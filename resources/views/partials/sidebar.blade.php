@@ -125,6 +125,43 @@
                     </li>
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-archive"></i>
+                    <span class="title">@lang('global.movimientos.title')</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'productos' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.productos.create') }}">
+                            <i class="fa fa-plus-square"></i>
+                            <span class="title">
+                                @lang('global.productos.title')
+                            </span>
+                        </a>
+                    </li>
+                    <li class="{{ $request->segment(2) == 'existencias' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.productos.index') }}">
+                            <i class="fa fa-edit"></i>
+                            <span class="title">
+                                @lang('global.existencias.title')
+                            </span>
+                        </a>
+                    </li>
+                    <li class="{{ $request->segment(2) == 'profesionales' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.profesionales.index') }}">
+                            <i class="fa fa-bars"></i>
+                            <span class="title">
+                                @lang('global.ingreso.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
             @endcan
 
             <li class="{{ $request->segment(1) == 'change_password' ? 'active' : '' }}">

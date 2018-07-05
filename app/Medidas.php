@@ -11,8 +11,7 @@ use Hash;
  *
  * @package App
  * @property string $nombre
- * @property string $referencia
- * @property string $direccion
+
 */
 class Medidas extends Authenticatable
 {
@@ -20,6 +19,7 @@ class Medidas extends Authenticatable
     use HasRolesAndAbilities;
 
     protected $fillable = ['nombre'];
-   
+  
+    
     
 }
