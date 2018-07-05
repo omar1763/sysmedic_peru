@@ -47,6 +47,14 @@
                             </span>
                         </a>
                     </li>
+                     <li class="{{ $request->segment(2) == 'sedesafilia' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.sedesafilia.index') }}">
+                            <i class="fa fa-user"></i>
+                            <span class="title">
+                                @lang('global.sedesafilia.title')
+                            </span>
+                        </a>
+                    </li>
                 </ul>
             </li>
              <li class="treeview">
@@ -67,19 +75,51 @@
                             </span>
                         </a>
                     </li>
-                    <li class="{{ $request->segment(2) == 'roles' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.roles.index') }}">
+                    <li class="{{ $request->segment(2) == 'centros' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.centros.index') }}">
                             <i class="fa fa-briefcase"></i>
+                            <span class="title">
+                                @lang('global.centros.title')
+                            </span>
+                        </a>
+                    </li>
+                    <li class="{{ $request->segment(2) == 'profesionales' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.profesionales.index') }}">
+                            <i class="fa fa-user"></i>
                             <span class="title">
                                 @lang('global.profesionales.title')
                             </span>
                         </a>
                     </li>
-                    <li class="{{ $request->segment(2) == 'users' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.users.index') }}">
+                    <li class="{{ $request->segment(2) == 'laboratorios' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.laboratorios.index') }}">
                             <i class="fa fa-user"></i>
                             <span class="title">
-                                @lang('global.users.title')
+                                @lang('global.laboratorio.title')
+                            </span>
+                        </a>
+                    </li>
+                    <li class="{{ $request->segment(2) == 'analisis' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.analisis.index') }}">
+                            <i class="fa fa-user"></i>
+                            <span class="title">
+                                @lang('global.analisis.title')
+                            </span>
+                        </a>
+                    </li>
+                    <li class="{{ $request->segment(2) == 'servicios' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.servicios.index') }}">
+                            <i class="fa fa-user"></i>
+                            <span class="title">
+                                @lang('global.servicios.title')
+                            </span>
+                        </a>
+                    </li>
+                    <li class="{{ $request->segment(2) == 'profesionales' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.profesionales.index') }}">
+                            <i class="fa fa-user"></i>
+                            <span class="title">
+                                @lang('global.pacientes.title')
                             </span>
                         </a>
                     </li>
