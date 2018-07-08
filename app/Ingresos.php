@@ -10,16 +10,18 @@ use Hash;
  * Class Ingresos
  *
  * @package App
- * @property string $nombre
- * @property string $medida
+ * @property string $producto
  * @property string $cantidad
+ * @property string $fechaingreso
 
 */
-class Productos extends Authenticatable
+class Ingresos extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombre', 'medida', 'cantidad'];
+    protected $fillable = ['producto','cantidad','fechaingreso'];
+  
+    
     
 }

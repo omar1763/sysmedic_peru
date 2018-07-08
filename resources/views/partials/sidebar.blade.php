@@ -151,11 +151,11 @@
                             </span>
                         </a>
                     </li>
-                    <li class="{{ $request->segment(2) == 'profesionales' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.profesionales.index') }}">
+                    <li class="{{ $request->segment(2) == 'ingresos' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.ingresos.index') }}">
                             <i class="fa fa-bars"></i>
                             <span class="title">
-                                @lang('global.ingreso.title')
+                                @lang('global.ingresos.title')
                             </span>
                         </a>
                     </li>
