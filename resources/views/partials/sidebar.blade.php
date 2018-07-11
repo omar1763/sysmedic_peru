@@ -115,14 +115,6 @@
                             </span>
                         </a>
                     </li>
-                    <li class="{{ $request->segment(2) == 'profesionales' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.profesionales.index') }}">
-                            <i class="fa fa-user"></i>
-                            <span class="title">
-                                @lang('global.pacientes.title')
-                            </span>
-                        </a>
-                    </li>
                 </ul>
             </li>
             <li class="treeview">

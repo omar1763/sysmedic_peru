@@ -7,19 +7,20 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Hash;
 
 /**
- * Class Medidas
+ * Class Analisis
  *
  * @package App
  * @property string $nombre
- * @property string $referencia
- * @property string $direccion
+ * @property string $laboratorio
+ * @property string $preciopublico
+ * @property string $costlab
 */
-class Medidas extends Authenticatable
+class Analisis extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre','laboratorio','preciopublico','costlab'];
    
     
 }

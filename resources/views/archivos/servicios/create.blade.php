@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="page-title">@lang('global.sedesafilia.title')</h3>
+    <h3 class="page-title">@lang('global.servicios.title')</h3>
     {!! Form::open(['method' => 'POST', 'route' => ['admin.servicios.store']]) !!}
 
     <div class="panel panel-default">
