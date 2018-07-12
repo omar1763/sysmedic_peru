@@ -6,7 +6,7 @@ use App\Laboratorios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Archivos\StorelaboratoriosRequest;
+use App\Http\Requests\Archivos\StoreLaboratoriosRequest;
 use App\Http\Requests\Archivos\UpdateLaboratoriosRequest;
 
 class LaboratoriosController extends Controller
