@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('direccion', 'Direcciòn', ['class' => 'control-label']) !!}
-                    {!! Form::text('direccion', old('direccion'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('direccion', old('direccion'), ['class' => 'form-control', 'placeholder' => '', 'required' => 'false']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('direccion'))
                         <p class="help-block">
@@ -38,7 +38,7 @@
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('referencia', 'Referencia', ['class' => 'control-label']) !!}
-                    {!! Form::text('referencia', old('referencia'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('referencia', old('referencia'), ['class' => 'form-control', 'placeholder' => '', 'required' => 'false']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('referencia'))
                         <p class="help-block">

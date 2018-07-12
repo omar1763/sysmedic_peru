@@ -24,9 +24,7 @@ class StoreCentrosRequest extends FormRequest
     {
         return [
             'nombre' => 'required',
-            'direccion' => 'required',
-         
-         
+            
         ];
     }
 }

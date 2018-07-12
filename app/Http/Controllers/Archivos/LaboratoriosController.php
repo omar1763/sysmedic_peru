@@ -41,13 +41,13 @@ class LaboratoriosController extends Controller
         return view('archivos.laboratorios.create');
     }
 
-    /**
+    /**Ll
      * Store a newly created User in storage.
      *
      * @param  \App\Http\Requests\StoreUsersRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorelaboratoriosRequest $request)
+    public function store(StoreLaboratoriosRequest $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);

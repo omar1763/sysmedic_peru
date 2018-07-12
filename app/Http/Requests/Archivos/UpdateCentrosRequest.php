@@ -24,8 +24,7 @@ class UpdateCentrosRequest extends FormRequest
     {
         return [
             'nombre' => 'required',
-            'direccion' => 'required',
-         
+      
         ];
     }
 }
