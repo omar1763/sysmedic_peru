@@ -10,12 +10,14 @@ use Hash;
  * Class Profesionales
  *
  * @package App
- * @property string $nombres
+ * @property string $name
  * @property string $apellidos
  * @property string $especialidad
  * @property string $centro
  * @property string $cmp
  * @property string $nacimiento
+ * @property string $id_empresa
+ * @property string $id_sucursal
 */
 
 class Profesionales extends Authenticatable
@@ -23,7 +25,7 @@ class Profesionales extends Authenticatable
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombres', 'apellidos', 'especialidad', 'centro', 'cmp', 'nacimiento'];
+    protected $fillable = ['name', 'apellidos', 'especialidad', 'centro', 'cmp', 'nacimiento','id_empresa','id_sucursal'];
     
     
     /**

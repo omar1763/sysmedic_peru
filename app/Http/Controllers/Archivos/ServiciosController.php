@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Archivos;
 
 use App\Servicios;
+use App\Empresas;
+use App\Locales;
+use DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
@@ -22,7 +26,28 @@ class ServiciosController extends Controller
             return abort(401);
         }
 
-        $servicios = Servicios::with('roles')->get();
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+         $servicios = DB::table('servicios as a')
+        ->select('a.id','a.detalle','a.precio','a.porcentaje','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
 
         return view('archivos.servicios.index', compact('servicios'));
     }
@@ -53,7 +78,28 @@ class ServiciosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $servicios = Servicios::create($request->all());
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $servicios = new Servicios;
+       $servicios->detalle =$request->detalle;
+       $servicios->precio     =$request->precio;
+       $servicios->porcentaje     =$request->porcentaje;
+       $servicios->id_empresa= $usuarioEmp;
+       $servicios->id_sucursal =$usuarioSuc;
+       $servicios->save();
+
 
         return redirect()->route('admin.servicios.index');
     }

@@ -18,7 +18,7 @@
                         <th>@lang('global.productos.fields.nombre')</th>
                         <th>@lang('global.productos.fields.cantidad')</th>
                         <th>@lang('global.productos.fields.medida')</th>
-                        <th>@lang('global.ingreso.fields.fecha')</th>
+                        <th>@lang('global.ingresos.fields.fecha')</th>
 
 
                         <th>&nbsp;</th>
@@ -32,7 +32,7 @@
                             <tr data-entry-id="{{ $prod->id }}">
                                 <td></td>
 
-                                <td>{{ $prod->nombre }}</td>
+                                <td>{{ $prod->name }}</td>
                                 <td>{{ $prod->cantidad }}</td>
                                 <td>{{ $prod->medida }}</td>
                                 <td>{{ $prod->updated_at }}</td>

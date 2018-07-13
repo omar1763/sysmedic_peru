@@ -23,7 +23,7 @@ class StoreAnalisisRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
+            'name' => 'required',
             'laboratorio' => 'required',
             'preciopublico' => 'required',
             'costlab' => 'required',

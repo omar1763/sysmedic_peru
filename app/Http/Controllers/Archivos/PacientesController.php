@@ -8,8 +8,11 @@ use App\Distrito;
 use App\EdoCivil;
 use App\GradoInstruccion;
 use App\HistoriasClinicas;
+use App\Empresas;
+use App\Locales;
 use DB;
 use Silber\Bouncer\Database\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
@@ -29,11 +32,24 @@ class PacientesController extends Controller
             return abort(401);
         }
 
-        $pacientes = Pacientes::with('roles')->get();
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
 
         $pacientes = DB::table('pacientes as a')
         ->select('a.id','a.nombres','a.apellidos','a.dni','a.provincia','a.distrito','a.direccion','a.gradoinstruccion','a.telefono','a.ocupacion','a.edocivil','a.fechanac','a.created_at','b.historia')
         ->join('historias_clinicas as b','a.id','b.id_paciente')
+        ->where('a.id_empresa','=',$usuarioEmp)
+        ->where('a.id_sucursal','=',$usuarioSuc)
         ->where('a.estatus','=','1')
         ->orderby('a.created_at','desc')
         ->paginate(10);
@@ -73,6 +89,19 @@ class PacientesController extends Controller
             return abort(401);
         }
 
+           $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
        $pacientes = new Pacientes;
        $pacientes->dni =$request->dni;
        $pacientes->nombres     =$request->nombres;
@@ -85,6 +114,8 @@ class PacientesController extends Controller
        $pacientes->gradoinstruccion     =$request->gradoinstruccion;
        $pacientes->ocupacion     =$request->ocupacion;
        $pacientes->edocivil     =$request->edocivil;
+       $pacientes->id_empresa     =$usuarioEmp;
+       $pacientes->id_sucursal     =$usuarioSuc;
        $pacientes->save();
 
        $historiaclinica=str_pad(($pacientes->id),4, "0", STR_PAD_LEFT);

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Archivos;
 
 use App\Centros;
+use App\Empresas;
+use App\Locales;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Archivos\StoreCentrosRequest;
 use App\Http\Requests\Archivos\UpdateCentrosRequest;
@@ -22,7 +26,28 @@ class CentrosController extends Controller
             return abort(401);
         }
 
-        $centros = Centros::with('roles')->get();
+          $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+          $centros = DB::table('centros as a')
+        ->select('a.id','a.name','a.direccion','a.referencia','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
 
         return view('archivos.centros.index', compact('centros'));
     }
@@ -52,7 +77,27 @@ class CentrosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $centros = Centros::create($request->all());
+
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+       $centros = new Centros;
+       $centros->name =$request->name;
+       $centros->direccion     =$request->direccion;
+       $centros->referencia     =$request->referencia;
+       $centros->id_empresa= $usuarioEmp;
+       $centros->id_sucursal =$usuarioSuc;
+       $centros->save();
+
 
         return redirect()->route('admin.centros.index');
     }

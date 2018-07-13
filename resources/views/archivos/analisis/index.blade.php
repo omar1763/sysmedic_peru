@@ -18,7 +18,7 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
 
-                        <th>@lang('global.analisis.fields.nombre')</th>
+                        <th>@lang('global.analisis.fields.name')</th>
                         <th>@lang('global.analisis.fields.laboratorio')</th>
                         <th>@lang('global.analisis.fields.preciopublico')</th>
                         <th>@lang('global.analisis.fields.costlab')</th>
@@ -33,7 +33,7 @@
                             <tr data-entry-id="{{ $ana->id }}">
                                 <td></td>
 
-                                <td>{{ $ana->nombre }}</td>
+                                <td>{{ $ana->name }}</td>
                                 <td>{{ $ana->laboratorio }}</td>
                                 <td>{{ $ana->preciopublico }}</td>
                                 <td>{{ $ana->costlab }}</td>

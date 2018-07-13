@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Archivos;
 
 use App\Analisis;
 use App\Laboratorios;
+use App\Empresas;
+use App\Locales;
+use DB;
+use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -24,8 +28,31 @@ class AnalisisController extends Controller
             return abort(401);
         }
 
-        $analisis = Analisis::with('roles')->get();
-        $laboratorio = Laboratorios::with('centro');
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+         $analisis = DB::table('analises as a')
+        ->select('a.id','a.name','a.laboratorio','a.preciopublico','a.costlab','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        //->join('laboratorios as d','a.laboratorio','d.name')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
+        $laboratorio = Laboratorios::with('name');
 
         return view('archivos.analisis.index', compact('analisis','laboratorio'));
     }
@@ -41,7 +68,7 @@ class AnalisisController extends Controller
             return abort(401);
         }
   
-       $laboratorio = Laboratorios::get()->pluck('nombre', 'nombre');
+       $laboratorio = Laboratorios::get()->pluck('name', 'name');
 
         return view('archivos.analisis.create', compact('laboratorio'));
     }
@@ -58,7 +85,28 @@ class AnalisisController extends Controller
             return abort(401);
         }
 
-        $analisis = Analisis::create($request->all());
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $analisis = new Analisis;
+       $analisis->name =$request->name;
+       $analisis->laboratorio     =$request->laboratorio;
+       $analisis->preciopublico     =$request->preciopublico;
+       $analisis->costlab     =$request->costlab;
+       $analisis->id_empresa= $usuarioEmp;
+       $analisis->id_sucursal =$usuarioSuc;
+       $analisis->save();
+
 
     
        

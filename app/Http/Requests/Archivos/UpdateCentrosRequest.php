@@ -23,7 +23,7 @@ class UpdateCentrosRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
+            'name' => 'required',
       
         ];
     }

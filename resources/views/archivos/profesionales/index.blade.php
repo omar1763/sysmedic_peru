@@ -18,7 +18,7 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
 
-                        <th>@lang('global.profesionales.fields.nombres')</th>
+                        <th>@lang('global.profesionales.fields.name')</th>
                         <th>@lang('global.profesionales.fields.apellidos')</th>
                         <th>@lang('global.profesionales.fields.especialidad')</th>
                         <th>@lang('global.profesionales.fields.centro')</th>
@@ -36,10 +36,10 @@
                             <tr data-entry-id="{{ $prof->id }}">
                                 <td></td>
 
-                                <td>{{ $prof->nombres }}</td>
+                                <td>{{ $prof->name }}</td>
                                 <td>{{ $prof->apellidos }}</td>
-                                 <td>{{ $prof->especialidad }}</td>
-                                  <td>{{ $prof->centro }}</td>
+                                <td>{{ $prof->especialidad }}</td>
+                                <td>{{ $prof->centro }}</td>
                                 <td>{{ $prof->cmp }}</td>
                                 <td>{{ $prof->nacimiento }}</td>
                                 <td>

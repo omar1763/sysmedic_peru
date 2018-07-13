@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Archivos;
 use App\Profesionales;
 use App\Centros;
 use App\Especialidad;
+use App\Empresas;
+use App\Locales;
+use DB;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Archivos\StoreProfesionalesRequest;
 use App\Http\Requests\Archivos\UpdateProfesionalesRequest;
@@ -25,7 +29,30 @@ class ProfesionalesController extends Controller
             return abort(401);
         }
 
-        $profesionales = Profesionales::with('roles')->get();
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+         $profesionales = DB::table('profesionales as a')
+        ->select('a.id','a.name','a.apellidos','a.especialidad','a.cmp','a.centro','a.nacimiento','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
+
         $centro = Centros::with('centro');
 
         return view('archivos.profesionales.index', compact('profesionales','centro'));
@@ -41,7 +68,7 @@ class ProfesionalesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-       $centro = Centros::get()->pluck('nombre', 'nombre');
+       $centro = Centros::get()->pluck('name', 'name');
        $especialidad = Especialidad::get()->pluck('nombre', 'nombre');
 
 
@@ -60,7 +87,30 @@ class ProfesionalesController extends Controller
             return abort(401);
         }
 
-        $profesionales = Profesionales::create($request->all());
+
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $profesionales = new Profesionales;
+       $profesionales->name =$request->name;
+       $profesionales->apellidos     =$request->apellidos;
+       $profesionales->especialidad     =$request->especialidad;
+       $profesionales->cmp     =$request->cmp;
+       $profesionales->centro     =$request->centro;
+       $profesionales->nacimiento     =$request->nacimiento;
+       $profesionales->id_empresa= $usuarioEmp;
+       $profesionales->id_sucursal =$usuarioSuc;
+       $profesionales->save();
 
     
        

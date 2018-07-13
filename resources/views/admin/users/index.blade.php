@@ -20,7 +20,8 @@
 
                         <th>@lang('global.users.fields.name')</th>
                         <th>@lang('global.users.fields.email')</th>
-                        <th>@lang('global.users.fields.roles')</th>
+                        <th>@lang('global.users.fields.empresa')</th>
+                        <th>@lang('global.users.fields.sucursal')</th>
                         <th>&nbsp;</th>
 
                     </tr>
@@ -34,11 +35,9 @@
 
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>
-                                    @foreach ($user->roles->pluck('name') as $role)
-                                        <span class="label label-info label-many">{{ $role }}</span>
-                                    @endforeach
-                                </td>
+                                <td>{{ $user->nombre }}</td>
+                                <td>{{ $user->nombres }}</td>
+                              
                                 <td>
                                     <a href="{{ route('admin.users.edit',[$user->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(

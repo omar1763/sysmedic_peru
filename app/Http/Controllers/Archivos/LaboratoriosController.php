@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Archivos;
 
 use App\Laboratorios;
+use App\Empresas;
+use App\Locales;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Archivos\StoreLaboratoriosRequest;
 use App\Http\Requests\Archivos\UpdateLaboratoriosRequest;
@@ -22,7 +26,30 @@ class LaboratoriosController extends Controller
             return abort(401);
         }
 
-        $laboratorio = Laboratorios::with('roles')->get();
+        
+          $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+         $laboratorio = DB::table('laboratorios as a')
+        ->select('a.id','a.name','a.direccion','a.referencia','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
 
         return view('archivos.laboratorios.index', compact('laboratorio'));
     }
@@ -52,7 +79,26 @@ class LaboratoriosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $laboratorio = Laboratorios::create($request->all());
+          $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $laboratorio = new Laboratorios;
+       $laboratorio->name =$request->name;
+       $laboratorio->direccion     =$request->direccion;
+       $laboratorio->referencia     =$request->referencia;
+       $laboratorio->id_empresa= $usuarioEmp;
+       $laboratorio->id_sucursal =$usuarioSuc;
+       $laboratorio->save();
 
         return redirect()->route('admin.laboratorios.index');
     }

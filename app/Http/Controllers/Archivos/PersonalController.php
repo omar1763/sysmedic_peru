@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Archivos;
 
 use App\Personal;
+use App\Empresas;
+use App\Locales;
+use App\User;
+use DB;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Archivos\StorePersonalRequest;
 use App\Http\Requests\Archivos\UpdatePersonalRequest;
@@ -23,7 +29,29 @@ class PersonalController extends Controller
             return abort(401);
         }
 
-        $personal = Personal::with('roles')->get();
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+          $personal = DB::table('personals as a')
+        ->select('a.id','a.name','a.apellidos','a.dni','a.telefono','a.direccion','a.estatus','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
 
         return view('archivos.personal.index', compact('personal'));
     }
@@ -53,7 +81,29 @@ class PersonalController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $personal = Personal::create($request->all());
+
+       $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $personal = new Personal;
+       $personal->name =$request->name;
+       $personal->apellidos     =$request->apellidos;
+       $personal->telefono     =$request->telefono;
+       $personal->direccion     =$request->direccion;
+       $personal->dni     =$request->dni;
+       $personal->id_empresa= $usuarioEmp;
+       $personal->id_sucursal =$usuarioSuc;
+       $personal->save();
 
         return redirect()->route('admin.personal.index');
     }

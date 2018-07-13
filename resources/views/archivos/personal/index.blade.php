@@ -18,7 +18,7 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
 
-                        <th>@lang('global.personal.fields.nombres')</th>
+                        <th>@lang('global.personal.fields.name')</th>
                         <th>@lang('global.personal.fields.apellidos')</th>
                         <th>@lang('global.personal.fields.dni')</th>
                         <th>@lang('global.personal.fields.telefono')</th>
@@ -34,7 +34,7 @@
                             <tr data-entry-id="{{ $prs->id }}">
                                 <td></td>
 
-                                <td>{{ $prs->nombres }}</td>
+                                <td>{{ $prs->name }}</td>
                                 <td>{{ $prs->apellidos }}</td>
                                 <td>{{ $prs->dni }}</td>
                                 <td>{{ $prs->telefono }}</td>

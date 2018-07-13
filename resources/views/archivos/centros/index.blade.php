@@ -32,7 +32,7 @@
                             <tr data-entry-id="{{ $ctr->id }}">
                                 <td></td>
 
-                                <td>{{ $ctr->nombre }}</td>
+                                <td>{{ $ctr->name }}</td>
                                 <td>{{ $ctr->direccion }}</td>
                                 <td>{{ $ctr->referencia }}</td>
                                 <td>

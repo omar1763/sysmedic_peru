@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Movimientos;
 
 use App\Productos;
 use App\Medidas;
+use App\Empresas;
+use App\Locales;
+use DB;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Movimientos\StoreProductosRequest;
@@ -24,7 +28,29 @@ class ProductosController extends Controller
             return abort(401);
         }
 
-        $productos = Productos::with('roles')->get();
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+         $productos = DB::table('productos as a')
+        ->select('a.id','a.name','a.medida','a.cantidad','a.updated_at','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
         $medida = Medidas::with('nombre');
 
         return view('movimientos.productos.index', compact('productos','medida'));

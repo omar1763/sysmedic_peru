@@ -23,7 +23,7 @@ class StoreLaboratoriosRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
+            'name' => 'required',
             'direccion' => 'required',
             'referencia' => 'required',
          

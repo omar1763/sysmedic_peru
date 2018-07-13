@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use App\Empresa;
+use App\Locales;
+use DB;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -23,9 +26,16 @@ class UsersController extends Controller
             return abort(401);
         }
 
-        $users = User::with('roles')->get();
+         $roles = User::with('roles')->get();
 
-        return view('admin.users.index', compact('users'));
+         $users = DB::table('users as a')
+        ->select('a.id','a.name','a.email','b.nombre','c.nombres')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
+        return view('admin.users.index', compact('users','roles'));
     }
 
     /**

@@ -23,7 +23,7 @@ class StoreProfesionalesRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombres' => 'required',
+            'name' => 'required',
             'apellidos' => 'required',
             'centro' => 'required',
             'especialidad' => 'required',

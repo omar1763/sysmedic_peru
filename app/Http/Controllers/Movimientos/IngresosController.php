@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Movimientos;
 
 use App\Productos;
 use App\Ingresos;
+use App\Empresas;
+use App\Locales;
+use DB;
+use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -24,7 +28,30 @@ class IngresosController extends Controller
             return abort(401);
         }
 
-        $ingresos = Ingresos::with('roles')->get();
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+         $ingresos = DB::table('ingresos as a')
+        ->select('a.id','a.producto','a.cantidad','a.fechaingreso','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
+
         $productos = Productos::with('nombre');
 
         return view('movimientos.ingresos.index', compact('productos','ingresos'));
@@ -40,7 +67,7 @@ class IngresosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-       $producto = Productos::get()->pluck('nombre', 'nombre');
+       $producto = Productos::get()->pluck('name', 'name');
 
 
         return view('movimientos.ingresos.create', compact('producto'));
@@ -58,23 +85,36 @@ class IngresosController extends Controller
             return abort(401);
         }
 
+        $id_usuario = Auth::id();
 
-         
-        $productos =Productos::all();
+        $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
 
-        foreach ($productos as $producto) {
-                    $nombreprod = $producto->nombre;
-                    $cantidadprod = $producto->cantidad;
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
                 }
+
+       
 
        $ingresos = new Ingresos;
        $ingresos->producto =$request->producto;
        $ingresos->cantidad     =$request->cantidad;
        $ingresos->fechaingreso     =$request->fechaingreso;
+       $ingresos->id_empresa     =$usuarioEmp;
+       $ingresos->id_sucursal     =$usuarioSuc;
        $ingresos->save();
-
+        
+        $product =Productos::all();
+        foreach ($product as $prod) {
+                    $nombreprod = $prod->name;
+                    $cantidadprod = $prod->cantidad;
+                }
       
-       $productos=Productos::where('nombre', '=' , $nombreprod)->get()->first();
+       $productos=Productos::where('name', '=' , $nombreprod)->get()->first();
        $productos->cantidad=$cantidadprod + $ingresos->cantidad;
        $productos->update();
 

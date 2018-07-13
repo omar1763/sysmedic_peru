@@ -10,7 +10,7 @@ use Hash;
  * Class Personal
  *
  * @package App
- * @property string $nombres
+ * @property string $name
  * @property string $apellidos
  * @property string $dni
  * @property string $telefono
@@ -21,7 +21,7 @@ class Personal extends Authenticatable
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombres', 'apellidos', 'dni', 'telefono','direccion'];
+    protected $fillable = ['name', 'apellidos', 'dni', 'telefono','direccion'];
     
     
     /**

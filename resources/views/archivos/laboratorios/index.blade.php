@@ -18,7 +18,7 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
 
-                        <th>@lang('global.laboratorio.fields.nombre')</th>
+                        <th>@lang('global.laboratorio.fields.name')</th>
                         <th>@lang('global.laboratorio.fields.direccion')</th>
                         <th>@lang('global.laboratorio.fields.referencia')</th>
                         <th>&nbsp;</th>
@@ -32,7 +32,7 @@
                             <tr data-entry-id="{{ $lab->id }}">
                                 <td></td>
 
-                                <td>{{ $lab->nombre }}</td>
+                                <td>{{ $lab->name }}</td>
                                 <td>{{ $lab->direccion }}</td>
                                 <td>{{ $lab->referencia }}</td>
                                 <td>

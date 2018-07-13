@@ -10,7 +10,7 @@ use Hash;
  * Class Profesionales
  *
  * @package App
- * @property string $nombre
+ * @property string $name
  * @property string $direccion
  * @property string $referencia
 
@@ -22,7 +22,7 @@ class Laboratorios extends Authenticatable
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombre', 'direccion', 'referencia'];
+    protected $fillable = ['name', 'direccion', 'referencia'];
     
     
 

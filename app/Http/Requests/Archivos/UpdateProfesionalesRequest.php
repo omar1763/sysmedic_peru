@@ -23,7 +23,7 @@ class UpdateProfesionalesRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombres' => 'required',
+            'name' => 'required',
             'apellidos' => 'required',
             'cmp' => 'required',
            

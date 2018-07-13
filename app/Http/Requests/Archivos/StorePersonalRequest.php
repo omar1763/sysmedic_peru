@@ -23,7 +23,7 @@ class StorePersonalRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombres' => 'required',
+            'name' => 'required',
             'apellidos' => 'required',
             'email' => 'required|email|unique:users,email',
             'telefono' => 'required',

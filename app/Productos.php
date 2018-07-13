@@ -10,7 +10,7 @@ use Hash;
  * Class Productos
  *
  * @package App
- * @property string $nombre
+ * @property string $name
  * @property string $medida
  * @property string $cantidad
 
@@ -20,6 +20,6 @@ class Productos extends Authenticatable
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombre', 'medida', 'cantidad'];
+    protected $fillable = ['name', 'medida', 'cantidad'];
     
 }
