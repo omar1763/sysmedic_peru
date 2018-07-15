@@ -84,7 +84,26 @@ class ProductosController extends Controller
             return abort(401);
         }
 
-        $productos = Productos::create($request->all());
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $productos = new Productos;
+       $productos->name =$request->name;
+       $productos->medida     =$request->medida;
+       $productos->cantidad     =$request->cantidad;
+       $productos->id_empresa     =$usuarioEmp;
+       $productos->id_sucursal     =$usuarioSuc;
+       $productos->save();
 
     
         return redirect()->route('admin.productos.create');

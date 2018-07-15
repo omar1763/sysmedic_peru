@@ -23,7 +23,7 @@ class StoreProductosRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
+            'name' => 'required',
             'medida' => 'required',
             'cantidad' => 'required',
        
