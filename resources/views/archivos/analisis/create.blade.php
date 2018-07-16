@@ -38,7 +38,7 @@
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('preciopublico', 'Precio Publicado', ['class' => 'control-label']) !!}
-                    {!! Form::number('preciopublico', old('preciopublico'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('preciopublico', old('preciopublico'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('preciopublico'))
                         <p class="help-block">
@@ -50,7 +50,7 @@
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('costlab', 'Costo de Laboratorio', ['class' => 'control-label']) !!}
-                    {!! Form::number('costlab', old('costlab'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('costlab', old('costlab'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('costlab'))
                         <p class="help-block">
@@ -63,7 +63,32 @@
         </div>
     </div>
 
+
     {!! Form::submit(trans('global.app_save'), ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
+
+   
 @stop
+
+@include('partials.javascripts')
+
+@section('javascript') 
+
+   <script>
+    $('#preciopublico').priceFormat({
+    prefix: '',
+    centsSeparator: ',',
+    thousandsSeparator: '.'
+    });
+    </script>
+
+   <script>
+    $('#costlab').priceFormat({
+    prefix: '',
+    centsSeparator: ',',
+    thousandsSeparator: '.'
+    });
+    </script>
+
+@endsection
 
