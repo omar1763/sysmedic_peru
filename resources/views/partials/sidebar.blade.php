@@ -71,6 +71,14 @@
                             </span>
                         </a>
                     </li>
+                    <li class="{{ $request->segment(2) == 'paquetes' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.paquetes.index') }}">
+                            <i class="fa fa-male"></i>
+                            <span class="title">
+                                @lang('global.paquetes.title')
+                            </span>
+                        </a>
+                    </li>
                     <li class="{{ $request->segment(2) == 'pacientes' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.pacientes.index') }}">
                             <i class="fa fa-male"></i>
@@ -117,6 +125,28 @@
                     </li>
                 </ul>
             </li>
+
+             <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-archive"></i>
+                    <span class="title">@lang('global.existenciass.title')</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'atencion' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.atencion.index') }}">
+                            <i class="fa fa-plus-square"></i>
+                            <span class="title">
+                                @lang('global.atencion.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             
             @endcan
 

@@ -17,6 +17,11 @@
 <script src="{{ url('adminlte/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ url('adminlte/plugins/fastclick/fastclick.js') }}"></script>
 <script src="{{ url('adminlte/js/app.min.js') }}"></script>
+
+<script src="{{ url('js/jquery.priceformat.js') }}"></script>
+<script src="{{ url('js/jquery.priceformat.min.js') }}"></script>
+<script src="{{ url('js/prototype.priceformat') }}"></script>
+<script src="{{ url('js/prototype.priceformat.min') }}"></script>
 <script>
     window._token = '{{ csrf_token() }}';
 </script>

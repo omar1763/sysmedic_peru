@@ -19,7 +19,7 @@ class RolesController extends Controller
      */
     public function index()
     {
-        if (! Gate::allows('users_manage')) {
+        if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
 
@@ -35,7 +35,7 @@ class RolesController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
+        if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
         $abilities = Ability::get()->pluck('name', 'name');
@@ -51,7 +51,7 @@ class RolesController extends Controller
      */
     public function store(StoreRolesRequest $request)
     {
-        if (! Gate::allows('users_manage')) {
+        if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
         $role = Role::create($request->all());
@@ -69,7 +69,7 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        if (! Gate::allows('users_manage')) {
+        if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
         $abilities = Ability::get()->pluck('name', 'name');
@@ -88,7 +88,7 @@ class RolesController extends Controller
      */
     public function update(UpdateRolesRequest $request, $id)
     {
-        if (! Gate::allows('users_manage')) {
+        if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
         $role = Role::findOrFail($id);
@@ -110,7 +110,7 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
-        if (! Gate::allows('users_manage')) {
+        if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
         $role = Role::findOrFail($id);
@@ -126,7 +126,7 @@ class RolesController extends Controller
      */
     public function massDestroy(Request $request)
     {
-        if (! Gate::allows('users_manage')) {
+        if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
         if ($request->input('ids')) {

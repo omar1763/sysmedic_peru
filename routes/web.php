@@ -44,4 +44,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('ingresos_mass_destroy', ['uses' => 'Movimientos\IngresosController@massDestroy', 'as' => 'ingresos.mass_destroy']);
     Route::resource('pacientes', 'Archivos\PacientesController');
     Route::post('pacientes_mass_destroy', ['uses' => 'Archivos\PacientesController@massDestroy', 'as' => 'pacientes.mass_destroy']);
+    Route::resource('paquetes', 'Archivos\PaquetesController');
+    Route::post('paquetes_mass_destroy', ['uses' => 'Archivos\PaquetesController@massDestroy', 'as' => 'paquetes.mass_destroy']);
+    Route::resource('atencion', 'Existencias\AtencionController');
+    Route::post('atencion_mass_destroy', ['uses' => 'Existencias\AtencionController@massDestroy', 'as' => 'atencion.mass_destroy']);
 });

@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Archivos;
 
+use App\Paquetes;
+use App\PaquetesServ;
 use App\Servicios;
 use App\Empresas;
 use App\Locales;
 use DB;
+use Silber\Bouncer\Database\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Archivos\StoreServiciosRequest;
-use App\Http\Requests\Archivos\UpdateServiciosRequest;
+use App\Http\Requests\Archivos\StorePaquetesRequest;
+use App\Http\Requests\Archivos\UpdatePaquetesRequest;
 
-class ServiciosController extends Controller
+class PaquetesController extends Controller
 {
     /**
      * Display a listing of User.
@@ -39,51 +42,18 @@ class ServiciosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-
-         $servicios = DB::table('servicios as a')
-        ->select('a.id','a.detalle','a.precio','a.porcentaje','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
-        ->join('empresas as b','a.id_empresa','b.id')
-        ->join('locales as c','a.id_sucursal','c.id')
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
+        $paquetes = DB::table('paquetes as a')
+        ->select('a.id','a.name','a.costo','a.id_empresa','a.id_sucursal')
+        ->where('a.id_empresa','=',$usuarioEmp)
+        ->where('a.id_sucursal','=',$usuarioSuc)
+       // ->where('a.estatus','=','1')
         ->orderby('a.created_at','desc')
         ->paginate(10);
 
-        return view('archivos.servicios.index', compact('servicios'));
+       
+
+        return view('archivos.paquetes.index', compact('paquetes'));
     }
-
-
-
-   public static function servbyemp($id){
-
-
-         $id_usuario = Auth::id();
-
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
-                   // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
-
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-
-
-             $servicio = DB::table('servicios as a')
-                     ->where('a.id_empresa','=', $usuarioEmp)
-                     ->where('a.id_sucursal','=', $usuarioSuc)
-                     ->get();
-         if(!is_null($servicio)){
-            return $servicio;
-         }else{
-            return false;
-         }
-
-    }
-
-
 
     /**
      * Show the form for creating new User.
@@ -95,24 +65,20 @@ class ServiciosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-
-        return view('archivos.servicios.create');
+       $servicio = Servicios::get()->pluck('detalle');
+    
+        return view('archivos.paquetes.create', compact('servicio'));
     }
 
-    /**
-     * Store a newly created User in storage.
-     *
-     * @param  \App\Http\Requests\StoreUsersRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    
-    public function store(StoreServiciosRequest $request)
+
+
+    public function store (StorePaquetesRequest $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
 
-        $id_usuario = Auth::id();
+           $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
                     ->select('*')
@@ -125,18 +91,23 @@ class ServiciosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-       $servicios = new Servicios;
-       $servicios->detalle =$request->detalle;
-       $servicios->precio     =$request->precio;
-       $servicios->porcentaje     =$request->porcentaje;
-       $servicios->id_empresa= $usuarioEmp;
-       $servicios->id_sucursal =$usuarioSuc;
-       $servicios->save();
+       $paquetes = new Paquetes;
+       $paquetes->name =$request->name;
+       $paquetes->costo     =$request->costo;
+       $paquetes->id_empresa     =$usuarioEmp;
+       $paquetes->id_sucursal     =$usuarioSuc;
+       $paquetes->save();
 
 
-        return redirect()->route('admin.servicios.index');
+
+       $paquetesserv = new PaquetesServ;
+       $paquetesserv->id_paquete =$paquetes->id;
+       $paquetesserv->id_servicio    =$paquetes->id;
+       $paquetesserv->save();
+
+    
+        return redirect()->route('admin.paquetes.index');
     }
-
 
     /**
      * Show the form for editing User.
@@ -149,10 +120,15 @@ class ServiciosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
+     
 
-        $servicios = Servicios::findOrFail($id);
+       $pacientes = Pacientes::findOrFail($id);
+       $provincia = Provincia::get()->pluck('nombre', 'nombre');
+       $distrito = Distrito::get()->pluck('nombre', 'nombre');
+       $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
+       $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
 
-        return view('archivos.servicios.edit', compact('servicios'));
+        return view('archivos.pacientes.edit', compact('pacientes', 'provincia','distrito','edocivil','gradoinstruccion'));
     }
 
     /**
@@ -162,15 +138,15 @@ class ServiciosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateServiciosRequest $request, $id)
+    public function update(UpdatePacientesRequest $request, $id)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $servicios = Servicios::findOrFail($id);
-        $servicios->update($request->all());
-       
-        return redirect()->route('admin.servicios.index');
+        $pacientes = Pacientes::findOrFail($id);
+        $pacientes->update($request->all());
+      
+        return redirect()->route('admin.pacientes.index');
     }
 
     /**
@@ -184,10 +160,10 @@ class ServiciosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $servicios = Servicios::findOrFail($id);
-        $servicios->delete();
+        $pacientes = Pacientes::findOrFail($id);
+        $pacientes->delete();
 
-        return redirect()->route('admin.servicios.index');
+        return redirect()->route('admin.pacientes.index');
     }
 
     /**
@@ -201,7 +177,7 @@ class ServiciosController extends Controller
             return abort(401);
         }
         if ($request->input('ids')) {
-            $entries = Servicios::whereIn('id', $request->input('ids'))->get();
+            $entries = Pacientes::whereIn('id', $request->input('ids'))->get();
 
             foreach ($entries as $entry) {
                 $entry->delete();
