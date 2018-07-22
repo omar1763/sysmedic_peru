@@ -107,17 +107,39 @@
                     <div class="input-icon">
                         <i class="icon-eye  font-red"></i>
                         
-                        {!! Form::select('origen_paciente', ['0' => 'Seleccione una Opciòn','PA' => 'Pago Adelantado', 'PT' => 'Pago con Tarjeta'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
+                        {!! Form::select('acuenta', ['0' => 'Seleccione una Opciòn','PA' => 'Pago Adelantado', 'PT' => 'Pago con Tarjeta'], null, ['id'=>'pago', 'class'=>'form-control select2']) !!}
                     </div>
 
                 </div>
             </div> 
         </div>
 
+        <div class="col-md-6" id="pagocuenta">
+
+        </div>
 
 
 
 
+
+        </div>
+
+        <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('observaciones', 'Observaciones', ['class' => 'control-label']) !!}
+                    {!! Form::text('observaciones', old('observaciones'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('observaciones'))
+                        <p class="help-block">
+                            {{ $errors->first('observaciones') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+
+           </div>
         </div>
              
              
@@ -181,6 +203,32 @@
        
     </script>
 
+
+     <script type="text/javascript">
+      $(document).ready(function(){
+        $('#pago').on('change',function(){
+          var link;
+          if ($(this).val() == 'PA') {
+            link = '/existencias/atencion/pagoadelantado/';
+          }else{
+            link = '/existencias/atencion/pagotarjeta/';
+          }
+
+          $.ajax({
+                 type: "get",
+                 url:  link,
+                 success: function(a) {
+                    $('#pagocuenta').html(a);
+                 }
+          });
+
+        });
+        
+
+      });
+       
+    </script>
+
    <script>
     $('#precio').priceFormat({
     prefix: '',
@@ -191,6 +239,14 @@
 
    <script>
     $('#porcentaje').priceFormat({
+    prefix: '',
+    centsSeparator: ',',
+    thousandsSeparator: '.'
+    });
+    </script>
+
+     <script>
+    $('#acuenta').priceFormat({
     prefix: '',
     centsSeparator: ',',
     thousandsSeparator: '.'

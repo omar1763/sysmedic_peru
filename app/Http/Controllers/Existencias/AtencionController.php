@@ -64,6 +64,16 @@ class AtencionController extends Controller
         return view('existencias.atencion.index', compact('atencion','servicios','personal','pacientes','profesionales'));
     }
 
+    public function pagoadelantado(){
+
+        return view('existencias.atencion.pagoadelantado');
+    }
+
+    public function pagotarjeta(){
+
+        return view('existencias.atencion.pagotarjeta');
+    }
+
     /**
      * Show the form for creating new User.
      *
