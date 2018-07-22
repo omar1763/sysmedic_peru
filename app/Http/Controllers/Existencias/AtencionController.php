@@ -132,9 +132,10 @@ class AtencionController extends Controller
                 }
 
          $pacientes = DB::table('pacientes as a')
-        ->select('a.id','a.id_empresa','a.id_sucursal','a.nombres','a.apellidos','a.direccion','a.telefono')
+        ->select('a.id','a.id_empresa','a.id_sucursal','a.dni','a.nombres','a.apellidos','a.direccion','a.telefono','d.historia')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
+        ->join('historias_clinicas as d','a.id','d.id_paciente')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.id','=',$id)
@@ -159,8 +160,7 @@ class AtencionController extends Controller
      public function verDataPacientes($id){
     
       $pacientes= AtencionController::dataPacientes($id);
-      var_dump($pacientes);
-      die();
+      
       return view('existencias.atencion.dataPacientes',['pacientes'=>$pacientes]);
 
     }

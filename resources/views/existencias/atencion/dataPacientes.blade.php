@@ -9,6 +9,12 @@
                         <th>@lang('global.pacientes.fields.dni')</th>
                         <th>@lang('global.pacientes.fields.nombres')</th>
                         <th>@lang('global.pacientes.fields.apellidos')</th>
+                        <th>@lang('global.pacientes.fields.telefono')</th>
+                        <th>@lang('global.pacientes.fields.direccion')</th>
+                        <th>@lang('global.pacientes.fields.historia')</th>
+
+
+
                       
                         <th>&nbsp;</th>
 
@@ -24,6 +30,12 @@
                                 <td>{{ $pac->dni }}</td>
                                 <td>{{ $pac->nombres }}</td>
                                 <td>{{ $pac->apellidos }}</td>
+                                <td>{{ $pac->telefono }}</td>
+                                <td>{{ $pac->direccion }}</td>
+                                <td>{{ $pac->historia }}</td>
+
+
+
                             </tr>
                         @endforeach
 
