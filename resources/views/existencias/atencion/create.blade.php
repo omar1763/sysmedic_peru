@@ -14,7 +14,7 @@
            <div class="row">
                 <div class="col-md-6">
                     {!! Form::label('pacientes', 'Pacientes*', ['class' => 'control-label']) !!}
-                    {!! Form::select('pacientes', $pacientes, old('pacientes'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    {!! Form::select('pacientes', $pacientes, old('pacientes'), ['id'=>'paciente','class' => 'form-control select2', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('pacientes'))
                         <p class="help-block">
@@ -23,7 +23,15 @@
                     @endif
                 </div>
 
+               
+
             </div>
+
+          <div class="row">
+             <div class="col-md-6" id="pac">
+
+             </div>
+          </div>
             
            <div class="row">
            	<div class="col-md-6">
@@ -59,6 +67,9 @@
 
                 </div>
             </div> 
+        </div>
+        <div class="col-md-6 id="pac">
+
         </div>
 
         <div class="col-md-6" id="origen">
@@ -219,6 +230,26 @@
                  url:  link,
                  success: function(a) {
                     $('#pagocuenta').html(a);
+                 }
+          });
+
+        });
+        
+
+      });
+       
+    </script>
+
+       <script type="text/javascript">
+      $(document).ready(function(){
+        $('#paciente').on('change',function(){
+          var link;
+            link = '/existencias/atencion/dataPacientes/id';
+          $.ajax({
+                 type: "get",
+                 url:  link,
+                 success: function(a) {
+                    $('#pac').html(a);
                  }
           });
 

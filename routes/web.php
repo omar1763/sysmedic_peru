@@ -57,11 +57,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/existencias/atencion/probyemp','Archivos\ProfesionalesController@probyemp');
     Route::get('/existencias/atencion/pagoadelantado','Existencias\AtencionController@pagoadelantado');
     Route::get('/existencias/atencion/pagotarjeta','Existencias\AtencionController@pagotarjeta');
+    Route::get('/existencias/atencion/dataPacientes/{id}','Existencias\AtencionController@verDataPacientes');
 
 
 
 
 
-    Route::get('/prueba','Archivos\ServiciosController@prueba');
+
+    Route::get('/prueba','Existencias\AtencionController@prueba');
 
 

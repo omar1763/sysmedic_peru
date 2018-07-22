@@ -116,6 +116,56 @@ class AtencionController extends Controller
         return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesionales'));
     }
 
+     public function dataPacientes($id){
+
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+         $pacientes = DB::table('pacientes as a')
+        ->select('a.id','a.id_empresa','a.id_sucursal','a.nombres','a.apellidos','a.direccion','a.telefono')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.id','=',$id)
+       // ->orderby('a.created_at','desc')
+        ->get();
+
+         if(!is_null($pacientes)){
+            return $pacientes;
+         }else{
+            return false;
+         }  
+
+     }
+
+
+
+     public function prueba(){
+    echo  AtencionController::dataPacientes(8);
+    }
+
+
+     public function verDataPacientes($id){
+    
+      $pacientes= AtencionController::dataPacientes($id);
+      //var_dump($pacientes);
+      return view('existencias.atencion.dataPacientes',['pacientes'=>$pacientes]);
+
+    }
+
+
+
      public function servbyemp($id)
     {
       $servicio = Servicios::servbyemp($id);
