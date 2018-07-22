@@ -244,7 +244,7 @@
       $(document).ready(function(){
         $('#paciente').on('change',function(){
           var link;
-            link = '/existencias/atencion/dataPacientes/id';
+            link = '/existencias/atencion/dataPacientes/'+$(this).val();
           $.ajax({
                  type: "get",
                  url:  link,

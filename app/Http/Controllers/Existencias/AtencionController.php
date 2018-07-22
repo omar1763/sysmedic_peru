@@ -107,7 +107,7 @@ class AtencionController extends Controller
                              ->get()->pluck('name','name');
        $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('nombres','nombres');
+                             ->get()->pluck('nombres','id');
        $profesionales = Profesionales::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','name');
@@ -159,7 +159,8 @@ class AtencionController extends Controller
      public function verDataPacientes($id){
     
       $pacientes= AtencionController::dataPacientes($id);
-      //var_dump($pacientes);
+      var_dump($pacientes);
+      die();
       return view('existencias.atencion.dataPacientes',['pacientes'=>$pacientes]);
 
     }
