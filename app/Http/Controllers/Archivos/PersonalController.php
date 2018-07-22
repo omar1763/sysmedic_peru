@@ -56,6 +56,36 @@ class PersonalController extends Controller
         return view('archivos.personal.index', compact('personal'));
     }
 
+     public static function perbyemp(){
+
+
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+             $personal = DB::table('personals as a')
+                     ->where('a.id_empresa','=', $usuarioEmp)
+                     ->where('a.id_sucursal','=', $usuarioSuc)
+                     ->get()->pluck('name','id','apellidos');
+            
+         if(!is_null($personal)){
+           return view("existencias.atencion.perbyemp",['personal'=>$personal]);
+         }else{
+            return view("existencias.atencion.perbyemp",['personal'=>[]]);
+         }
+
+    }
+
     /**
      * Show the form for creating new User.
      *

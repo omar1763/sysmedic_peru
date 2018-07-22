@@ -97,7 +97,7 @@ class AtencionController extends Controller
                              ->get()->pluck('name','name');
        $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('name','name');
+                             ->get()->pluck('nombres','nombres');
        $profesionales = Profesionales::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','name');

@@ -49,3 +49,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::resource('atencion', 'Existencias\AtencionController');
     Route::post('atencion_mass_destroy', ['uses' => 'Existencias\AtencionController@massDestroy', 'as' => 'atencion.mass_destroy']);
 });
+    
+    Route::get('/paciente/buscar/{dni}', 'Archivos\PacientesController@buscarPacientes');
+    Route::get('/existencias/atencion/servbyemp','Archivos\ServiciosController@servbyemp');
+    Route::get('/existencias/atencion/paqbyemp','Archivos\PaquetesController@paqbyemp');
+    Route::get('/existencias/atencion/perbyemp','Archivos\PersonalController@perbyemp');
+    Route::get('/existencias/atencion/probyemp','Archivos\ProfesionalesController@probyemp');
+
+
+
+    Route::get('/prueba','Archivos\ServiciosController@prueba');
+
+

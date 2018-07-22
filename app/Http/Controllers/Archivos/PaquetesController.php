@@ -43,16 +43,48 @@ class PaquetesController extends Controller
                 }
 
         $paquetes = DB::table('paquetes as a')
-        ->select('a.id','a.name','a.costo','a.id_empresa','a.id_sucursal')
+        ->select('a.id','a.name','a.costo','a.id_empresa','a.id_sucursal','b.id','b.id_paquete','c.detalle')
+        ->join('paquetes_servs as b','a.id','b.id_paquete')
+        ->join('servicios as c','b.id_servicio','c.id')
         ->where('a.id_empresa','=',$usuarioEmp)
         ->where('a.id_sucursal','=',$usuarioSuc)
        // ->where('a.estatus','=','1')
         ->orderby('a.created_at','desc')
         ->paginate(10);
 
-       
-
         return view('archivos.paquetes.index', compact('paquetes'));
+    }
+
+
+
+     public static function paqbyemp(){
+
+
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+             $paquetes = DB::table('paquetes as a')
+                     ->where('a.id_empresa','=', $usuarioEmp)
+                     ->where('a.id_sucursal','=', $usuarioSuc)
+                     ->get()->pluck('name','id');
+            
+         if(!is_null($paquetes)){
+           return view("existencias.atencion.paqbyemp",['paquetes'=>$paquetes]);
+         }else{
+            return view("existencias.atencion.paqbyemp",['paquetes'=>[]]);
+         }
+
     }
 
     /**
@@ -77,7 +109,8 @@ class PaquetesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-
+          //  print_r($request->all());
+          //  die();
            $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
@@ -90,7 +123,8 @@ class PaquetesController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
-
+       
+      
        $paquetes = new Paquetes;
        $paquetes->name =$request->name;
        $paquetes->costo     =$request->costo;
@@ -99,11 +133,36 @@ class PaquetesController extends Controller
        $paquetes->save();
 
 
-
+       foreach ($request->servicio as $key => $value) {
        $paquetesserv = new PaquetesServ;
        $paquetesserv->id_paquete =$paquetes->id;
-       $paquetesserv->id_servicio    =$paquetes->id;
+       $paquetesserv->id_servicio    =$value;
        $paquetesserv->save();
+       }
+      
+
+
+
+
+/*
+
+  foreach ($request->parameter as $key => $value) {
+                $array = explode ('-',$value);
+                $model_f = new Invoiceproducts();
+                $model_f->id_sales = $model->id;        
+                $model_f->id_product =$array[0];
+                $model_f->quantity =$array[1];
+                $model_f->importe =$array[2];
+                $model_f->valor =$array[3];
+                $model_f->igv =$array[4];
+                $model_f->save();
+              }
+
+
+*/
+
+
+
 
     
         return redirect()->route('admin.paquetes.index');

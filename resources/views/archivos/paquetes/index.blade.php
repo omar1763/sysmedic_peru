@@ -21,6 +21,7 @@
 
                         <th>@lang('global.paquetes.fields.name')</th>
                         <th>@lang('global.paquetes.fields.costo')</th>
+                        <th>@lang('global.paquetes.fields.detalle')</th>
                         <th>&nbsp;</th>
 
                     </tr>
@@ -34,6 +35,7 @@
 
                                 <td>{{ $paq->name }}</td>
                                 <td>{{ $paq->costo }}</td>
+                                <td>{{ $paq->detalle }}</td>
                                 <td>
                                     <a href="{{ route('admin.pacientes.edit',[$paq->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(

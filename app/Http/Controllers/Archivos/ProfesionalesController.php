@@ -58,6 +58,36 @@ class ProfesionalesController extends Controller
         return view('archivos.profesionales.index', compact('profesionales','centro'));
     }
 
+     public static function probyemp(){
+
+
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+             $profesional = DB::table('profesionales as a')
+                     ->where('a.id_empresa','=', $usuarioEmp)
+                     ->where('a.id_sucursal','=', $usuarioSuc)
+                     ->get()->pluck('name','id','apellidos');
+            
+         if(!is_null($profesional)){
+           return view("existencias.atencion.probyemp",['profesional'=>$profesional]);
+         }else{
+            return view("existencias.atencion.probyemp",['profesional'=>[]]);
+         }
+
+    }
+
     /**
      * Show the form for creating new User.
      *

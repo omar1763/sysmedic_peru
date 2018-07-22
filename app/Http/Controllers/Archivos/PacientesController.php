@@ -11,6 +11,7 @@ use App\HistoriasClinicas;
 use App\Empresas;
 use App\Locales;
 use DB;
+use Response;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -81,6 +82,7 @@ class PacientesController extends Controller
         return view('archivos.pacientes.create', compact('provincia','distrito','edocivil','gradoinstruccion'));
     }
 
+    
 
 
     public function store (StorePacientesRequest $request)

@@ -10,20 +10,114 @@
         </div>
         
         <div class="panel-body">
+
+           <div class="row">
+                <div class="col-md-6">
+                    {!! Form::label('pacientes', 'Pacientes*', ['class' => 'control-label']) !!}
+                    {!! Form::select('pacientes', $pacientes, old('pacientes'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('pacientes'))
+                        <p class="help-block">
+                            {{ $errors->first('pacientes') }}
+                        </p>
+                    @endif
+                </div>
+
+            </div>
+            
            <div class="row">
            	<div class="col-md-6">
-           <div id="error-tipo_servicio" class="form-group error-status">
+           <div id="tipo_servicio" class="form-group error-status">
                 {!! Form::label("tipo_servicio","* Tipo de Servicio",["class"=>""]) !!}
                 <div class="input-icon">
                     <div class="input-icon">
                         <i class="icon-eye  font-red"></i>
-                        {!! Form::select('tipo_servicio', ['1'=>'Servicio','2'=>'Paquete'], old('tipo_servicio'), ['class' => 'form-control select2',]) !!}
+                        
+                        {!! Form::select('tipo_servicio', ['0' => 'Seleccionar Tipo de Servicio','P' => 'Paquete', 'S' => 'Servicio'], null, ['id'=>'tipo', 'class'=>'form-control select2']) !!}
                     </div>
 
                 </div>
-                <span id="sp-error-tipo_servicio" class="help-block estatus-error"></span>
             </div> 
         </div>
+
+                <div class="col-md-6" id="servbyemp">
+                    
+                </div>
+        </div>
+
+        <div class="row">
+          
+          <div class="col-md-6">
+          <div id="origen_paciente" class="form-group error-status">
+                {!! Form::label("origen_paciente","* Origen del Paciente",["class"=>""]) !!}
+                <div class="input-icon">
+                    <div class="input-icon">
+                        <i class="icon-eye  font-red"></i>
+                        
+                        {!! Form::select('origen_paciente', ['0' => 'Seleccionar Origen del Paciente','P' => 'Personal', 'PR' => 'Profesional'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
+                    </div>
+
+                </div>
+            </div> 
+        </div>
+
+        <div class="col-md-6" id="origen">
+                    
+                </div>
+        </div>
+
+        <div class="row">
+           <div class="col-md-6">
+                <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('precio', 'Precio', ['class' => 'control-label']) !!}
+                    {!! Form::text('precio', old('precio'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('precio'))
+                        <p class="help-block">
+                            {{ $errors->first('precio') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+
+           </div>
+           <div class="col-md-6">
+                <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('porcentaje', 'Porcentaje*', ['class' => 'control-label']) !!}
+                    {!! Form::text('porcentaje', old('porcentaje'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('porcentaje'))
+                        <p class="help-block">
+                            {{ $errors->first('porcentaje') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+             
+           </div>
+        </div>
+
+        <div class="row">
+           <div class="col-md-6">
+          <div id="origen_paciente" class="form-group error-status">
+                {!! Form::label("acuenta","*A cuenta",["class"=>""]) !!}
+                <div class="input-icon">
+                    <div class="input-icon">
+                        <i class="icon-eye  font-red"></i>
+                        
+                        {!! Form::select('origen_paciente', ['0' => 'Seleccione una Opciòn','PA' => 'Pago Adelantado', 'PT' => 'Pago con Tarjeta'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
+                    </div>
+
+                </div>
+            </div> 
+        </div>
+
+
+
+
+
         </div>
              
              
@@ -38,24 +132,70 @@
     
 
      <script type="text/javascript">
-        $('#tipo_servicio').on('change',function(){
-          var id= $('#tipo_servicio').val();
-          var link= '{{asset("existencias/atencion/servbyemp")}}';
-              link= link.replace('id',id);
+      $(document).ready(function(){
+        $('#tipo').on('change',function(){
+          var link;
+          if ($(this).val() == 'S') {
+            link = '/existencias/atencion/servbyemp/';
+          }else{
+            link = '/existencias/atencion/paqbyemp/';
+          }
+
           $.ajax({
                  type: "get",
-                 url: link ,
+                 url:  link,
                  success: function(a) {
                     $('#servbyemp').html(a);
                  }
           });
 
         });
+        
+
+      });
+       
     </script>
 
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#tipoO').on('change',function(){
+          var link;
+          if ($(this).val() == 'P') {
+            link = '/existencias/atencion/perbyemp/';
+          }else{
+            link = '/existencias/atencion/probyemp/';
+          }
 
+          $.ajax({
+                 type: "get",
+                 url:  link,
+                 success: function(a) {
+                    $('#origen').html(a);
+                 }
+          });
 
+        });
+        
 
+      });
+       
+    </script>
+
+   <script>
+    $('#precio').priceFormat({
+    prefix: '',
+    centsSeparator: ',',
+    thousandsSeparator: '.'
+    });
+    </script>
+
+   <script>
+    $('#porcentaje').priceFormat({
+    prefix: '',
+    centsSeparator: ',',
+    thousandsSeparator: '.'
+    });
+    </script>
 
 
 

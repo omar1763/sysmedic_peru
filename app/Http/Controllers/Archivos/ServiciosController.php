@@ -52,9 +52,12 @@ class ServiciosController extends Controller
         return view('archivos.servicios.index', compact('servicios'));
     }
 
+  public function prueba(){
+    echo  "hola";
+    }
 
 
-   public static function servbyemp($id){
+   public static function servbyemp(){
 
 
          $id_usuario = Auth::id();
@@ -74,11 +77,12 @@ class ServiciosController extends Controller
              $servicio = DB::table('servicios as a')
                      ->where('a.id_empresa','=', $usuarioEmp)
                      ->where('a.id_sucursal','=', $usuarioSuc)
-                     ->get();
+                     ->get()->pluck('detalle','id');
+            
          if(!is_null($servicio)){
-            return $servicio;
+           return view("existencias.atencion.servbyemp",['servicio'=>$servicio]);
          }else{
-            return false;
+            return view("existencias.atencion.servbyemp",['servicio'=>[]]);
          }
 
     }
