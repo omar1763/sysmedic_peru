@@ -19,11 +19,13 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         <th>@lang('global.atencion.fields.id')</th>
-                        <th>@lang('global.atencion.fields.paciente')</th>
-                        <th>@lang('global.atencion.fields.servicio')</th>
-                        <th>@lang('global.atencion.fields.costo')</th>
-                        <th>@lang('global.atencion.fields.porcentaje')</th>
+                        <th>@lang('global.atencion.fields.nombres')</th>
+                        <th>@lang('global.atencion.fields.apellido')</th>
                         <th>@lang('global.atencion.fields.acuenta')</th>
+                        <th>@lang('global.atencion.fields.costo')</th>
+                        <th>@lang('global.atencion.fields.costoa')</th>
+                        <th>@lang('global.atencion.fields.fechaatencion')</th>
+                    
                         <th>&nbsp;</th>
 
                     </tr>
@@ -32,11 +34,17 @@
                 <tbody>
                     @if (count($atencion) > 0)
                         @foreach ($atencion as $atec)
-                            <tr data-entry-id="{{ $ing->id }}">
+                            <tr data-entry-id="{{ $atec->id }}">
                                 <td></td>
 
                                 <td>{{ $atec->id }}</td>
-                      
+                                <td>{{ $atec->nombres }}</td>
+                                <td>{{ $atec->apellidos }}</td>
+                                <td>{{ $atec->acuenta }}</td>
+                                <td>{{ $atec->costo }}</td>
+                                <td>{{ $atec->costoa }}</td>
+                                <td>{{ $atec->created_at }}</td>
+                               
                                 <td>
                                     <a href="{{ route('admin.atencion.edit',[$atec->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(

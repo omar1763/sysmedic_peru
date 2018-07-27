@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Archivos;
+namespace App\Http\Controllers\Existencias;
 
-use App\Servicios;
+use App\Gastos;
 use App\Empresas;
 use App\Locales;
 use DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Archivos\StoreServiciosRequest;
-use App\Http\Requests\Archivos\UpdateServiciosRequest;
+use App\Http\Requests\Existencias\StoreGastosRequest;
+use App\Http\Requests\Existencias\UpdateGastosRequest;
 
-class ServiciosController extends Controller
+class GastosController extends Controller
 {
     /**
      * Display a listing of User.
@@ -26,7 +26,8 @@ class ServiciosController extends Controller
             return abort(401);
         }
 
-        $id_usuario = Auth::id();
+        
+          $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
                     ->select('*')
@@ -40,8 +41,8 @@ class ServiciosController extends Controller
                 }
 
 
-         $servicios = DB::table('servicios as a')
-        ->select('a.id','a.detalle','a.precio','a.porcentaje','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+         $gastos = DB::table('gastos as a')
+        ->select('a.id','a.name','a.concepto','a.monto','a.id_empresa','a.id_sucursal')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->where('a.id_empresa','=', $usuarioEmp)
@@ -49,50 +50,9 @@ class ServiciosController extends Controller
         ->orderby('a.created_at','desc')
         ->paginate(10);
 
-        return view('archivos.servicios.index', compact('servicios'));
+
+        return view('existencias.gastos.index', compact('gastos'));
     }
-
-  public function prueba(){
-    echo  "hola";
-    }
-
-
-   public static function servbyemp(){
-
-
-         $id_usuario = Auth::id();
-
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
-                   // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
-
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-
-
-             $servicio = DB::table('servicios as a')
-                     ->select('a.id','a.detalle','a.precio','a.porcentaje','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
-                     ->join('empresas as b','a.id_empresa','b.id')
-                     ->join('locales as c','a.id_sucursal','c.id')
-                     ->where('a.id_empresa','=', $usuarioEmp)
-                     ->where('a.id_sucursal','=', $usuarioSuc)
-                     ->get();
-
-                    $newData = json_decode($servicio,TRUE);
-            
-         if(!is_null($servicio)){
-           return view("existencias.atencion.servbyemp",['servicio'=>$newData]);
-         }else{
-            return view("existencias.atencion.servbyemp",['servicio'=>[]]);
-         }
-
-    }
-
-
 
     /**
      * Show the form for creating new User.
@@ -105,23 +65,21 @@ class ServiciosController extends Controller
             return abort(401);
         }
 
-        return view('archivos.servicios.create');
+        return view('existencias.gastos.create');
     }
 
-    /**
+    /**Ll
      * Store a newly created User in storage.
      *
      * @param  \App\Http\Requests\StoreUsersRequest  $request
      * @return \Illuminate\Http\Response
      */
-    
-    public function store(StoreServiciosRequest $request)
+    public function store(StoreGastosRequest $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-
-        $id_usuario = Auth::id();
+          $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
                     ->select('*')
@@ -134,16 +92,15 @@ class ServiciosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-       $servicios = new Servicios;
-       $servicios->detalle =$request->detalle;
-       $servicios->precio     =$request->precio;
-       $servicios->porcentaje     =$request->porcentaje;
-       $servicios->id_empresa= $usuarioEmp;
-       $servicios->id_sucursal =$usuarioSuc;
-       $servicios->save();
+       $gastos = new Gastos;
+       $gastos->name =$request->name;
+       $gastos->concepto     =$request->concepto;
+       $gastos->monto     =$request->monto;
+       $gastos->id_empresa= $usuarioEmp;
+       $gastos->id_sucursal =$usuarioSuc;
+       $gastos->save();
 
-
-        return redirect()->route('admin.servicios.index');
+        return redirect()->route('admin.gastos.index');
     }
 
 
@@ -159,9 +116,9 @@ class ServiciosController extends Controller
             return abort(401);
         }
 
-        $servicios = Servicios::findOrFail($id);
+        $gastos = Gastos::findOrFail($id);
 
-        return view('archivos.servicios.edit', compact('servicios'));
+        return view('existencias.gastos.edit', compact('gastos'));
     }
 
     /**
@@ -171,15 +128,15 @@ class ServiciosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateServiciosRequest $request, $id)
+    public function update(UpdateGastosRequest $request, $id)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $servicios = Servicios::findOrFail($id);
-        $servicios->update($request->all());
+        $gastos = Gastos::findOrFail($id);
+        $gastos->update($request->all());
        
-        return redirect()->route('admin.servicios.index');
+        return redirect()->route('admin.gastos.index');
     }
 
     /**
@@ -193,10 +150,10 @@ class ServiciosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $servicios = Servicios::findOrFail($id);
-        $servicios->delete();
+        $gastos = Gastos::findOrFail($id);
+        $gastos->delete();
 
-        return redirect()->route('admin.servicios.index');
+        return redirect()->route('admin.gastos.index');
     }
 
     /**
@@ -210,7 +167,7 @@ class ServiciosController extends Controller
             return abort(401);
         }
         if ($request->input('ids')) {
-            $entries = Servicios::whereIn('id', $request->input('ids'))->get();
+            $entries = Gastos::whereIn('id', $request->input('ids'))->get();
 
             foreach ($entries as $entry) {
                 $entry->delete();

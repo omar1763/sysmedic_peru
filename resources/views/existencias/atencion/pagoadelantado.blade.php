@@ -1,12 +1,12 @@
     <div class="col-md-6">
                 <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('acuenta', 'Monto a Abonar', ['class' => 'control-label']) !!}
-                    {!! Form::text('acuenta', old('acuenta'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::label('costoa', 'Monto a Abonar', ['class' => 'control-label']) !!}
+                    {!! Form::text('costoa', old('costoa'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
-                    @if($errors->has('acuenta'))
+                    @if($errors->has('costoa'))
                         <p class="help-block">
-                            {{ $errors->first('acuenta') }}
+                            {{ $errors->first('costoa') }}
                         </p>
                     @endif
                 </div>
@@ -19,7 +19,7 @@
 @section('javascript') 
 
 <script>
-    $('#acuenta').priceFormat({
+    $('#costoa').priceFormat({
     prefix: '',
     centsSeparator: ',',
     thousandsSeparator: '.'

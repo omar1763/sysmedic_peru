@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="page-title">@lang('global.centros.title')</h3>
+    <h3 class="page-title">@lang('global.gastos.title')</h3>
     
-    {!! Form::model($centros, ['method' => 'PUT', 'route' => ['admin.centros.update', $centros->id]]) !!}
+    {!! Form::model($gastos, ['method' => 'PUT', 'route' => ['admin.gastos.update', $gastos->id]]) !!}
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -25,12 +25,12 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('direccion', 'Direcciòn', ['class' => 'control-label']) !!}
-                    {!! Form::text('direccion', old('direccion'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::label('concepto', 'Concepto*', ['class' => 'control-label']) !!}
+                    {!! Form::text('concepto', old('concepto'), ['class' => 'form-control', 'placeholder' => '', 'required' => 'false']) !!}
                     <p class="help-block"></p>
-                    @if($errors->has('direccion'))
+                    @if($errors->has('concepto'))
                         <p class="help-block">
-                            {{ $errors->first('direccion') }}
+                            {{ $errors->first('concepto') }}
                         </p>
                     @endif
                 </div>
@@ -38,16 +38,17 @@
         
              <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('referencia', 'Referencia', ['class' => 'control-label']) !!}
-                    {!! Form::text('referencia', old('referencia'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::label('monto', 'Monto*', ['class' => 'control-label']) !!}
+                    {!! Form::text('monto', old('monto'), ['class' => 'form-control', 'placeholder' => '', 'required' => 'false']) !!}
                     <p class="help-block"></p>
-                    @if($errors->has('referencia'))
+                    @if($errors->has('monto'))
                         <p class="help-block">
-                            {{ $errors->first('referencia') }}
+                            {{ $errors->first('monto') }}
                         </p>
                     @endif
                 </div>
             </div>
+            
         </div>
     </div>
 

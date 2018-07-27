@@ -145,6 +145,17 @@
                         </a>
                     </li>
                 </ul>
+                    <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'gastos' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.gastos.index') }}">
+                            <i class="fa fa-plus-square"></i>
+                            <span class="title">
+                                @lang('global.gastos.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             

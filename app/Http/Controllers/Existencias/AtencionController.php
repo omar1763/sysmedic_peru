@@ -46,10 +46,12 @@ class AtencionController extends Controller
                 }
 
 
-        $atencion = DB::table('atencion as a')
-        ->select('a.id','a.id_empresa','a.id_sucursal')
+        $atencion = DB::table('atencions as a')
+        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
+        ->join('atencion_detalles as d','a.id','d.id_atencion')
+        ->join('pacientes as e','d.id_paciente','e.id')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->orderby('a.created_at','desc')
@@ -101,7 +103,7 @@ class AtencionController extends Controller
        //$producto = Productos::get()->pluck('name', 'name');
        $servicios = Servicios::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('name','name');
+                             ->get()->pluck('detalle','id');
        $personal = Personal::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','name');
@@ -150,11 +152,39 @@ class AtencionController extends Controller
 
      }
 
+      public function dataServicios($id){
 
+         $id_usuario = Auth::id();
 
-     public function prueba(){
-    echo  AtencionController::dataPacientes(8);
-    }
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+         $servicios = DB::table('servicios as a')
+        ->select('a.id','a.detalle','a.precio','a.porcentaje')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.id','=',$id)
+       // ->orderby('a.created_at','desc')
+        ->get();
+
+         if(!is_null($servicios)){
+            return $servicios;
+         }else{
+            return false;
+         }  
+
+     }
+
 
 
      public function verDataPacientes($id){
@@ -162,6 +192,16 @@ class AtencionController extends Controller
       $pacientes= AtencionController::dataPacientes($id);
       
       return view('existencias.atencion.dataPacientes',['pacientes'=>$pacientes]);
+
+    }
+
+
+
+     public function verDataServicios($id){
+    
+      $servicios= AtencionController::dataServicios($id);
+      
+      return view('existencias.atencion.dataServicios',['servicios'=>$servicios]);
 
     }
 
@@ -180,7 +220,7 @@ class AtencionController extends Controller
      * @param  \App\Http\Requests\StoreUsersRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreIngresosRequest $request)
+    public function store(StoreAtencionRequest $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
@@ -201,27 +241,24 @@ class AtencionController extends Controller
 
        
 
-       $ingresos = new Ingresos;
-       $ingresos->producto =$request->producto;
-       $ingresos->cantidad     =$request->cantidad;
-       $ingresos->fechaingreso     =$request->fechaingreso;
-       $ingresos->id_empresa     =$usuarioEmp;
-       $ingresos->id_sucursal     =$usuarioSuc;
-       $ingresos->save();
+       $atencion = new Atencion;
+       $atencion->id_empresa     =$usuarioEmp;
+       $atencion->id_sucursal     =$usuarioSuc;
+       $atencion->save();
+
+       $atenciondetalle = new AtencionDetalle;
+       $atenciondetalle->id_atencion     =$atencion->id;
+       $atenciondetalle->id_paciente     =$request->pacientes;
+       $atenciondetalle->id_servicio     =$request->servicios;
+       $atenciondetalle->costo           =$request->precio;
+       $atenciondetalle->porcentaje      =$request->porcentaje;
+       $atenciondetalle->acuenta         =$request->acuenta;
+       $atenciondetalle->costoa          =$request->costoa;
+       $atenciondetalle->tarjeta         =$request->tarjeta;
+       $atenciondetalle->observaciones   =$request->observaciones;
+       $atenciondetalle->save();
         
-        $product =Productos::all();
-        foreach ($product as $prod) {
-                    $nombreprod = $prod->name;
-                    $cantidadprod = $prod->cantidad;
-                }
-      
-       $productos=Productos::where('name', '=' , $nombreprod)->get()->first();
-       $productos->cantidad=$cantidadprod + $ingresos->cantidad;
-       $productos->update();
-
-
-    
-        return redirect()->route('admin.ingresos.index');
+        return redirect()->route('admin.atencion.index');
     }
 
 

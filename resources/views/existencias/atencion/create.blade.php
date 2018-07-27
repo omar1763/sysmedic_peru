@@ -23,7 +23,6 @@
                     @endif
                 </div>
 
-               
 
             </div>
 
@@ -49,8 +48,14 @@
         </div>
 
                 <div class="col-md-6" id="servbyemp">
-                    
                 </div>
+        </div>
+
+        <div class="row">
+          
+          <div class="col-md-6 id="ser">
+
+         </div>
         </div>
 
         <div class="row">
@@ -112,7 +117,6 @@
 
         <div class="row">
            <div class="col-md-6">
-          <div id="origen_paciente" class="form-group error-status">
                 {!! Form::label("acuenta","*A cuenta",["class"=>""]) !!}
                 <div class="input-icon">
                     <div class="input-icon">
@@ -122,17 +126,36 @@
                     </div>
 
                 </div>
-            </div> 
         </div>
 
-        <div class="col-md-6" id="pagocuenta">
-
+         <div class="col-md-6">
+                    {!! Form::label('costoa', 'Monto a Abonar', ['class' => 'control-label']) !!}
+                    {!! Form::text('costoa', old('costoa'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('costoa'))
+                        <p class="help-block">
+                            {{ $errors->first('costoa') }}
+                        </p>
+                    @endif
+         </div>
         </div>
 
+        <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('tarjeta', 'Datos de Tarjeta', ['class' => 'control-label']) !!}
+                    {!! Form::text('tarjeta', old('tarjeta'), ['class' => 'form-control', 'placeholder' => '', 'required' => 'false']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('tarjeta'))
+                        <p class="help-block">
+                            {{ $errors->first('tarjeta') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
 
-
-
-
+           </div>
         </div>
 
         <div class="row">
@@ -250,6 +273,26 @@
                  url:  link,
                  success: function(a) {
                     $('#pac').html(a);
+                 }
+          });
+
+        });
+        
+
+      });
+       
+    </script>
+
+     <script type="text/javascript">
+      $(document).ready(function(){
+        $('#servbyemp').on('change',function(){
+          var link;
+            link = '/existencias/atencion/dataServicios/'+$(this).val();
+          $.ajax({
+                 type: "get",
+                 url:  link,
+                 success: function(a) {
+                    $('#ser').html(a);
                  }
           });
 

@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('paquetes_mass_destroy', ['uses' => 'Archivos\PaquetesController@massDestroy', 'as' => 'paquetes.mass_destroy']);
     Route::resource('atencion', 'Existencias\AtencionController');
     Route::post('atencion_mass_destroy', ['uses' => 'Existencias\AtencionController@massDestroy', 'as' => 'atencion.mass_destroy']);
+    Route::resource('gastos', 'Existencias\GastosController');
+    Route::post('gastos_mass_destroy', ['uses' => 'Existencias\GastosController@massDestroy', 'as' => 'gastos.mass_destroy']);
 });
     
     Route::get('/paciente/buscar/{dni}', 'Archivos\PacientesController@buscarPacientes');
@@ -58,6 +60,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/existencias/atencion/pagoadelantado','Existencias\AtencionController@pagoadelantado');
     Route::get('/existencias/atencion/pagotarjeta','Existencias\AtencionController@pagotarjeta');
     Route::get('/existencias/atencion/dataPacientes/{id}','Existencias\AtencionController@verDataPacientes');
+    Route::get('/existencias/atencion/dataServicios/{id}','Existencias\AtencionController@verDataServicios');
 
 
 
