@@ -80,12 +80,12 @@ class ServiciosController extends Controller
                      ->join('locales as c','a.id_sucursal','c.id')
                      ->where('a.id_empresa','=', $usuarioEmp)
                      ->where('a.id_sucursal','=', $usuarioSuc)
-                     ->get();
+                     ->get()->pluck('detalle','id');
 
-                    $newData = json_decode($servicio,TRUE);
+                //    $newData = json_decode($servicio,TRUE);
             
          if(!is_null($servicio)){
-           return view("existencias.atencion.servbyemp",['servicio'=>$newData]);
+           return view("existencias.atencion.servbyemp",['servicio'=>$servicio]);
          }else{
             return view("existencias.atencion.servbyemp",['servicio'=>[]]);
          }

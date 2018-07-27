@@ -21,6 +21,7 @@
                         <th>@lang('global.atencion.fields.id')</th>
                         <th>@lang('global.atencion.fields.nombres')</th>
                         <th>@lang('global.atencion.fields.apellido')</th>
+                        <th>@lang('global.atencion.fields.servicio')</th>
                         <th>@lang('global.atencion.fields.acuenta')</th>
                         <th>@lang('global.atencion.fields.costo')</th>
                         <th>@lang('global.atencion.fields.costoa')</th>
@@ -40,6 +41,7 @@
                                 <td>{{ $atec->id }}</td>
                                 <td>{{ $atec->nombres }}</td>
                                 <td>{{ $atec->apellidos }}</td>
+                                <td>{{ $atec->detalle }}</td>
                                 <td>{{ $atec->acuenta }}</td>
                                 <td>{{ $atec->costo }}</td>
                                 <td>{{ $atec->costoa }}</td>
