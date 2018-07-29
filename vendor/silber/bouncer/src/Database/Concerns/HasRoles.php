@@ -7,8 +7,8 @@ use Illuminate\Container\Container;
 use Silber\Bouncer\Clipboard;
 use Silber\Bouncer\Database\Role;
 use Silber\Bouncer\Database\Models;
-use Silber\Bouncer\Conductors\AssignsRole;
-use Silber\Bouncer\Conductors\RemovesRole;
+use Silber\Bouncer\Conductors\AssignsRoles;
+use Silber\Bouncer\Conductors\RemovesRoles;
 use Silber\Bouncer\Database\Queries\Roles as RolesQuery;
 
 trait HasRoles
@@ -28,27 +28,27 @@ trait HasRoles
     }
 
     /**
-     * Assign the given role to the model.
+     * Assign the given roles to the model.
      *
-     * @param  \Silber\Bouncer\Database\Role|string  $role
+     * @param  \Illuminate\Database\Eloquent\Model|string|array  $roles
      * @return $this
      */
-    public function assign($role)
+    public function assign($roles)
     {
-        (new AssignsRole($role))->to($this);
+        (new AssignsRoles($roles))->to($this);
 
         return $this;
     }
 
     /**
-     * Retract the given role from the model.
+     * Retract the given roles from the model.
      *
-     * @param  \Silber\Bouncer\Database\Role|string  $role
+     * @param  \Illuminate\Database\Eloquent\Model|string|array  $roles
      * @return $this
      */
-    public function retract($role)
+    public function retract($roles)
     {
-        (new RemovesRole($role))->from($this);
+        (new RemovesRoles($roles))->from($this);
 
         return $this;
     }
@@ -110,19 +110,6 @@ trait HasRoles
     }
 
     /**
-     * Check if the model has none of the given roles.
-     *
-     * Alias for the "isNotAn" method.
-     *
-     * @param  string  $role
-     * @return bool
-     */
-    public function isNot($role)
-    {
-        return call_user_func_array([$this, 'isNotAn'], func_get_args());
-    }
-
-    /**
      * Check if the model has all of the given roles.
      *
      * @param  string  $role
@@ -146,13 +133,10 @@ trait HasRoles
      */
     public function scopeWhereIs($query, $role)
     {
-        $constraint = new RolesQuery;
-
-        $params = array_slice(func_get_args(), 1);
-
-        array_unshift($params, $query);
-
-        call_user_func_array([$constraint, 'constrainWhereIs'], $params);
+        call_user_func_array(
+            [new RolesQuery, 'constrainWhereIs'],
+            func_get_args()
+        );
     }
 
     /**
@@ -164,13 +148,25 @@ trait HasRoles
      */
     public function scopeWhereIsAll($query, $role)
     {
-        $constrainer = new RolesQuery;
+        call_user_func_array(
+            [new RolesQuery, 'constrainWhereIsAll'],
+            func_get_args()
+        );
+    }
 
-        $params = array_slice(func_get_args(), 1);
-
-        array_unshift($params, $query);
-
-        call_user_func_array([$constrainer, 'constrainWhereIsAll'], $params);
+    /**
+     * Constrain the given query by the provided role.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $role
+     * @return void
+     */
+    public function scopeWhereIsNot($query, $role)
+    {
+        call_user_func_array(
+            [new RolesQuery, 'constrainWhereIsNot'],
+            func_get_args()
+        );
     }
 
     /**

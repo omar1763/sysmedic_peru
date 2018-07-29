@@ -59,8 +59,8 @@
    <script>
     $('#costo').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
 

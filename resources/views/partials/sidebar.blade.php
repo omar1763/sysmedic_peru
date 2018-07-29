@@ -15,7 +15,7 @@
             @can('users_manage')
              <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-users"></i>
+                    <i class="fa fa-archive"></i>
                     <span class="title">@lang('global.archivos.title')</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
@@ -91,7 +91,7 @@
             </li>
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-archive"></i>
+                    <i class="fa fa-retweet"></i>
                     <span class="title">@lang('global.movimientos.title')</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
@@ -128,7 +128,7 @@
 
              <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-archive"></i>
+                    <i class="fa fa-check-square-o"></i>
                     <span class="title">@lang('global.existenciass.title')</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
@@ -138,7 +138,7 @@
 
                     <li class="{{ $request->segment(2) == 'atencion' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.atencion.index') }}">
-                            <i class="fa fa-plus-square"></i>
+                            <i class="fa fa-h-square"></i>
                             <span class="title">
                                 @lang('global.atencion.title')
                             </span>
@@ -149,13 +149,59 @@
 
                     <li class="{{ $request->segment(2) == 'gastos' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.gastos.index') }}">
-                            <i class="fa fa-plus-square"></i>
+                            <i class="fa fa-share"></i>
                             <span class="title">
                                 @lang('global.gastos.title')
                             </span>
                         </a>
                     </li>
                 </ul>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'labporpagar' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.labporpagar.index') }}">
+                            <i class="fa fa-money"></i>
+                            <span class="title">
+                                @lang('global.labporpagar.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                 <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'otrosingresos' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.otrosingresos.index') }}">
+                            <i class="fa fa-reply "></i>
+                            <span class="title">
+                                @lang('global.otrosingresos.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+               <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-file-pdf-o"></i>
+                    <span class="title">@lang('global.reportes.title')</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'atenciondiaria' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.atenciondiaria.index') }}">
+                            <i class="fa fa-file"></i>
+                            <span class="title">
+                                @lang('global.atenciondiaria.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                    
+             
+                 
             </li>
 
             

@@ -58,19 +58,19 @@
 
 @section('javascript') 
 
-   <script>
+    <script>
     $('#precio').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
 
    <script>
     $('#porcentaje').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
 

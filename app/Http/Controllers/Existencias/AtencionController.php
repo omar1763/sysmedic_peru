@@ -10,6 +10,10 @@ use App\Servicios;
 use App\Personal;
 use App\Pacientes;
 use App\Profesionales;
+use App\Analisis;
+use App\AtencionLaboratorio;
+use App\Creditos;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
@@ -55,8 +59,9 @@ class AtencionController extends Controller
         ->join('servicios as f','d.id_servicio','f.id')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(10);
+        ->paginate(500);
 
 
         $servicios = Servicios::with('nombre');
@@ -111,12 +116,15 @@ class AtencionController extends Controller
        $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('nombres','id');
+       $analisis = Analisis::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('name','id');
        $profesionales = Profesionales::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','name');
 
 
-        return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesionales'));
+        return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesionales','analisis'));
     }
 
      public function dataPacientes($id){
@@ -258,7 +266,27 @@ class AtencionController extends Controller
        $atenciondetalle->tarjeta         =$request->tarjeta;
        $atenciondetalle->observaciones   =$request->observaciones;
        $atenciondetalle->save();
-        
+
+       $creditos = new Creditos;
+       $creditos->id_atencion    =$atencion->id;
+       $creditos->monto          =$request->costoa;
+       $creditos->tipo_ingreso   =$request->acuenta;
+       $creditos->origen          ='INGRESO DE ATENCIONES';
+       $creditos->id_empresa     =$usuarioEmp;
+       $creditos->id_sucursal    =$usuarioSuc;
+       $creditos->save();
+
+
+        foreach ($request->analisis as $key => $value) {
+       $analisisatencion = new AtencionLaboratorio;
+       $analisisatencion->id_atencion =$atencion->id;
+       $analisisatencion->id_analisis    =$value;
+       $analisisatencion->id_sucursal =$usuarioSuc;
+       $analisisatencion->id_empresa =$usuarioEmp;
+       $analisisatencion->save();
+       }
+      
+
         return redirect()->route('admin.atencion.index');
     }
 

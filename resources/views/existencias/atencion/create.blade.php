@@ -52,6 +52,19 @@
         </div>
 
         <div class="row">
+                <div class="col-md-6">
+                    {!! Form::label('analisis', 'Analisis de Laboratorio*', ['class' => 'control-label']) !!}
+                    {!! Form::select('analisis[]', $analisis, old('analisis'), ['class' => 'form-control select2', 'multiple' => 'multiple']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('analisis'))
+                        <p class="help-block">
+                            {{ $errors->first('analisis') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+
+        <div class="row">
           
           <div class="col-md-6 id="ser">
 
@@ -122,7 +135,7 @@
                     <div class="input-icon">
                         <i class="icon-eye  font-red"></i>
                         
-                        {!! Form::select('acuenta', ['0' => 'Seleccione una Opciòn','PA' => 'Pago Adelantado', 'PT' => 'Pago con Tarjeta'], null, ['id'=>'pago', 'class'=>'form-control select2']) !!}
+                        {!! Form::select('acuenta', ['0' => 'Seleccione una Opciòn','EF' => 'Pago Adelantado', 'TJ' => 'Pago con Tarjeta'], null, ['id'=>'pago', 'class'=>'form-control select2']) !!}
                     </div>
 
                 </div>
@@ -303,29 +316,32 @@
        
     </script>
 
-   <script>
+  <script>
     $('#precio').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
 
-   <script>
+
+  <script>
     $('#porcentaje').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
+
 
      <script>
     $('#acuenta').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
+
 
 
 

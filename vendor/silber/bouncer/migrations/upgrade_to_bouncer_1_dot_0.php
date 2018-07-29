@@ -16,6 +16,7 @@ class UpgradeToBouncer1Dot0 extends Migration
     public function up()
     {
         $this->createNewTables();
+        $this->addNewColumns();
         $this->migrateData();
         $this->deleteOldTables();
         $this->updateIndex();
@@ -43,6 +44,24 @@ class UpgradeToBouncer1Dot0 extends Migration
 
             $table->foreign('ability_id')->references('id')->on('abilities')
                   ->onUpdate('cascade')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Add new columns in Bouncer 1.0.
+     *
+     * @return void
+     */
+    protected function addNewColumns()
+    {
+        Schema::table('abilities', function (Blueprint $table) {
+            $table->string('title')->nullable()->after('name');
+            $table->boolean('only_owned')->after('entity_type')->default(false);
+        });
+
+        Schema::table('roles', function (Blueprint $table) {
+            $table->string('title')->nullable()->after('name');
+            $table->integer('level')->unsigned()->nullable()->after('name');
         });
     }
 

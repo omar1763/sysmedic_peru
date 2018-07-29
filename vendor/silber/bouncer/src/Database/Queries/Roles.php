@@ -2,7 +2,7 @@
 
 namespace Silber\Bouncer\Database\Queries;
 
-use Silber\Bouncer\Helper;
+use Silber\Bouncer\Helpers;
 use Silber\Bouncer\Database\Models;
 
 class Roles
@@ -23,6 +23,7 @@ class Roles
         });
     }
 
+
     /**
      * Constrain the given query by all provided roles.
      *
@@ -40,6 +41,22 @@ class Roles
     }
 
     /**
+     * Constrain the given query by the provided role.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $role
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function constrainWhereIsNot($query, $role)
+    {
+        $roles = array_slice(func_get_args(), 1);
+
+        return $query->whereHas('roles', function ($query) use ($roles) {
+            $query->whereIn('name', $roles);
+        }, '<', 1);
+    }
+
+    /**
      * Constrain the given roles query to those that were assigned to the given authorities.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -49,7 +66,7 @@ class Roles
      */
     public function constrainWhereAssignedTo($query, $model, array $keys = null)
     {
-        list($model, $keys) = Helper::extractModelAndKeys($model, $keys);
+        list($model, $keys) = Helpers::extractModelAndKeys($model, $keys);
 
         $query->whereExists(function ($query) use ($model, $keys) {
             $table  = $model->getTable();

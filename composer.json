@@ -6,12 +6,15 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "barryvdh/laravel-dompdf": "^0.8.2",
         "doctrine/dbal": "^2.5",
         "intervention/image": "^2.3",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.3",
-        "silber/bouncer": "v1.0.0-beta.2"
+        "nesbot/carbon": "^1.32",
+        "silber/bouncer": "v1.0.0-beta.3",
+        "elibyy/tcpdf-laravel": "5.4.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

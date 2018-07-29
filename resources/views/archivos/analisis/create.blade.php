@@ -74,19 +74,20 @@
 
 @section('javascript') 
 
-   <script>
+ <script>
     $('#preciopublico').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
 
-   <script>
+   
+    <script>
     $('#costlab').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
 

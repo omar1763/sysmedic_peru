@@ -50,6 +50,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('atencion_mass_destroy', ['uses' => 'Existencias\AtencionController@massDestroy', 'as' => 'atencion.mass_destroy']);
     Route::resource('gastos', 'Existencias\GastosController');
     Route::post('gastos_mass_destroy', ['uses' => 'Existencias\GastosController@massDestroy', 'as' => 'gastos.mass_destroy']);
+    Route::resource('labporpagar', 'Existencias\LabPorPagarController');
+    Route::post('labporpagar_mass_destroy', ['uses' => 'Existencias\LabPorPagarController@massDestroy', 'as' => 'labporpagar.mass_destroy']);
+    Route::resource('otrosingresos', 'Existencias\OtrosIngresosController');
+    Route::post('otrosingresos_mass_destroy', ['uses' => 'Existencias\OtrosIngresosController@massDestroy', 'as' => 'otrosingresos.mass_destroy']);
+    Route::resource('atenciondiaria', 'Reportes\PdfController');
+    Route::post('atenciondiaria_mass_destroy', ['uses' => 'Reportes\PdfController@massDestroy', 'as' => 'atenciondiaria.mass_destroy']);
 });
     
     Route::get('/paciente/buscar/{dni}', 'Archivos\PacientesController@buscarPacientes');
@@ -65,6 +71,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
 
 
+  Route::get('reportes/index','PdfController@index');
+  Route::get('listado_atenciondiaria_ver','Reportes\PdfController@listado_atenciondiaria_ver');
 
 
     Route::get('/prueba','Existencias\AtencionController@prueba');

@@ -143,7 +143,6 @@ class PaquetesController extends Controller
 
 
 
-
 /*
 
   foreach ($request->parameter as $key => $value) {

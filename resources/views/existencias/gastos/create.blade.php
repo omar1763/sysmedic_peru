@@ -59,11 +59,11 @@
 
 @section('javascript') 
 
-   <script>
+    <script>
     $('#monto').priceFormat({
     prefix: '',
-    centsSeparator: ',',
-    thousandsSeparator: '.'
+    thousandsSeparator: '',
+    clearOnEmpty: true
     });
     </script>
 

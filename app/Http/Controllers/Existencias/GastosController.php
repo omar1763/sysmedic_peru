@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Existencias;
 
 use App\Gastos;
+use App\Debitos;
 use App\Empresas;
 use App\Locales;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -42,11 +44,12 @@ class GastosController extends Controller
 
 
          $gastos = DB::table('gastos as a')
-        ->select('a.id','a.name','a.concepto','a.monto','a.id_empresa','a.id_sucursal')
+        ->select('a.id','a.name','a.concepto','a.monto','a.id_empresa','a.id_sucursal','a.created_at')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
         ->paginate(10);
 
@@ -99,6 +102,16 @@ class GastosController extends Controller
        $gastos->id_empresa= $usuarioEmp;
        $gastos->id_sucursal =$usuarioSuc;
        $gastos->save();
+
+       $debitos = new Debitos;
+       $debitos->id_gasto= $gastos->id;
+       $debitos->descripcion =$gastos->concepto;
+       $debitos->origen ='RELACION DE GASTOS';
+       $debitos->monto     =$gastos->monto;
+       $debitos->id_empresa= $usuarioEmp;
+       $debitos->id_sucursal =$usuarioSuc;
+       $debitos->save();
+
 
         return redirect()->route('admin.gastos.index');
     }
