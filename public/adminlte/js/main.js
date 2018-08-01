@@ -222,3 +222,21 @@ function processAjaxTables() {
     });
 
 }
+function ajaxLoadSelect(fileame, selectLoad,stateID) { 
+ if (stateID) {
+   $.ajax({
+    url: fileame+'/' + stateID+'*'+selectLoad,
+    type: "GET",
+    dataType: "json",
+    beforeSend: function() {     
+    },
+    success: function (data) {
+        $("#precio").val(data.precio);
+        $("#porcentaje").val(data.porcentaje);
+     
+    }
+  });
+ } else {
+   $('select[name="'+selectLoad+'"]').empty();
+ }
+}

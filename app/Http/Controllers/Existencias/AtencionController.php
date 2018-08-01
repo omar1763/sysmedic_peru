@@ -212,7 +212,35 @@ class AtencionController extends Controller
       
       return view('existencias.atencion.dataServicios',['servicios'=>$servicios]);
 
+    }   
+    public function cardainput($id){
+        $filter=explode('*', $id);
+        $precio='';
+        $porcentaje='';
+        if ($filter[1]=='servicios') {          
+         $servicios= DB::table('servicios')
+         ->select('precio','porcentaje')     
+         ->where('id','=',$filter[0])
+         ->first();
+         $precio=$servicios->precio;
+         $porcentaje=$servicios->porcentaje;
+     } else {
+        $paquetes= DB::table('paquetes')
+        ->select('costo')     
+        ->where('id','=',$filter[0])
+        ->first();
+        $precio=$paquetes->costo;
+        $porcentaje='';
     }
+
+    return response()->json([
+      'precio' => $precio,
+      'porcentaje' => $porcentaje      
+  ]);
+
+
+
+}
 
 
 

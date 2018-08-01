@@ -69,6 +69,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/existencias/atencion/dataServicios/{id}','Existencias\AtencionController@verDataServicios');
 
 
+        Route::get('/existencias/atencion/cardainput/{id}','Existencias\AtencionController@cardainput');
+
+
 
 
   Route::get('reportes/index','PdfController@index');
