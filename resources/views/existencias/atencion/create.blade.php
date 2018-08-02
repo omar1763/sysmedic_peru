@@ -27,7 +27,7 @@
             </div>
 
           <div class="row">
-             <div class="col-md-6" id="pac">
+             <div class="col" id="pac">
 
              </div>
           </div>
