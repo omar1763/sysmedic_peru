@@ -36,7 +36,6 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        <th>@lang('global.atencion.fields.id')</th>
                         <th>@lang('global.atencion.fields.nombres')</th>
                         <th>@lang('global.atencion.fields.apellido')</th>
                         <th>@lang('global.atencion.fields.servicio')</th>
@@ -55,8 +54,6 @@
                         @foreach ($atencion as $atec)
                             <tr data-entry-id="{{ $atec->id }}">
                                 <td></td>
-
-                                <td>{{ $atec->id }}</td>
                                 <td>{{ $atec->nombres }}</td>
                                 <td>{{ $atec->apellidos }}</td>
                                 <td>{{ $atec->detalle }}</td>
