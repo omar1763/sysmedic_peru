@@ -22,7 +22,7 @@ class GastosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
@@ -41,7 +41,17 @@ class GastosController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
+         
+         
+                      
+        
+            $f1 = date('YYYY-m-d');
 
+            if(! is_null($request->fecha)) {
+                $f1 = $request->fecha;
+            }
+
+           
 
          $gastos = DB::table('gastos as a')
         ->select('a.id','a.name','a.concepto','a.monto','a.id_empresa','a.id_sucursal','a.created_at')
@@ -49,9 +59,10 @@ class GastosController extends Controller
         ->join('locales as c','a.id_sucursal','c.id')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->where('a.created_at','=', $f1)
+        //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(10);
+        ->paginate(500);
 
 
         return view('existencias.gastos.index', compact('gastos'));

@@ -21,7 +21,7 @@ class LabPorPagarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
@@ -40,6 +40,13 @@ class LabPorPagarController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
+          
+
+    $f1 = date('YYYY-m-d');
+
+    if(! is_null($request->fecha)) {
+        $f1 = $request->fecha;
+    }
 
 
          $labporpagar = DB::table('atencion_laboratorios as a')
@@ -50,6 +57,7 @@ class LabPorPagarController extends Controller
         ->where('a.pagado','=',FALSE)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.created_at','=', $f1)
         ->orderby('a.created_at','desc')
         ->paginate(100);
 
