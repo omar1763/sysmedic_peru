@@ -30,7 +30,7 @@ class AtencionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
@@ -48,7 +48,14 @@ class AtencionController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
+        
+    $f1 = date('YYYY-m-d');
 
+    if(! is_null($request->fecha)) {
+        $f1 = $request->fecha;
+    }
+
+   
 
         $atencion = DB::table('atencions as a')
         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
@@ -59,6 +66,57 @@ class AtencionController extends Controller
         ->join('servicios as f','d.id_servicio','f.id')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.created_at','=', $f1)
+        //->orwhereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->orderby('a.created_at','desc')
+        ->paginate(500);
+
+
+        $servicios = Servicios::with('nombre');
+        $personal = Personal::with('dni');
+        $pacientes = Pacientes::with('dni');
+        $profesionales = Profesionales::with('nombre');
+
+        return view('existencias.atencion.index', compact('atencion','servicios','personal','pacientes','profesionales'));
+    }
+
+      public function indexFecha(Request $request)
+    {
+        if (! Gate::allows('users_manage')) {
+            return abort(401);
+        }
+
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+        
+        //   $f1 = date('d-m-YYYY');
+      $f1 = date('Y-m-d');
+
+    if(! is_null($request->fecha)) {
+        $f1 = $request->fecha;
+    
+    }
+
+        $atencion = DB::table('atencions as a')
+        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->join('atencion_detalles as d','a.id','d.id_atencion')
+        ->join('pacientes as e','d.id_paciente','e.id')
+        ->join('servicios as f','d.id_servicio','f.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.created_at','=', $f1)
         //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
         ->paginate(500);
