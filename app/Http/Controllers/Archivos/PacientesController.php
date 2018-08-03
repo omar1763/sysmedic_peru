@@ -81,7 +81,21 @@ class PacientesController extends Controller
 
         return view('archivos.pacientes.create', compact('provincia','distrito','edocivil','gradoinstruccion'));
     }
+   public function createmodal()
+    {
+        if (! Gate::allows('users_manage')) {
+            return abort(401);
+        }
+       $provincia = Provincia::get()->pluck('nombre', 'nombre');
+       $distrito = Distrito::get()->pluck('nombre', 'nombre');
+       $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
+       $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
 
+
+        return view('archivos.pacientes.createmodal', compact('provincia','distrito','edocivil','gradoinstruccion'));
+    }
+
+    
     
 
 
@@ -126,6 +140,7 @@ class PacientesController extends Controller
        $historia->id_paciente =$pacientes->id;
        $historia->historia    =$historiaclinica;
        $historia->save();
+      
 
     
         return redirect()->route('admin.pacientes.index');

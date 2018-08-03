@@ -1,6 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+
+<div class="modal fade" id="createPacienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title disabled" id="modalTitle">Nuevo Paciente</h4>
+                
+               <!-- <small class="badge badge-danger">* Campos obligatorios</small>-->
+            </div>
+            <div id="id_container_modal_render" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+               
+               <!-- <button type="button" id="save-btn" class="btn green">Guardar</button>-->
+               <button type="button" class="btn red btn-outline" data-dismiss="modal">Cerrar</button>
+              
+            </div>
+        </div>
+    </div>
+</div>
     <h3 class="page-title">@lang('global.atencion.title')</h3>
     {!! Form::open(['method' => 'POST', 'route' => ['admin.atencion.store']]) !!}
 
@@ -21,6 +46,13 @@
                             {{ $errors->first('pacientes') }}
                         </p>
                     @endif
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <a id="btn_add" onclick="addCiente()" style="margin-top:25px;" class="btn btn-danger">
+                      <i class="glyphicon glyphicon-plus"></i>
+                    </a>
+                  </div>
                 </div>
 
 
@@ -222,7 +254,10 @@
         
 
       });
-       
+       function addCiente(){        
+       javascript:ajaxLoad("{{ route('admin.pacientes.createmodal') }}","id_container_modal_render");
+         $('#createPacienteModal').modal('show');
+       }
     </script>
 
     <script type="text/javascript">

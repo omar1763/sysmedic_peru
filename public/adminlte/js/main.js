@@ -240,3 +240,30 @@ function ajaxLoadSelect(fileame, selectLoad,stateID) {
    $('select[name="'+selectLoad+'"]').empty();
  }
 }
+function ajaxLoad(filename, content) {
+    $.ajax({
+        type: "GET",
+        url: filename,
+        contentType: false,
+        beforeSend: function() {
+            $("#preloaderSpinner").css("display", "");
+        },
+        success: function(data) {
+            
+            $("#" + content).html(data);
+           
+        },
+        error: function(xhr, status, error) {
+            $("#preloaderSpinner").css("display", "none");
+            $("#preloaderSpinner").css("display", "none");
+            if (xhr.status == 401 || xhr.status == 419) {
+                swal("Error!", "La Sesión Caduco", "error");
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            } else {
+                swal("Error!", "Error Desconocido por Refresque la Página", "error");
+            }
+        }
+    });
+}
