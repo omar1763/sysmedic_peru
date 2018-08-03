@@ -42,7 +42,21 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('productos_mass_destroy', ['uses' => 'Movimientos\ProductosController@massDestroy', 'as' => 'productos.mass_destroy']);
     Route::resource('ingresos', 'Movimientos\IngresosController');
     Route::post('ingresos_mass_destroy', ['uses' => 'Movimientos\IngresosController@massDestroy', 'as' => 'ingresos.mass_destroy']);
-    Route::resource('pacientes', 'Archivos\PacientesController');
+    /*  Route::resource('pacientes', 'Archivos\PacientesController');
+
+     Route::resource('pacientes', 'Archivos\PacientesController', 
+        ['names' => [
+            'create' => 'pacientes.create',
+            'createmodal' => 'pacientes.createmodal',
+            'update' => 'pacientes.update',
+            'edit' => 'pacientes.edit',
+            'store' => 'pacientes.store',
+            'show' => 'pacientes.show',
+            'destroy' => 'pacientes.destroy',
+        ]]);
+
+*/
+
     Route::post('pacientes_mass_destroy', ['uses' => 'Archivos\PacientesController@massDestroy', 'as' => 'pacientes.mass_destroy']);
     Route::resource('paquetes', 'Archivos\PaquetesController');
     Route::post('paquetes_mass_destroy', ['uses' => 'Archivos\PaquetesController@massDestroy', 'as' => 'paquetes.mass_destroy']);
@@ -69,10 +83,30 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/existencias/atencion/dataServicios/{id}','Existencias\AtencionController@verDataServicios');
 
 
+
+/////// RUTAS DE PACIENTES  ////
+
+
+    Route::get('/pacientes', function () {return view('pacientes.create');});
+    Route::get('/pacientes/create','Archivos\PacientesController@create');
+    Route::get('/archivos/pacientes/createmodal', ['uses' => 'Archivos\PacientesController@createmodal', 'as' => 'pacientes.createmodal']);
+    Route::post('/pacientes/store', ['uses' => 'Archivos\PacientesController@store', 'as' => 'pacientes.store']);
+    Route::post('/pacientes/store2', ['uses' => 'Archivos\PacientesController@store2', 'as' => 'pacientes.store2']);
+    Route::get('/pacientes/index',['uses' => 'Archivos\PacientesController@index', 'as' => 'pacientes.index']);
+    Route::get('/pacientes/edit/{id}',['uses' => 'Archivos\PacientesController@edit', 'as' => 'pacientes.edit']);
+    Route::put('/pacientes/update/{id}',['uses' => 'Archivos\PacientesController@update', 'as' => 'pacientes.update']);
+    Route::put('/pacientes/destroy/{id}',['uses' => 'Archivos\PacientesController@destroy', 'as' => 'pacientes.destroy']);
+
+
+
+
+
         Route::get('/existencias/atencion/cardainput/{id}','Existencias\AtencionController@cardainput');
 
 
+   Route::get('/indexFecha/{fecha}','Existencias\AtencionController@indexFecha');
 
+   Route::get('createmodal','Archivos\PacientesController@createmodal');
 
   Route::get('reportes/index','PdfController@index');
   Route::get('listado_atenciondiaria_ver','Reportes\PdfController@listado_atenciondiaria_ver');

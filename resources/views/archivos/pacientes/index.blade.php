@@ -4,7 +4,7 @@
 @section('content')
     <h3 class="page-title">@lang('global.pacientes.title')</h3>
      <p>
-        <a href="{{ route('admin.pacientes.create') }}" class="btn btn-success">@lang('global.app_add_new')</a>
+        <a href="{{asset('/pacientes/create')}}" class="btn btn-success">@lang('global.app_add_new')</a>
     </p>
 
   
@@ -56,12 +56,12 @@
                                 <td>{{ $pac->historia }}</td>
                             
                                 <td>
-                                    <a href="{{ route('admin.pacientes.edit',[$pac->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
+                                    <a href="{{asset('/pacientes/edit')}}/{{$pac->id}}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
                                         'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
-                                        'route' => ['admin.pacientes.destroy', $pac->id])) !!}
+                                        'route' => ['pacientes.destroy', $pac->id])) !!}
                                     {!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
                                 </td>

@@ -255,7 +255,7 @@
 
       });
        function addCiente(){        
-       javascript:ajaxLoad("{{ route('admin.pacientes.createmodal') }}","id_container_modal_render");
+       javascript:ajaxLoad("{{ route('pacientes.createmodal') }}","id_container_modal_render");
          $('#createPacienteModal').modal('show');
        }
     </script>

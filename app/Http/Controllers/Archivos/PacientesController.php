@@ -81,6 +81,7 @@ class PacientesController extends Controller
 
         return view('archivos.pacientes.create', compact('provincia','distrito','edocivil','gradoinstruccion'));
     }
+
    public function createmodal()
     {
         if (! Gate::allows('users_manage')) {
@@ -143,8 +144,57 @@ class PacientesController extends Controller
       
 
     
-        return redirect()->route('admin.pacientes.index');
+        return redirect()->route('pacientes.index');
     }
+
+
+     public function store2 (StorePacientesRequest $request)
+    {
+        if (! Gate::allows('users_manage')) {
+            return abort(401);
+        }
+
+           $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $pacientes = new Pacientes;
+       $pacientes->dni =$request->dni;
+       $pacientes->nombres     =$request->nombres;
+       $pacientes->apellidos     =$request->apellidos;
+       $pacientes->direccion     =$request->direccion;
+       $pacientes->provincia     =$request->provincia;
+       $pacientes->distrito     =$request->distrito;
+       $pacientes->telefono     =$request->telefono;
+       $pacientes->fechanac     =$request->fechanac;
+       $pacientes->gradoinstruccion     =$request->gradoinstruccion;
+       $pacientes->ocupacion     =$request->ocupacion;
+       $pacientes->edocivil     =$request->edocivil;
+       $pacientes->id_empresa     =$usuarioEmp;
+       $pacientes->id_sucursal     =$usuarioSuc;
+       $pacientes->save();
+
+       $historiaclinica=str_pad(($pacientes->id),4, "0", STR_PAD_LEFT);
+
+       $historia = new HistoriasClinicas;
+       $historia->id_paciente =$pacientes->id;
+       $historia->historia    =$historiaclinica;
+       $historia->save();
+      
+
+    
+        return redirect()->route('admin.atencion.create');
+    }
+
 
     /**
      * Show the form for editing User.
@@ -183,7 +233,7 @@ class PacientesController extends Controller
         $pacientes = Pacientes::findOrFail($id);
         $pacientes->update($request->all());
       
-        return redirect()->route('admin.pacientes.index');
+        return redirect()->route('pacientes.index');
     }
 
     /**
@@ -200,7 +250,7 @@ class PacientesController extends Controller
         $pacientes = Pacientes::findOrFail($id);
         $pacientes->delete();
 
-        return redirect()->route('admin.pacientes.index');
+        return redirect()->route('pacientes.index');
     }
 
     /**
