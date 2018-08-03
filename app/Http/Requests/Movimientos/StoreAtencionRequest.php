@@ -23,7 +23,7 @@ class StoreAtencionRequest extends FormRequest
     public function rules()
     {
         return [
-           
+            'costoa' => 'required',
        
         ];
     }

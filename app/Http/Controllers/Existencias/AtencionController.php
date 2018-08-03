@@ -12,6 +12,7 @@ use App\Pacientes;
 use App\Profesionales;
 use App\Analisis;
 use App\AtencionLaboratorio;
+use App\AtencionServicios;
 use App\Creditos;
 use Carbon\Carbon;
 use DB;
@@ -49,15 +50,12 @@ class AtencionController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
         
-    $f1 = date('YYYY-m-d');
+    $fechaHoy = date('YYYY-m-d');
 
     if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
-    }
 
-   
-
-        $atencion = DB::table('atencions as a')
+          $atencion = DB::table('atencions as a')
         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
@@ -69,7 +67,23 @@ class AtencionController extends Controller
         ->where('a.created_at','=', $f1)
         //->orwhereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(500);
+        ->paginate(100);
+    } else {
+
+          $atencion = DB::table('atencions as a')
+        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->join('atencion_detalles as d','a.id','d.id_atencion')
+        ->join('pacientes as e','d.id_paciente','e.id')
+        ->join('servicios as f','d.id_servicio','f.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        //->where('a.created_at', '=', $fechaHoy)
+        ->orderby('a.created_at','desc')
+        ->paginate(100);
+    }
 
 
         $servicios = Servicios::with('nombre');
@@ -344,7 +358,7 @@ class AtencionController extends Controller
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
-       $atenciondetalle->id_servicio     =$request->servicio;
+       //$atenciondetalle->id_servicio     =$request->servicio;
        $atenciondetalle->costo           =$request->precio;
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
@@ -362,7 +376,8 @@ class AtencionController extends Controller
        $creditos->id_sucursal    =$usuarioSuc;
        $creditos->save();
 
-
+      
+        if(! is_null($request->analisis)){
         foreach ($request->analisis as $key => $value) {
        $analisisatencion = new AtencionLaboratorio;
        $analisisatencion->id_atencion =$atencion->id;
@@ -371,6 +386,20 @@ class AtencionController extends Controller
        $analisisatencion->id_empresa =$usuarioEmp;
        $analisisatencion->save();
        }
+         }
+
+
+          if(! is_null($request->analisis)){
+         foreach ($request->servicio as $key => $value) {
+       $serviciosatencion = new AtencionServicios;
+       $serviciosatencion->id_atencion =$atencion->id;
+       $serviciosatencion->id_servicio    =$value;
+       $serviciosatencion->id_sucursal =$usuarioSuc;
+       $serviciosatencion->id_empresa =$usuarioEmp;
+       $serviciosatencion->save();
+       }
+       }
+      
       
 
         return redirect()->route('admin.atencion.index');

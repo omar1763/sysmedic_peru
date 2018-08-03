@@ -190,7 +190,7 @@
                 <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('tarjeta', 'Datos de Tarjeta', ['class' => 'control-label']) !!}
-                    {!! Form::text('tarjeta', old('tarjeta'), ['class' => 'form-control', 'placeholder' => '', 'required' => 'false']) !!}
+                    {!! Form::text('tarjeta', old('tarjeta'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('tarjeta'))
                         <p class="help-block">
@@ -208,7 +208,7 @@
                 <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('observaciones', 'Observaciones', ['class' => 'control-label']) !!}
-                    {!! Form::text('observaciones', old('observaciones'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('observaciones', old('observaciones'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('observaciones'))
                         <p class="help-block">
