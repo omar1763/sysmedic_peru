@@ -46,8 +46,18 @@ class OtrosIngresosController extends Controller
 
             if(! is_null($request->fecha)) {
                 $f1 = $request->fecha;
-            }
+                    $otrosingresos = DB::table('creditos as a')
+                    ->select('a.id','a.id_atencion','a.descripcion','a.monto','a.origen','a.id_empresa','a.id_sucursal','a.created_at')
+                    ->join('empresas as b','a.id_empresa','b.id')
+                    ->join('locales as c','a.id_sucursal','c.id')
+                    ->where('a.id_empresa','=', $usuarioEmp)
+                    ->where('a.id_sucursal','=', $usuarioSuc)
+                    ->where('a.origen','=','OTROS INGRESOS')
+                    ->where('a.created_at','=', $f1)
+                    ->orderby('a.created_at','desc')
+                    ->paginate(10);
 
+            } else {
 
          $otrosingresos = DB::table('creditos as a')
         ->select('a.id','a.id_atencion','a.descripcion','a.monto','a.origen','a.id_empresa','a.id_sucursal','a.created_at')
@@ -56,11 +66,10 @@ class OtrosIngresosController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.origen','=','OTROS INGRESOS')
-        ->where('a.created_at','=', $f1)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
         ->paginate(10);
-
+}
 
         return view('existencias.otrosingresos.index', compact('otrosingresos'));
     }

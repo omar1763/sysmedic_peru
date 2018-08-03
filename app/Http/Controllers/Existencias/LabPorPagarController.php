@@ -7,6 +7,7 @@ use App\Analisis;
 use App\Debitos;
 use App\Empresas;
 use App\Locales;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -46,10 +47,7 @@ class LabPorPagarController extends Controller
 
     if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
-    }
-
-
-         $labporpagar = DB::table('atencion_laboratorios as a')
+        $labporpagar = DB::table('atencion_laboratorios as a')
         ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
@@ -60,6 +58,20 @@ class LabPorPagarController extends Controller
         ->where('a.created_at','=', $f1)
         ->orderby('a.created_at','desc')
         ->paginate(100);
+    } else {
+
+         $labporpagar = DB::table('atencion_laboratorios as a')
+        ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->join('analises as d','a.id_analisis','d.id')
+        ->where('a.pagado','=',FALSE)
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->orderby('a.created_at','desc')
+        ->paginate(100);
+}
 
 
         return view('existencias.labporpagar.index', compact('labporpagar'));
