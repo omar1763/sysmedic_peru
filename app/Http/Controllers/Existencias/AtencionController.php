@@ -159,7 +159,7 @@ class AtencionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
@@ -195,6 +195,8 @@ class AtencionController extends Controller
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','name');
 
+        $request->session()->put('service_price', 0);
+        $request->session()->put('analises_price', 0);
 
         return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesionales','analisis'));
     }
@@ -285,25 +287,78 @@ class AtencionController extends Controller
       return view('existencias.atencion.dataServicios',['servicios'=>$servicios]);
 
     }   
-    public function cardainput($id){
+    public function cardainput($id, Request $request){
         $filter=explode('*', $id);
-        $precio='';
-        $porcentaje='';
-        if ($filter[1]=='servicios') {          
-         $servicios= DB::table('servicios')
-         ->select('precio','porcentaje')     
-         ->where('id','=',$filter[0])
-         ->first();
-         $precio=$servicios->precio;
-         $porcentaje=$servicios->porcentaje;
-     } else {
-        $paquetes= DB::table('paquetes')
-        ->select('costo')     
-        ->where('id','=',$filter[0])
-        ->first();
-        $precio=$paquetes->costo;
-        $porcentaje='';
-    }
+
+        $precio = 0;
+        $porcentaje = 0;
+
+        switch ($filter[1]) {
+            case 'servicios':
+                    $servicios= DB::table('servicios')
+                        ->select('precio','porcentaje')     
+                        ->whereIn('id',explode(',', $filter[0]))
+                        ->get();
+                    
+                    foreach ($servicios as $servicio) {
+                        $precio += (float)$servicio->precio;
+                    }
+
+                    $request->session()->put('service_price', $precio);
+                    
+                    $precio = $precio + $request->session()->get('analises_price');
+                    
+                break;
+
+            case 'analises':
+
+                    $analises= DB::table('analises')
+                        ->select('preciopublico')     
+                        ->whereIn('id',explode(',', $filter[0]))
+                        ->get();
+                    
+                    foreach ($analises as $a) {
+                        $precio += (float)$a->preciopublico;
+                    }
+
+                    $request->session()->put('analises_price', $precio);
+                    $request->session()->put('analises', explode(',', $filter[0]));
+
+                    $precio = $precio + $request->session()->get('service_price');
+                    
+                break;
+            
+            default:
+                    $paquetes= DB::table('paquetes')
+                        ->select('costo')     
+                        ->where('id','=',$filter[0])
+                        ->first();
+                    
+                    $precio = $paquetes->costo;
+
+                break;
+        }
+        // if ($filter[1]=='servicios') {          
+        //     $servicios= DB::table('servicios')
+        //     ->select('precio','porcentaje')     
+        //     ->whereIn('id',explode(',', $filter[0]))
+        //     ->get();
+        
+        //     foreach ($servicios as $servicio) {
+        //         $precio += (float)$servicio->precio;
+        //     }
+            
+        //     $request->session()->put('service_price', $precio);
+
+        //     $porcentaje=$servicios[0]->porcentaje;
+        //  } else {
+        //     $paquetes= DB::table('paquetes')
+        //     ->select('costo')     
+        //     ->where('id','=',$filter[0])
+        //     ->first();
+        //     $precio=$paquetes->costo;
+        //     $porcentaje='';
+        // }
 
     return response()->json([
       'precio' => $precio,
