@@ -178,6 +178,18 @@
                         </a>
                     </li>
                 </ul>
+
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultados' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultados.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.resultados.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
                <li class="treeview">

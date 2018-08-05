@@ -22,6 +22,7 @@
 <script src="{{ url('js/jquery.priceformat.min.js') }}"></script>
 <script src="{{ url('js/prototype.priceformat') }}"></script>
 <script src="{{ url('js/prototype.priceformat.min') }}"></script>
+<script src="{{ asset('/vendor/ckeditor/ckeditor.js') }}"></script>
 <script>
     window._token = '{{ csrf_token() }}';
 </script>
