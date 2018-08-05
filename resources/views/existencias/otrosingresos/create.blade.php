@@ -52,6 +52,17 @@
                         </p>
                     @endif
            </div>
+           <div class="col-md-6">
+                {!! Form::label("causa","*Causa de Ingreso",["class"=>""]) !!}
+                <div class="input-icon">
+                    <div class="input-icon">
+                        <i class="icon-eye  font-red"></i>
+                        
+                        {!! Form::select('causa', ['0' => 'Seleccione Causa de Ingreso','V' => 'Ventas', 'CC' => 'Cuentas por Cobrar', 'O' => 'Otros'], null, ['id'=>'tipo', 'class'=>'form-control select2']) !!}
+                    </div>
+
+                </div>
+        </div>
          
         </div>
 

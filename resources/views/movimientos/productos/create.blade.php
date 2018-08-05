@@ -25,7 +25,7 @@
 
             <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('medida', 'Medida*', ['class' => 'control-label']) !!}
+                    {!! Form::label('medida', 'Presentaciòn*', ['class' => 'control-label']) !!}
                     {!! Form::select('medida', $medida, old('medida'), ['class' => 'form-control select2', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('medida'))

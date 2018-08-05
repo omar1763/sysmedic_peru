@@ -117,6 +117,7 @@ class OtrosIngresosController extends Controller
        $otrosingresos->descripcion     =$request->descripcion;
        $otrosingresos->origen     ='OTROS INGRESOS';
        $otrosingresos->tipo_ingreso     =$request->tipo_ingreso;
+       $otrosingresos->causa     =$request->causa;
        $otrosingresos->id_empresa= $usuarioEmp;
        $otrosingresos->id_sucursal =$usuarioSuc;
        $otrosingresos->save();
