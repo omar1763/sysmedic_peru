@@ -37,7 +37,7 @@
                                 <td>{{ $paq->costo }}</td>
                                 <td>{{ $paq->detalle }}</td>
                                 <td>
-                                    <a href="{{ route('admin.pacientes.edit',[$paq->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
+                                    <a href="{{ route('admin.paquetes.edit',[$paq->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
