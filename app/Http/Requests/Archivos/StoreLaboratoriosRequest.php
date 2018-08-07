@@ -25,8 +25,6 @@ class StoreLaboratoriosRequest extends FormRequest
         return [
             'name' => 'required',
             'direccion' => 'required',
-            'referencia' => 'required',
-         
          
         ];
     }

@@ -13,12 +13,12 @@
         <div class="panel-body">
            <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('nombre', 'Nombre*', ['class' => 'control-label']) !!}
-                    {!! Form::text('nombre', old('nombre'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::label('name', 'Nombre*', ['class' => 'control-label']) !!}
+                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
-                    @if($errors->has('nombre'))
+                    @if($errors->has('name'))
                         <p class="help-block">
-                            {{ $errors->first('nombre') }}
+                            {{ $errors->first('name') }}
                         </p>
                     @endif
                 </div>
@@ -38,8 +38,8 @@
         
              <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('preciopublico', 'Precio Publicado', ['class' => 'control-label']) !!}
-                    {!! Form::number('preciopublico', old('preciopublico'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::label('preciopublico', 'Precio al Pùblico', ['class' => 'control-label']) !!}
+                    {!! Form::text('preciopublico', old('preciopublico'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('preciopublico'))
                         <p class="help-block">
@@ -48,10 +48,24 @@
                     @endif
                 </div>
             </div>
+
+             <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('porcentaje', 'Porcentaje', ['class' => 'control-label']) !!}
+                    {!! Form::text('porcentaje', old('porcentaje'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('porcentaje'))
+                        <p class="help-block">
+                            {{ $errors->first('porcentaje') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+          
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('costlab', 'Costo de Laboratorio', ['class' => 'control-label']) !!}
-                    {!! Form::number('costlab', old('costlab'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('costlab', old('costlab'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('costlab'))
                         <p class="help-block">

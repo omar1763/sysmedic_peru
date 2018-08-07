@@ -22,6 +22,7 @@
                         <th>@lang('global.personal.fields.apellidos')</th>
                         <th>@lang('global.personal.fields.dni')</th>
                         <th>@lang('global.personal.fields.telefono')</th>
+                        <th>@lang('global.personal.fields.email')</th>
                         <th>@lang('global.personal.fields.direccion')</th>
                         <th>&nbsp;</th>
 
@@ -38,6 +39,7 @@
                                 <td>{{ $prs->apellidos }}</td>
                                 <td>{{ $prs->dni }}</td>
                                 <td>{{ $prs->telefono }}</td>
+                                <td>{{ $prs->email }}</td>
                                 <td>{{ $prs->direccion }}</td>
                                 <td>
                                     <a href="{{ route('admin.personal.edit',[$prs->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>

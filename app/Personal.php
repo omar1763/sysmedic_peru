@@ -14,6 +14,7 @@ use Hash;
  * @property string $apellidos
  * @property string $dni
  * @property string $telefono
+ * @property string $email
  * @property string $direccion
 */
 class Personal extends Authenticatable
@@ -21,21 +22,8 @@ class Personal extends Authenticatable
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['name', 'apellidos', 'dni', 'telefono','direccion'];
+    protected $fillable = ['name', 'apellidos', 'dni','email', 'telefono','direccion'];
     
-    
-    /**
-     * Hash password
-     * @param $input
-     */
-    public function setPasswordAttribute($input)
-    {
-        if ($input)
-            $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
-    }
-    
-    
-   
-    
+        
     
 }

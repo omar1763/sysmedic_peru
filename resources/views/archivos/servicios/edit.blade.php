@@ -11,7 +11,7 @@
         </div>
 
         <div class="panel-body">
-            <div class="row">
+           <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('detalle', 'Detalle', ['class' => 'control-label']) !!}
                     {!! Form::text('detalle', old('detalle'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
@@ -26,7 +26,7 @@
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('precio', 'Precio', ['class' => 'control-label']) !!}
-                    {!! Form::number('precio', old('precio'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('precio', old('precio'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('precio'))
                         <p class="help-block">
@@ -38,7 +38,7 @@
            <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('porcentaje', 'Porcentaje', ['class' => 'control-label']) !!}
-                    {!! Form::number('porcentaje', old('porcentaje'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('porcentaje', old('porcentaje'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('porcentaje'))
                         <p class="help-block">

@@ -38,7 +38,7 @@
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('referencia', 'Referencia', ['class' => 'control-label']) !!}
-                    {!! Form::text('referencia', old('referencia'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('referencia', old('referencia'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('referencia'))
                         <p class="help-block">

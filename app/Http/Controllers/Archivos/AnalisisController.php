@@ -43,7 +43,7 @@ class AnalisisController extends Controller
 
 
          $analisis = DB::table('analises as a')
-        ->select('a.id','a.name','a.laboratorio','a.preciopublico','a.costlab','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->select('a.id','a.name','a.laboratorio','a.preciopublico','a.costlab','a.porcentaje','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         //->join('laboratorios as d','a.laboratorio','d.name')
@@ -102,6 +102,7 @@ class AnalisisController extends Controller
        $analisis->name =$request->name;
        $analisis->laboratorio     =$request->laboratorio;
        $analisis->preciopublico     =$request->preciopublico;
+       $analisis->porcentaje     =$request->porcentaje;
        $analisis->costlab     =$request->costlab;
        $analisis->id_empresa= $usuarioEmp;
        $analisis->id_sucursal =$usuarioSuc;
@@ -129,7 +130,7 @@ class AnalisisController extends Controller
      
 
         $analisis = Analisis::findOrFail($id);
-        $laboratorio = Laboratorios::get()->pluck('nombre', 'nombre');
+        $laboratorio = Laboratorios::get()->pluck('name', 'name');
       
 
         return view('archivos.analisis.edit', compact('analisis', 'laboratorio'));

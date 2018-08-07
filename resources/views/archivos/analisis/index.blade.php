@@ -22,6 +22,7 @@
                         <th>@lang('global.analisis.fields.laboratorio')</th>
                         <th>@lang('global.analisis.fields.preciopublico')</th>
                         <th>@lang('global.analisis.fields.costlab')</th>
+                        <th>@lang('global.analisis.fields.porcentaje')</th>
                         <th>&nbsp;</th>
 
                     </tr>
@@ -37,6 +38,7 @@
                                 <td>{{ $ana->laboratorio }}</td>
                                 <td>{{ $ana->preciopublico }}</td>
                                 <td>{{ $ana->costlab }}</td>
+                                <td>{{ $ana->porcentaje }}</td>
                                 <td>
                                     <a href="{{ route('admin.analisis.edit',[$ana->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(

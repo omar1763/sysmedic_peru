@@ -294,6 +294,7 @@ class AtencionController extends Controller
          ->select('precio','porcentaje')     
          ->where('id','=',$filter[0])
          ->first();
+
          $precio=$servicios->precio;
          $porcentaje=$servicios->porcentaje;
      } else {

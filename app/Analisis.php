@@ -13,6 +13,7 @@ use Hash;
  * @property string $nombre
  * @property string $laboratorio
  * @property string $preciopublico
+ * @property string $porcentaje
  * @property string $costlab
 */
 class Analisis extends Authenticatable
@@ -20,7 +21,7 @@ class Analisis extends Authenticatable
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombre','laboratorio','preciopublico','costlab'];
+    protected $fillable = ['nombre','laboratorio','preciopublico','porcentaje','costlab'];
    
     
 }

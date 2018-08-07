@@ -37,7 +37,7 @@
         
              <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('preciopublico', 'Precio Publicado', ['class' => 'control-label']) !!}
+                    {!! Form::label('preciopublico', 'Precio al Pùblico', ['class' => 'control-label']) !!}
                     {!! Form::text('preciopublico', old('preciopublico'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('preciopublico'))
@@ -47,6 +47,20 @@
                     @endif
                 </div>
             </div>
+
+             <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('porcentaje', 'Porcentaje', ['class' => 'control-label']) !!}
+                    {!! Form::text('porcentaje', old('porcentaje'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('porcentaje'))
+                        <p class="help-block">
+                            {{ $errors->first('porcentaje') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+          
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('costlab', 'Costo de Laboratorio', ['class' => 'control-label']) !!}
@@ -85,6 +99,14 @@
    
     <script>
     $('#costlab').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+    </script>
+
+      <script>
+    $('#porcentaje').priceFormat({
     prefix: '',
     thousandsSeparator: '',
     clearOnEmpty: true

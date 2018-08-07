@@ -23,6 +23,7 @@
                         <th>@lang('global.profesionales.fields.especialidad')</th>
                         <th>@lang('global.profesionales.fields.centro')</th>
                         <th>@lang('global.profesionales.fields.cmp')</th>
+                        <th>@lang('global.profesionales.fields.codigo')</th>
                         <th>@lang('global.profesionales.fields.nacimiento')</th>
 
                         <th>&nbsp;</th>
@@ -41,6 +42,7 @@
                                 <td>{{ $prof->especialidad }}</td>
                                 <td>{{ $prof->centro }}</td>
                                 <td>{{ $prof->cmp }}</td>
+                                <td>{{ $prof->codigo }}</td>
                                 <td>{{ $prof->nacimiento }}</td>
                                 <td>
                                     <a href="{{ route('admin.profesionales.edit',[$prof->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>

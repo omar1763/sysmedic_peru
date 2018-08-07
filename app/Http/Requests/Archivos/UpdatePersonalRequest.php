@@ -23,11 +23,11 @@ class UpdatePersonalRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombres' => 'required',
+            'name' => 'required',
             'apellidos' => 'required',
-            'email' => 'required|email|unique:users,email,'.$this->route('user'),
             'telefono' => 'required',
             'direccion' => 'required',
+            'email' => 'required',
         ];
     }
 }

@@ -44,7 +44,7 @@ class ProfesionalesController extends Controller
 
 
          $profesionales = DB::table('profesionales as a')
-        ->select('a.id','a.name','a.apellidos','a.especialidad','a.cmp','a.centro','a.nacimiento','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->select('a.id','a.name','a.apellidos','a.especialidad','a.cmp','a.centro','a.codigo','a.nacimiento','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->where('a.id_empresa','=', $usuarioEmp)
@@ -142,6 +142,9 @@ class ProfesionalesController extends Controller
        $profesionales->id_sucursal =$usuarioSuc;
        $profesionales->save();
 
+       DB::table('profesionales')
+            ->where('id', $profesionales->id)
+            ->update(['codigo' => str_pad(($profesionales->id),4, "0", STR_PAD_LEFT)]);
     
        
 
@@ -163,7 +166,7 @@ class ProfesionalesController extends Controller
      
 
         $profesionales = Profesionales::findOrFail($id);
-        $centro = Centros::get()->pluck('nombre', 'nombre');
+        $centro = Centros::get()->pluck('name', 'name');
         $especialidad = Especialidad::get()->pluck('nombre', 'nombre');
 
         return view('archivos.profesionales.edit', compact('profesionales', 'roles','centro','especialidad'));

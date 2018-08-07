@@ -44,7 +44,7 @@ class PersonalController extends Controller
 
 
           $personal = DB::table('personals as a')
-        ->select('a.id','a.name','a.apellidos','a.dni','a.telefono','a.direccion','a.estatus','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->select('a.id','a.name','a.apellidos','a.dni','a.telefono','a.direccion','a.email','a.estatus','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->where('a.id_empresa','=', $usuarioEmp)
@@ -130,6 +130,7 @@ class PersonalController extends Controller
        $personal->apellidos     =$request->apellidos;
        $personal->telefono     =$request->telefono;
        $personal->direccion     =$request->direccion;
+       $personal->email     =$request->email;
        $personal->dni     =$request->dni;
        $personal->id_empresa= $usuarioEmp;
        $personal->id_sucursal =$usuarioSuc;

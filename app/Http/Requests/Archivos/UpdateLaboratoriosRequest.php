@@ -25,8 +25,6 @@ class UpdateLaboratoriosRequest extends FormRequest
         return [
             'name' => 'required',
             'direccion' => 'required',
-            'referencia' => 'required',
-         
          
         ];
     }

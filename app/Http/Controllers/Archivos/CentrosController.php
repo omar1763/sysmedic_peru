@@ -90,6 +90,9 @@ class CentrosController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
+
+
+
        $centros = new Centros;
        $centros->name =$request->name;
        $centros->direccion     =$request->direccion;
