@@ -11,7 +11,7 @@ use Hash;
  *
  * @package App
  * @property string $name
- * @property string $costo
+
 
 */
 class Paquetes extends Authenticatable
