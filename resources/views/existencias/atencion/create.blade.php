@@ -86,7 +86,7 @@
         <div class="row">
                 <div class="col-md-6">
                     {!! Form::label('analisis', 'Analisis de Laboratorio*', ['class' => 'control-label']) !!}
-                    {!! Form::select('analisis[]', $analisis, old('analisis'), ['class' => 'form-control select2', 'multiple' => 'multiple']) !!}
+                    {!! Form::select('analisis[]', $analisis, old('analisis'), ['class' => 'form-control select2', 'multiple' => 'multiple', 'onchange'=>"ajaxLoadSelect('/existencias/atencion/cardainput', 'analises',$(this).val())"]) !!}
                     <p class="help-block"></p>
                     @if($errors->has('analisis'))
                         <p class="help-block">
@@ -249,10 +249,8 @@
                     $('#servbyemp').html(a);
                  }
           });
-
         });
-        
-
+      
       });
        function addCiente(){        
        javascript:ajaxLoad("{{ route('pacientes.createmodal') }}","id_container_modal_render");
@@ -346,7 +344,6 @@
 
         });
         
-
       });
        
     </script>
