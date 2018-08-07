@@ -180,13 +180,11 @@ class PaquetesController extends Controller
         }
      
 
-       $pacientes = Pacientes::findOrFail($id);
-       $provincia = Provincia::get()->pluck('nombre', 'nombre');
-       $distrito = Distrito::get()->pluck('nombre', 'nombre');
-       $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
-       $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
+       $paquetes = Paquetes::findOrFail($id);
+       $servicio = Servicios::get()->pluck('detalle');
+    
 
-        return view('archivos.pacientes.edit', compact('pacientes', 'provincia','distrito','edocivil','gradoinstruccion'));
+        return view('archivos.paquetes.edit', compact('paquetes', 'servicio'));
     }
 
     /**
@@ -196,15 +194,15 @@ class PaquetesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePacientesRequest $request, $id)
+    public function update(UpdatePaquetesRequest $request, $id)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $pacientes = Pacientes::findOrFail($id);
-        $pacientes->update($request->all());
+        $paquetes = Paquetes::findOrFail($id);
+        $paquetes->update($request->all());
       
-        return redirect()->route('admin.pacientes.index');
+        return redirect()->route('admin.paquetes.index');
     }
 
     /**
@@ -218,10 +216,10 @@ class PaquetesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $pacientes = Pacientes::findOrFail($id);
-        $pacientes->delete();
+        $paquetes = Paquetes::findOrFail($id);
+        $paquetes->delete();
 
-        return redirect()->route('admin.pacientes.index');
+        return redirect()->route('admin.paquetes.index');
     }
 
     /**
@@ -235,7 +233,7 @@ class PaquetesController extends Controller
             return abort(401);
         }
         if ($request->input('ids')) {
-            $entries = Pacientes::whereIn('id', $request->input('ids'))->get();
+            $entries = Paquetes::whereIn('id', $request->input('ids'))->get();
 
             foreach ($entries as $entry) {
                 $entry->delete();
