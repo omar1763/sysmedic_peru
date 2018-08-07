@@ -23,12 +23,10 @@ class UpdateAnalisisRequest extends FormRequest
     public function rules()
     {
         return [
-            'analisis' => 'required',
+            'name' => 'required',
             'laboratorio' => 'required',
             'preciopublico' => 'required',
             'costlab' => 'required',
-         
-         
         ];
     }
 }

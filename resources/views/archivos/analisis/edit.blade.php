@@ -11,10 +11,10 @@
         </div>
 
         <div class="panel-body">
-           <div class="row">
+          <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('name', 'Nombre*', ['class' => 'control-label']) !!}
-                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('name'))
                         <p class="help-block">
@@ -82,3 +82,33 @@
     {!! Form::close() !!}
 @stop
 
+@include('partials.javascripts')
+
+@section('javascript') 
+
+ <script>
+    $('#preciopublico').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+    </script>
+
+   
+    <script>
+    $('#costlab').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+    </script>
+
+      <script>
+    $('#porcentaje').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+    </script>
+
+@endsection

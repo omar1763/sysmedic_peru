@@ -10,7 +10,7 @@ use Hash;
  * Class Analisis
  *
  * @package App
- * @property string $nombre
+ * @property string $name
  * @property string $laboratorio
  * @property string $preciopublico
  * @property string $porcentaje
@@ -21,7 +21,7 @@ class Analisis extends Authenticatable
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['nombre','laboratorio','preciopublico','porcentaje','costlab'];
+    protected $fillable = ['name','laboratorio','preciopublico','porcentaje','costlab'];
    
     
 }
