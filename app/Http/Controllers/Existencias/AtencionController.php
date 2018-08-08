@@ -11,9 +11,11 @@ use App\Personal;
 use App\Pacientes;
 use App\Profesionales;
 use App\Analisis;
+use App\Laboratorios;
 use App\AtencionLaboratorio;
 use App\AtencionServicios;
 use App\Creditos;
+use App\Ingresos;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -43,13 +45,17 @@ class AtencionController extends Controller
                     ->select('*')
                    // ->where('estatus','=','1')
                     ->where('id','=', $id_usuario)
-                    ->get();
-
-            foreach ($searchUsuarioID as $usuario) {
+                    ->first();                    
+                    //->get();
+                    
+                    $usuarioEmp = $searchUsuarioID->id_empresa;
+                    $usuarioSuc = $searchUsuarioID->id_sucursal;
+                    
+ /*           foreach ($searchUsuarioID as $usuario) {
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
-        
+        */
     $fechaHoy = date('YYYY-m-d');
 
     if(! is_null($request->fecha)) {
@@ -67,7 +73,10 @@ class AtencionController extends Controller
         ->where('a.created_at','=', $f1)
         //->orwhereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(100);
+         ->paginate(100);
+ //      ->toSql();
+//dd($atencion);
+       // dd(DB::getQueryLog());
     } else {
 
           $atencion = DB::table('atencions as a')
@@ -77,21 +86,27 @@ class AtencionController extends Controller
         ->join('atencion_detalles as d','a.id','d.id_atencion')
         ->join('pacientes as e','d.id_paciente','e.id')
         ->join('servicios as f','d.id_servicio','f.id')
+
+
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         //->where('a.created_at', '=', $fechaHoy)
         ->orderby('a.created_at','desc')
+  //      ->toSql();
         ->paginate(100);
+//dd($atencion);
+      //  dd(DB::getQueryLog());
     }
 
 
-        $servicios = Servicios::with('nombre');
+        $servicios = new Servicios();
+        $analisis = new Analisis();
         $personal = Personal::with('dni');
         $pacientes = Pacientes::with('dni');
         $profesionales = Profesionales::with('nombre');
 
-        return view('existencias.atencion.index', compact('atencion','servicios','personal','pacientes','profesionales'));
+        return view('existencias.atencion.index', compact('atencion','servicios','analisis','personal','pacientes','profesionales'));
     }
 
       public function indexFecha(Request $request)

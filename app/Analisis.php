@@ -23,5 +23,30 @@ class Analisis extends Authenticatable
 
     protected $fillable = ['name','laboratorio','preciopublico','porcentaje','costlab'];
    
-    
+        public function selectAllAnalisis($id)
+    {
+
+    	$array='';
+    	$data = \DB::table('atencion_laboratorios')
+    	->select('*')
+                   // ->where('estatus','=','1')
+    	->where('id_atencion', $id)
+    	->get();
+    	$descripcion='';
+    	
+    	
+    	foreach ($data as $key => $value) {
+
+    		$dataanalisis = \DB::table('analises')
+    		->select('*')
+    		->where('id', $value->id_analisis)
+    		->get();
+
+    	foreach ($dataanalisis as $keydataanalisis => $valuedataanalisis) {
+    			$descripcion.= $valuedataanalisis->name.',';
+                          # code...
+    		}
+    	}  
+    	return substr($descripcion, 0, -1);  
+    }
 }

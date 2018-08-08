@@ -31,6 +31,33 @@ class Servicios extends Authenticatable
         if ($input)
             $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
     }
+    public function selectAllServicios($id)
+    {
+
+        $array='';
+        $data = \DB::table('atencion_servicios')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id_atencion', $id)
+        ->get();
+        $descripcion='';
+        
+        
+        foreach ($data as $key => $value) {
+
+          $dataservicio = \DB::table('servicios')
+          ->select('*')
+          ->where('id', $value->id_servicio)
+          ->get();
+          foreach ($dataservicio as $key => $valueservicio) {
+            $descripcion.= $valueservicio->detalle.',';
+                          # code...
+        }
+    }
+
+    return substr($descripcion, 0, -1);
+              //  return $id;
+}
     
     
    

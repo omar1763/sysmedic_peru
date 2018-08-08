@@ -8,6 +8,8 @@
     </p>
       {!! Form::open(['method' => 'get', 'route' => ['admin.atencion.index']]) !!}
 
+
+
            <div class="row">
                 <div class="col-md-4">
                     {!! Form::label('fecha', 'Seleccione una Fecha', ['class' => 'control-label']) !!}
@@ -36,14 +38,14 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        <th>@lang('global.atencion.fields.nombres')</th>
-                        <th>@lang('global.atencion.fields.apellido')</th>
+                        <th>@lang('global.atencion.fields.nombres_apellidos')</th>
+                       
                         <th>@lang('global.atencion.fields.servicio')</th>
-                        <th>@lang('global.atencion.fields.acuenta')</th>
-                        <th>@lang('global.atencion.fields.costo')</th>
+                        
+                        <th>@lang('global.atencion.fields.laboratorio')</th>
+                        
+                       
                         <th>@lang('global.atencion.fields.costoa')</th>
-                        <th>@lang('global.atencion.fields.fechaatencion')</th>
-                    
                         <th>&nbsp;</th>
 
                     </tr>
@@ -54,13 +56,15 @@
                         @foreach ($atencion as $atec)
                             <tr data-entry-id="{{ $atec->id }}">
                                 <td></td>
-                                <td>{{ $atec->nombres }}</td>
-                                <td>{{ $atec->apellidos }}</td>
-                                <td>{{ $atec->detalle }}</td>
-                                <td>{{ $atec->acuenta }}</td>
-                                <td>{{ $atec->costo }}</td>
+                                <td>{{ $atec->nombres.' '.$atec->apellidos }}</td>
+                                <td> {{$servicios->selectAllServicios($atec->id_atencion)}}</td>
+                                <td> {{$analisis->selectAllAnalisis($atec->id_atencion)}}</td>
+                             
+                              
+                               
+                                
                                 <td>{{ $atec->costoa }}</td>
-                                <td>{{ $atec->created_at }}</td>
+                               
                                
                                 <td>
                                     <a href="{{ route('admin.atencion.edit',[$atec->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
