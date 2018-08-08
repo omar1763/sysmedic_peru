@@ -42,6 +42,7 @@
                         <th>@lang('global.atencion.fields.origenpaciente')</th>
                        
                         <th>@lang('global.atencion.fields.servicio')</th>
+                        <th>@lang('global.atencion.fields.paquete')</th>
                         
                         <th>@lang('global.atencion.fields.laboratorio')</th>
                         
@@ -59,7 +60,32 @@
                                 <td></td>
                                 <td>{{ $atec->nombres.' '.$atec->apellidos }}</td>
                                 <td>{{ $atec->acuenta=='PR'? Profesional:'Personal' }}</td>
-                                <td> {{$servicios->selectAllServicios($atec->id_atencion)}}</td>
+
+
+
+
+                           <td> 
+                                  @if($servicios->selectAllServicios($atec->id_atencion))
+                                  {{$servicios->selectAllServicios($atec->id_atencion)}}
+                                  @else
+                                  <small class="label pull-right bg-red">Sin Servicio</small>
+                                  @endif
+                              </td>
+
+
+
+
+
+
+
+                                
+                                <td> 
+                                  @if($paquete->selectPaquete($atec->id_paquete))
+                                  {{$paquete->selectPaquete($atec->id_paquete)}}
+                                  @else
+                                  <small class="label pull-right bg-red">Sin Paquete</small>
+                                  @endif
+                              </td>
                                 <td> {{$analisis->selectAllAnalisis($atec->id_atencion)}}</td>
                              
                               

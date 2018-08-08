@@ -11,6 +11,7 @@ use App\Personal;
 use App\Pacientes;
 use App\Profesionales;
 use App\Analisis;
+use App\Paquetes;
 use App\Laboratorios;
 use App\AtencionLaboratorio;
 use App\AtencionServicios;
@@ -80,7 +81,7 @@ class AtencionController extends Controller
     } else {
 
           $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
+        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','d.id_paquete')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
@@ -102,11 +103,12 @@ class AtencionController extends Controller
 
         $servicios = new Servicios();
         $analisis = new Analisis();
+        $paquete = new Paquetes();
         $personal = Personal::with('dni');
         $pacientes = Pacientes::with('dni');
         $profesionales = Profesionales::with('nombre');
 
-        return view('existencias.atencion.index', compact('atencion','servicios','analisis','personal','pacientes','profesionales'));
+        return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','personal','pacientes','profesionales'));
     }
 
       public function indexFecha(Request $request)
@@ -422,6 +424,8 @@ class AtencionController extends Controller
      */
     public function store(StoreAtencionRequest $request)
     {
+       // dd();
+
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
@@ -449,7 +453,7 @@ class AtencionController extends Controller
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
-       //$atenciondetalle->id_servicio     =$request->servicio;
+       $atenciondetalle->id_paquete     =isset($request->paquetes)? $request->paquetes: 0;
        $atenciondetalle->costo           =$request->precio;
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
@@ -479,8 +483,8 @@ class AtencionController extends Controller
        }
          }
 
-
-          if(! is_null($request->analisis)){
+//var_dump($request->servicio);
+          if(isset($request->servicio)){
          foreach ($request->servicio as $key => $value) {
        $serviciosatencion = new AtencionServicios;
        $serviciosatencion->id_atencion =$atencion->id;
