@@ -63,7 +63,7 @@ class AtencionController extends Controller
         $f1 = $request->fecha;
 
           $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
+        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','d.id_paquete')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
@@ -87,14 +87,10 @@ class AtencionController extends Controller
         ->join('atencion_detalles as d','a.id','d.id_atencion')
         ->join('pacientes as e','d.id_paciente','e.id')
         ->join('servicios as f','d.id_servicio','f.id')
-
-
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-        //->where('a.created_at', '=', $fechaHoy)
         ->orderby('a.created_at','desc')
-  //      ->toSql();
         ->paginate(100);
 //dd($atencion);
       //  dd(DB::getQueryLog());
@@ -453,7 +449,7 @@ class AtencionController extends Controller
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
-       $atenciondetalle->id_paquete     =isset($request->paquetes)? $request->paquetes: 0;
+       $atenciondetalle->id_paquete      =isset($request->paquetes)? $request->paquetes: 0;
        $atenciondetalle->costo           =$request->precio;
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
