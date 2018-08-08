@@ -11,7 +11,7 @@
         </div>
 
         <div class="panel-body">
-             <div class="row">
+          <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('name', 'Name*', ['class' => 'control-label']) !!}
                     {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}

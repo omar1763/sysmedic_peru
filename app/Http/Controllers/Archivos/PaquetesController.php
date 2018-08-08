@@ -43,7 +43,7 @@ class PaquetesController extends Controller
                 }
 
         $paquetes = DB::table('paquetes as a')
-        ->select('a.id','a.name','a.costo','a.id_empresa','a.id_sucursal','b.id','b.id_paquete','c.detalle')
+        ->select('a.id','a.name','a.costo','a.id_empresa','a.id_sucursal','b.id','b.id_paquete','b.id_servicio','c.detalle')
         ->join('paquetes_servs as b','a.id','b.id_paquete')
         ->join('servicios as c','b.id_servicio','c.id')
         ->where('a.id_empresa','=',$usuarioEmp)
@@ -141,29 +141,6 @@ class PaquetesController extends Controller
        }
       
 
-
-
-/*
-
-  foreach ($request->parameter as $key => $value) {
-                $array = explode ('-',$value);
-                $model_f = new Invoiceproducts();
-                $model_f->id_sales = $model->id;        
-                $model_f->id_product =$array[0];
-                $model_f->quantity =$array[1];
-                $model_f->importe =$array[2];
-                $model_f->valor =$array[3];
-                $model_f->igv =$array[4];
-                $model_f->save();
-              }
-
-
-*/
-
-
-
-
-    
         return redirect()->route('admin.paquetes.index');
     }
 
@@ -180,11 +157,14 @@ class PaquetesController extends Controller
         }
      
 
-       $paquetes = Paquetes::findOrFail($id);
+      //$paquetess = Paquetes::findOrFail($id);
+
+       $paquetes = PaquetesServ::findOrFail($id);
+
        $servicio = Servicios::get()->pluck('detalle');
     
 
-        return view('archivos.paquetes.edit', compact('paquetes', 'servicio'));
+        return view('archivos.paquetes.edit', compact('servicio','paquetes'));
     }
 
     /**
@@ -199,8 +179,19 @@ class PaquetesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $paquetes = Paquetes::findOrFail($id);
-        $paquetes->update($request->all());
+
+     
+       $paquetes=Paquetes::findOrFail($id);
+       $paquetes->name =$request->name;
+       $paquetes->costo     =$request->costo;
+       $paquetes->update();
+
+
+     /*  foreach ($request->servicio as $key => $value) {
+       $paquetesserv=PaquetesServ::findOrFail($id);
+       $paquetesserv->id_servicio    =$value;
+       $paquetesserv->update();
+       }*/
       
         return redirect()->route('admin.paquetes.index');
     }
@@ -216,7 +207,7 @@ class PaquetesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $paquetes = Paquetes::findOrFail($id);
+        $paquetes = PaquetesServ::findOrFail($id);
         $paquetes->delete();
 
         return redirect()->route('admin.paquetes.index');
