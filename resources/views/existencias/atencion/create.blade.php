@@ -374,6 +374,13 @@
     });
     </script>
 
+     <script>
+    $('#costoa').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+    </script>
 
 
 
