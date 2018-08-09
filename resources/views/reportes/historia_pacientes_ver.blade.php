@@ -19,8 +19,9 @@
    <p style="text-align: left;"><strong>EDAD:</strong></p> 
    <p style="text-align: right; margin-top: -30px; margin-right: 400px;"><strong>ESTADO CIVIL:</strong>{{ $pac->edocivil}}</p>
    <p style="text-align: right; margin-top: -30px; margin-right: 100px;"><strong>DNI:</strong>{{ $pac->dni}}</p> 
-   <p style="text-align: left;"><strong>FECHA DE NACIMIENTO:</strong>{{ $pac->fechanac}}</p> 
-   <p style="text-align: right;margin-top: -30px;margin-right: 200px"><strong>LUGAR DE NACIMIENTO:</strong>{{ $pac->direccion}}</p> 
+   <p style="text-align: left;"><strong>FECHA DE NACIMIENTO:</strong>{{ $pac->fechanac}}</p>
+   <p style="text-align: right;margin-top: -30px;margin-right: 300px"><strong>DISTRITO:</strong>{{ $pac->distrito}}</p> 
+   <p style="text-align: left;"><strong>LUGAR DE NACIMIENTO:</strong>{{ $pac->direccion}}</p> 
    <p style="text-align: left;"><strong>OCUPACIÒN:</strong>{{ $pac->ocupacion}}</p> 
    <p style="text-align: right;margin-top: -30px;margin-right: 200px"><strong>GRADO DE INST:</strong>{{ $pac->gradoinstruccion}}</p>
    <p style="text-align: left;"><strong>DOMICILIO ACTUAL:</strong>{{ $pac->direccion}}</p> 
