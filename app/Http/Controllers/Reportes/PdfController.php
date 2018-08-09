@@ -371,16 +371,55 @@ class PdfController extends Controller
 
     }
 
-    public function getData() 
+     public function verHistoriaPaciente($id){
+       
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+        $pacientes = DB::table('pacientes as a')
+        ->select('a.id','a.nombres','a.apellidos','a.dni','a.provincia','a.distrito','a.direccion','a.gradoinstruccion','a.telefono','a.ocupacion','a.edocivil','a.fechanac','a.created_at','b.historia')
+        ->join('historias_clinicas as b','a.id','b.id_paciente')
+        ->where('a.id_empresa','=',$usuarioEmp)
+        ->where('a.id_sucursal','=',$usuarioSuc)
+        ->where('a.id','=',$id)
+        ->orderby('a.created_at','desc')
+        ->get();
+
+
+        if(!is_null($pacientes)){
+            return $pacientes;
+         }else{
+            return false;
+         }  
+
+     }
+
+       public function historia_pacientes_ver($id) 
     {
-        $data =  [
-            'quantity'      => '1' ,
-            'description'   => 'some ramdom text',
-            'price'   => '500',
-            'total'     => '500'
-        ];
-        return $data;
+       
+       $pacientes =PdfController::verHistoriaPaciente($id);
+
+       $view = \View::make('reportes.historia_pacientes_ver')->with('pacientes', $pacientes);
+       $pdf = \App::make('dompdf.wrapper');
+       $pdf->loadHTML($view);
+       
+        return $pdf->stream('historiapaciente');
+
     }
+
+
 
 
 }

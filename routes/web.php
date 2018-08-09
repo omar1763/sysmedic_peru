@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
   Route::get('reportes/index','PdfController@index');
   Route::get('listado_atenciondiaria_ver','Reportes\PdfController@listado_atenciondiaria_ver');
+  Route::get('/historia_pacientes_ver/{id}','Reportes\PdfController@historia_pacientes_ver');
 
 
     Route::get('/prueba','Existencias\AtencionController@prueba');
