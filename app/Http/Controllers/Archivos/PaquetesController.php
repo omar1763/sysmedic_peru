@@ -19,7 +19,7 @@ use App\Http\Requests\Archivos\UpdatePaquetesRequest;
 class PaquetesController extends Controller
 {
     /**
-     * Display a listing of User.
+     * Display a lisitng of User.
      *
      * @return \Illuminate\Http\Response
      */
@@ -174,14 +174,16 @@ class PaquetesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePaquetesRequest $request, $id)
+
+     public function update(UpdatePaquetesRequest $request, $id)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
 
-     
-       $paquetes=Paquetes::findOrFail($id);
+    
+       $paquetes=Paquetes::find($id);
+       dd($id);
        $paquetes->name =$request->name;
        $paquetes->costo     =$request->costo;
        $paquetes->update();

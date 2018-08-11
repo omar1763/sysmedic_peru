@@ -58,13 +58,23 @@
                     <div class="input-icon">
                         <i class="icon-eye  font-red"></i>
                         
-                        {!! Form::select('causa', ['0' => 'Seleccione Causa de Ingreso','V' => 'Ventas', 'CC' => 'Cuentas por Cobrar', 'O' => 'Otros'], null, ['id'=>'tipo', 'class'=>'form-control select2']) !!}
+                        {!! Form::select('causa', ['0' => 'Seleccione Causa de Ingreso','V' => 'Ventas', 'CC' => 'Cuentas por Cobrar', 'O' => 'Otros'], null, ['id'=>'causa', 'class'=>'form-control select2']) !!}
                     </div>
 
                 </div>
         </div>
          
         </div>
+        <div  class="row" >
+            <div class="col-md-12">
+        <div  id="id_div_producto" class="row" style="display: none;">
+                {!! Form::label('productos', 'Productos*', ['class' => 'control-label']) !!}
+                {!! Form::select('id_productos[]', $sector, old('id_productos'), ['class' => 'form-control select2', 'multiple' => 'multiple']) !!}
+        </div>
+
+            </div>
+        </div>
+            
 
    
 
@@ -79,6 +89,29 @@
 @stop
 
 @section('javascript') 
+  <script type="text/javascript">
+   
+       $('#causa').on('select2:select', function(e) {
+  var data = e.params.data;
+  var stateID = data.id;
+  if (stateID=='V') {
+   // http://127.0.0.1:8000/existencias/atencion/servbyemp/
+   // 
+   // 
+    $("#id_div_producto").css("display", "");
+   
+    
+
+  }
+  else {
+    $("#id_div_producto").css("display", "none");
+
+  }
+    
+});
+
+   
+    </script>
     
  <script>
     $('#monto').priceFormat({

@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
 
    Route::get('/indexFecha/{fecha}','Existencias\AtencionController@indexFecha');
+   Route::get('/selectproduct/{id}','Existencias\AtencionController@selectproduct');
 
    Route::get('createmodal','Archivos\PacientesController@createmodal');
 
@@ -117,4 +118,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
     Route::get('/prueba','Existencias\AtencionController@prueba');
 
+
+  /*Route for config*/
+    Route::group(['prefix' => 'jjma'], function () {
+        Route::get('select-producto/{id}', 'JjmaController@selectproducto');
+        
+    });
 

@@ -84,8 +84,23 @@ class OtrosIngresosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-
-        return view('existencias.otrosingresos.create');
+          $sector = DB::table('productos')
+               // ->where('clvregion' , $id)
+                
+              /*->where([
+                    ['clvregion', '=', $id],
+                    ['blnborrado', '=', true]
+             
+                ])*/
+                ->get()
+                ->pluck('name', 'id')
+                ->prepend('Lelecciones los Item', '');
+ $relations = [            
+            'sector' => $sector,
+           
+            
+        ];
+        return view('existencias.otrosingresos.create',$relations);
     }
 
     /**Ll
