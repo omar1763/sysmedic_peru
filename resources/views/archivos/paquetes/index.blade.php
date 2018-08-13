@@ -22,6 +22,7 @@
                         <th>@lang('global.paquetes.fields.name')</th>
                         <th>@lang('global.paquetes.fields.costo')</th>
                         <th>@lang('global.paquetes.fields.servicios')</th>
+                        <th>Analisis</th>
                         <th>&nbsp;</th>
 
                     </tr>
@@ -42,6 +43,29 @@
                                   <small class="label pull-left bg-red">Sin Servicio</small>
                                   @endif
                               </td>
+
+
+
+                              <td> 
+                 @if($paquetes_analises->selectAllAnalisis($paq->id))
+                {{$paquetes_analises->selectAllAnalisis($paq->id)}}
+                                  @else
+                                  <small class="label pull-left bg-red">Sin Analisis</small>
+                                  @endif
+                              </td>
+
+
+
+
+
+
+
+
+
+
+
+
+                             
 
                                 <td>
                                     <a href="{{ route('admin.paquetes.edit',[$paq->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>

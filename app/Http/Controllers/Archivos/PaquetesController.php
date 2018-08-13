@@ -6,6 +6,8 @@ use App\Paquetes;
 use App\PaquetesServ;
 use App\Servicios;
 use App\Empresas;
+use App\Analisis;
+use App\PaquetesAnalisis;
 use App\Locales;
 use DB;
 use Silber\Bouncer\Database\Role;
@@ -52,8 +54,9 @@ class PaquetesController extends Controller
         ->orderby('a.created_at','desc')
         ->paginate(10);
         $paquetes_servicios = new PaquetesServ();
+        $paquetes_analises = new PaquetesAnalisis();
 
-        return view('archivos.paquetes.index', compact('paquetes','paquetes_servicios'));
+        return view('archivos.paquetes.index', compact('paquetes','paquetes_servicios','paquetes_analises'));
     }
 
 
@@ -99,8 +102,9 @@ class PaquetesController extends Controller
             return abort(401);
         }
        $servicio = Servicios::get()->pluck('detalle');
+       $analisis = Analisis::get()->pluck('name');
     
-        return view('archivos.paquetes.create', compact('servicio'));
+        return view('archivos.paquetes.create', compact('servicio','analisis'));
     }
 
 
@@ -129,7 +133,7 @@ class PaquetesController extends Controller
        $paquetes = new Paquetes;
        $paquetes->name =$request->name;
        $paquetes->costo     =$request->costo;
-       $paquetes->id_servicios     =json_encode($request->servicio);
+      
      //  dd($request->servicio);
        $paquetes->id_empresa     =$usuarioEmp;
        $paquetes->id_sucursal     =$usuarioSuc;
@@ -137,10 +141,16 @@ class PaquetesController extends Controller
 
 
        foreach ($request->servicio as $key => $value) {
-       $paquetesserv = new PaquetesServ;
-       $paquetesserv->id_paquete =$paquetes->id;
-       $paquetesserv->id_servicio    =$value;
-       $paquetesserv->save();
+         $paquetesserv = new PaquetesServ;
+         $paquetesserv->id_paquete =$paquetes->id;
+         $paquetesserv->id_servicio    =$value;
+         $paquetesserv->save();
+       }
+       foreach ($request->analisis as $key_a => $value_a) {
+         $paquetesanalisis = new PaquetesAnalisis();
+         $paquetesanalisis->id_paquete  =$paquetes->id;
+         $paquetesanalisis->id_analisis=$value_a;
+       $paquetesanalisis->save();
        }
       
 
@@ -165,19 +175,27 @@ class PaquetesController extends Controller
 
       // $paquetes = PaquetesServ::findOrFail($id);
     
-       $tags = ['2'=>'COACHING', '3'=>'Servicio prueba', '4'=>'yuyuyu', '5'=>'yuyuyu'] ;
-$servicioIds = [];
-     $servicio = Servicios::all();
-     $paquetesserv = PaquetesServ::all()->where('id_paquete',$id );
      
-      foreach($paquetesserv as $value)
-        {
-$servicioIds[] = $value->id_servicio;
-        } 
-  //   dd($servicioIds);
+       $servicioIds = [];
+       $analisisIds = [];
+       $servicio = Servicios::all();
+       $analisis = Analisis::all();
+       $paquetesserv = PaquetesServ::all()->where('id_paquete',$id );
+       $paquetesanalisis = PaquetesAnalisis::all()->where('id_paquete',$id );
+
+       foreach($paquetesserv as $value)
+       {
+        $servicioIds[] = $value->id_servicio;
+      } 
+      foreach($paquetesanalisis as $value_ana)
+      {
+        $analisisIds[] = $value_ana->id_analisis;
+      } 
 
 
-        return view('archivos.paquetes.edit', compact('servicio','paquetes','servicioIds'));
+
+
+        return view('archivos.paquetes.edit', compact('servicio','analisis','paquetes','servicioIds','analisisIds'));
     }
 
     /**
@@ -195,12 +213,21 @@ $servicioIds[] = $value->id_servicio;
         }    
        $paquetes=Paquetes::find($id);
        $paquetesserv = PaquetesServ::where('id_paquete',$id )->delete();
+        $paquetes_ana = PaquetesAnalisis::where('id_paquete',$id )->delete();
        foreach ($request->servicio as $key => $value) {
          $paquetesserv = new PaquetesServ;
          $paquetesserv->id_paquete =$paquetes->id;
          $paquetesserv->id_servicio    =$value;
          $paquetesserv->save();
-     }       
+     } 
+
+
+        foreach ($request->analisis as $key_a => $value_a) {
+         $paquetesanalisis = new PaquetesAnalisis();
+         $paquetesanalisis->id_paquete  =$paquetes->id;
+         $paquetesanalisis->id_analisis=$value_a;
+       $paquetesanalisis->save();
+       }      
        $paquetes->name =$request->name;
        $paquetes->costo     =$request->costo;
        $paquetes->update();
@@ -228,12 +255,14 @@ $servicioIds[] = $value->id_servicio;
         }
         $paquetes=Paquetes::find($id)->delete();
         $paquetesserv = PaquetesServ::where('id_paquete',$id )->delete();
+         $paquetes_ana = PaquetesAnalisis::where('id_paquete',$id )->delete();
 
        /* if ( $paquetes && $paquetesserv) {
             return redirect()->route('admin.paquetes.index');
         } else {
             echo "Se Presento un Error, comunicarse con el Administrador";
         }*/
+           return redirect()->route('admin.paquetes.index');
 
     }
 

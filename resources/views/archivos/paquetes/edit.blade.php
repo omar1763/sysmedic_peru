@@ -44,6 +44,27 @@
                     @endif
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('analisis', 'Analisis', ['class' => 'control-label']) !!}
+                
+                    <select name="analisis[]" class="form-control select2"  multiple="multiple">
+                        @foreach($analisis as $data)
+                        @if(in_array($data->id, $analisisIds))
+                        <option value="{{ $data->id }}" selected="true">{{ $data->name }}</option>
+                        @else
+                        <option value="{{ $data->id }}">{{ $data->name }}</option>
+                        @endif 
+                        @endforeach
+                    </select>
+                    <p class="help-block"></p>
+                    @if($errors->has('analisis'))
+                        <p class="help-block">
+                            {{ $errors->first('analisis') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('costo', 'Costo*', ['class' => 'control-label']) !!}

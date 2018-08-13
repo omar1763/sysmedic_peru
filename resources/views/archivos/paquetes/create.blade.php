@@ -34,6 +34,18 @@
                     @endif
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('analisis ', 'Analisis ', ['class' => 'control-label']) !!}
+                    {!! Form::select('analisis[]', $analisis, old('analisis'), ['class' => 'form-control select2', 'multiple' => 'multiple','required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('analisis'))
+                        <p class="help-block">
+                            {{ $errors->first('analisis') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
              <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('costo', 'Costo*', ['class' => 'control-label']) !!}
