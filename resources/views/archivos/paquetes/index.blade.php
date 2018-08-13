@@ -21,7 +21,7 @@
 
                         <th>@lang('global.paquetes.fields.name')</th>
                         <th>@lang('global.paquetes.fields.costo')</th>
-                        <th>@lang('global.paquetes.fields.detalle')</th>
+                        <th>@lang('global.paquetes.fields.servicios')</th>
                         <th>&nbsp;</th>
 
                     </tr>
@@ -35,7 +35,14 @@
 
                                 <td>{{ $paq->name }}</td>
                                 <td>{{ $paq->costo }}</td>
-                                <td>{{ $paq->detalle }}</td>
+                                 <td> 
+                                  @if($paquetes_servicios->selectAllServicios($paq->id))
+                                  {{$paquetes_servicios->selectAllServicios($paq->id)}}
+                                  @else
+                                  <small class="label pull-left bg-red">Sin Servicio</small>
+                                  @endif
+                              </td>
+
                                 <td>
                                     <a href="{{ route('admin.paquetes.edit',[$paq->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(

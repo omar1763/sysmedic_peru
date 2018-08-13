@@ -26,7 +26,16 @@
             <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('servicio', 'Servicios', ['class' => 'control-label']) !!}
-                    {!! Form::select('servicio[]', $servicio, old('servicio'), ['class' => 'form-control select2', 'multiple' => 'multiple']) !!}
+                
+                    <select name="servicio[]" class="form-control select2"  multiple="multiple">
+                        @foreach($servicio as $data)
+                        @if(in_array($data->id, $servicioIds))
+                        <option value="{{ $data->id }}" selected="true">{{ $data->detalle }}</option>
+                        @else
+                        <option value="{{ $data->id }}">{{ $data->detalle }}</option>
+                        @endif 
+                        @endforeach
+                    </select>
                     <p class="help-block"></p>
                     @if($errors->has('servicio'))
                         <p class="help-block">

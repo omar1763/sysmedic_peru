@@ -43,16 +43,17 @@ class PaquetesController extends Controller
                 }
 
         $paquetes = DB::table('paquetes as a')
-        ->select('a.id','a.name','a.costo','a.id_empresa','a.id_sucursal','b.id','b.id_paquete','b.id_servicio','c.detalle')
-        ->join('paquetes_servs as b','a.id','b.id_paquete')
-        ->join('servicios as c','b.id_servicio','c.id')
+        ->select('a.id','a.name','a.costo'/*,'a.id_empresa','a.id_sucursal','b.id','b.id_paquete','b.id_servicio','c.detalle'*/)
+      /*  ->join('paquetes_servs as b','a.id','b.id_paquete')
+        ->join('servicios as c','b.id_servicio','c.id')*/
         ->where('a.id_empresa','=',$usuarioEmp)
         ->where('a.id_sucursal','=',$usuarioSuc)
        // ->where('a.estatus','=','1')
         ->orderby('a.created_at','desc')
         ->paginate(10);
+        $paquetes_servicios = new PaquetesServ();
 
-        return view('archivos.paquetes.index', compact('paquetes'));
+        return view('archivos.paquetes.index', compact('paquetes','paquetes_servicios'));
     }
 
 
@@ -128,6 +129,8 @@ class PaquetesController extends Controller
        $paquetes = new Paquetes;
        $paquetes->name =$request->name;
        $paquetes->costo     =$request->costo;
+       $paquetes->id_servicios     =json_encode($request->servicio);
+     //  dd($request->servicio);
        $paquetes->id_empresa     =$usuarioEmp;
        $paquetes->id_sucursal     =$usuarioSuc;
        $paquetes->save();
@@ -157,14 +160,24 @@ class PaquetesController extends Controller
         }
      
 
-      //$paquetess = Paquetes::findOrFail($id);
+      $paquetes = Paquetes::find($id);
+       $select=json_decode($paquetes->servicio);
 
-       $paquetes = PaquetesServ::findOrFail($id);
-
-       $servicio = Servicios::get()->pluck('detalle');
+      // $paquetes = PaquetesServ::findOrFail($id);
     
+       $tags = ['2'=>'COACHING', '3'=>'Servicio prueba', '4'=>'yuyuyu', '5'=>'yuyuyu'] ;
+$servicioIds = [];
+     $servicio = Servicios::all();
+     $paquetesserv = PaquetesServ::all()->where('id_paquete',$id );
+     
+      foreach($paquetesserv as $value)
+        {
+$servicioIds[] = $value->id_servicio;
+        } 
+  //   dd($servicioIds);
 
-        return view('archivos.paquetes.edit', compact('servicio','paquetes'));
+
+        return view('archivos.paquetes.edit', compact('servicio','paquetes','servicioIds'));
     }
 
     /**
@@ -179,11 +192,15 @@ class PaquetesController extends Controller
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
-        }
-
-    
+        }    
        $paquetes=Paquetes::find($id);
-       dd($id);
+       $paquetesserv = PaquetesServ::where('id_paquete',$id )->delete();
+       foreach ($request->servicio as $key => $value) {
+         $paquetesserv = new PaquetesServ;
+         $paquetesserv->id_paquete =$paquetes->id;
+         $paquetesserv->id_servicio    =$value;
+         $paquetesserv->save();
+     }       
        $paquetes->name =$request->name;
        $paquetes->costo     =$request->costo;
        $paquetes->update();
@@ -209,10 +226,15 @@ class PaquetesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $paquetes = PaquetesServ::findOrFail($id);
-        $paquetes->delete();
+        $paquetes=Paquetes::find($id)->delete();
+        $paquetesserv = PaquetesServ::where('id_paquete',$id )->delete();
 
-        return redirect()->route('admin.paquetes.index');
+       /* if ( $paquetes && $paquetesserv) {
+            return redirect()->route('admin.paquetes.index');
+        } else {
+            echo "Se Presento un Error, comunicarse con el Administrador";
+        }*/
+
     }
 
     /**

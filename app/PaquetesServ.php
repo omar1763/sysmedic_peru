@@ -20,6 +20,33 @@ class PaquetesServ extends Authenticatable
     use HasRolesAndAbilities;
 
     protected $fillable = ['name','costo'];
+     public function selectAllServicios($id)
+    {
+
+        $array='';
+        $data = \DB::table('paquetes_servs')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id_paquete', $id)
+        ->get();
+        $descripcion='';
+        
+        
+        foreach ($data as $key => $value) {
+
+          $dataservicio = \DB::table('servicios')
+          ->select('*')
+          ->where('id', $value->id_servicio)
+          ->get();
+          foreach ($dataservicio as $key => $valueservicio) {
+            $descripcion.= $valueservicio->detalle.',';
+                          # code...
+        }
+    }
+
+    return substr($descripcion, 0, -1);
+              //  return $id;
+}
    
     
 }

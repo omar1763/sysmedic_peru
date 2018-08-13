@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('servicio', 'Servicios', ['class' => 'control-label']) !!}
-                    {!! Form::select('servicio[]', $servicio, old('servicio'), ['class' => 'form-control select2', 'multiple' => 'multiple']) !!}
+                    {!! Form::select('servicio[]', $servicio, old('servicio'), ['class' => 'form-control select2', 'multiple' => 'multiple','required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('servicio'))
                         <p class="help-block">
