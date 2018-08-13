@@ -7,14 +7,14 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Hash;
 
 /**
- * Class PaquetesServ
+ * Class PaquetesAnalises
  *
  * @package App
  * @property string $id_paquete
  * @property string $id_servicio
 
 */
-class PaquetesAnalisis extends Authenticatable
+class PaquetesAnalises extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
@@ -26,7 +26,6 @@ class PaquetesAnalisis extends Authenticatable
         $array='';
         $data = \DB::table('paquetes_analises')
         ->select('*')
-                   // ->where('estatus','=','1')
         ->where('id_paquete', $id)
         ->get();
         $descripcion='';

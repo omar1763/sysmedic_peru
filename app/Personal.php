@@ -21,7 +21,7 @@ class Personal extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
-    protected $table = 'public.paquetes_analisis';
+   // protected $table = 'public.paquetes_analises';
 
     protected $fillable = ['name', 'apellidos', 'dni','email', 'telefono','direccion'];
     
