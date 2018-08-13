@@ -94,8 +94,7 @@ $creditosproductos = new CreditosProductos();
              
                 ])*/
                 ->get()
-                ->pluck('name', 'id')
-                ->prepend('Lelecciones los Item', '');
+                ->pluck('name', 'id');
  $relations = [            
             'product' => $product,
            
