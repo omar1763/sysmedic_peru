@@ -349,7 +349,37 @@ class PdfController extends Controller
          }  
           }  
       
+        public function empresaSucursal(){
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
       
+
+          $empresaSucursal = DB::table('empresas as a')
+               ->select('a.id','a.nombre as empresa','b.id','b.nombres as sucursal')
+               ->join('locales as b','a.id','b.id_empresa')
+               ->where('a.id','=', $usuarioEmp)
+               ->where('b.id','=', $usuarioSuc)
+               ->get();
+
+
+          if(!is_null($empresaSucursal)){
+            return $empresaSucursal;
+         }else{
+            return false;
+         }  
+          }  
 
        public function listado_atenciondiaria_ver() 
     {
@@ -363,7 +393,8 @@ class PdfController extends Controller
        $debitosDETALLE =PdfController::atenciondiariaDETALLEEGRESOS();
        $creditosEF =PdfController::ingresosEF();
        $creditosTJ =PdfController::ingresosTJ();
-       $view = \View::make('reportes.listado_atenciondiaria_ver')->with('creditos', $creditosSUMATOTALINGRESOS)->with('servicios', $creditosSERVICIOS)->with('serviciosmonto', $creditosSERVICIOSMONTO)->with('otrosingresos', $creditosOTROSINGRESOS)->with('otrosingresosmonto', $creditosOTROSINGRESOMONTO)->with('debitostotal', $debitosSUMATOTAL)->with('debitosdetalle', $debitosDETALLE)->with('ingresosef', $creditosEF)->with('ingresostj', $creditosTJ);
+       $empresaSucursal =PdfController::empresaSucursal();
+       $view = \View::make('reportes.listado_atenciondiaria_ver')->with('creditos', $creditosSUMATOTALINGRESOS)->with('servicios', $creditosSERVICIOS)->with('serviciosmonto', $creditosSERVICIOSMONTO)->with('otrosingresos', $creditosOTROSINGRESOS)->with('otrosingresosmonto', $creditosOTROSINGRESOMONTO)->with('debitostotal', $debitosSUMATOTAL)->with('debitosdetalle', $debitosDETALLE)->with('ingresosef', $creditosEF)->with('ingresostj', $creditosTJ)->with('empresasucursal', $empresaSucursal);
        $pdf = \App::make('dompdf.wrapper');
        $pdf->loadHTML($view);
        

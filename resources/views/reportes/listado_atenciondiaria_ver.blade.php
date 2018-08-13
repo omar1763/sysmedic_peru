@@ -12,12 +12,15 @@
    @foreach($otrosingresos as $otros)
     @foreach($otrosingresosmonto as $otrosmonto)
 
+ @foreach($empresasucursal as $es)
 
-  	<p style="text-align: left;"><center><STRONG>CENTRO MÈDICO MADRE TERESA</STRONG></center></p>
+  	<p style="text-align: left;"><center><STRONG>EMPRESA:</STRONG>{{ $es->empresa}}</center></p>
+    <p style="text-align: left;"><center><STRONG>SUCURSAL:</STRONG>{{ $es->sucursal}}</center></p>
+ @endforeach
   <br>
  
-  <p style="margin-left: 15px; float: left;">Fecha:</p>
-  <p style="margin-left: 500px; float:left;">Hora:</p>
+  <p style="margin-left: 15px; float: left;">Fecha:<?=date('d/m/Y');?></p>
+  <p style="margin-left: 450px; float:left;">Hora:<?=date('g:ia');?></p>
  
   <br><br><br>
 <table>
