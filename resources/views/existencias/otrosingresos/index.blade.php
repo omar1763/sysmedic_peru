@@ -39,7 +39,9 @@
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         <th>@lang('global.otrosingresos.fields.descripcion')</th>
                         <th>@lang('global.otrosingresos.fields.monto')</th>
-                        <th>@lang('global.otrosingresos.fields.origen')</th>
+                       <!-- <th>@lang('global.otrosingresos.fields.origen')</th>-->
+                        <th>@lang('global.otrosingresos.fields.causa')</th>
+                        <th>@lang('global.otrosingresos.fields.detallecausa')</th>
                         <th>@lang('global.otrosingresos.fields.created_at')</th>
                     
                         <th>&nbsp;</th>
@@ -55,7 +57,50 @@
 
                                 <td>{{ $otr->descripcion }}</td>
                                 <td>{{ $otr->monto }}</td>
-                                <td>{{ $otr->origen }}</td>
+                                <!--<td>$otr->origen</td>-->
+                                <td>
+                                    @if ($otr->tipo_ingreso == 'V')
+                                    <span> VENTAS</span>
+                                    @elseif ($otr->tipo_ingreso == 'CC')
+                                    <span>CUENTAS POR COBRAR</span>
+                                    @else                                    
+                                    <span>OTROS</span>
+                                    @endif
+                                </td>
+                                <td>
+
+
+
+                                    @if ($otr->causa == 'V')
+                                    {{$creditosproductos->selectAllProductos($otr->id)}}
+                                    
+                                    @else                                    
+                                    <span>No Aplica</span>
+                                    @endif
+
+
+
+
+
+
+
+
+
+
+
+
+                                
+
+
+
+
+
+
+                              
+
+
+
+                               </td>
                                 <td>{{ $otr->created_at }}</td>
                      
                                 <td>

@@ -121,7 +121,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
   /*Route for config*/
     Route::group(['prefix' => 'jjma'], function () {
-        Route::get('select-producto/{id}', 'JjmaController@selectproducto');
+        Route::get('select-producto', 'JjmaController@selectproducto');
         
     });
 

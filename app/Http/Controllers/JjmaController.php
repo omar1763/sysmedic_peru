@@ -20,12 +20,12 @@ class JjmaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function selectproducto($id)
+    public function selectproducto()
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $sector = DB::table('productos')
+        $product = DB::table('productos')
                // ->where('clvregion' , $id)
                 
               /*->where([
@@ -36,8 +36,10 @@ class JjmaController extends Controller
                 ->get()
                 ->pluck('name', 'id');
 
-        return json_encode($sector);
+       
+      return view("existencias.otrosingresos.selectprodut",['product'=>$product]);
     }
+     
 
       
 

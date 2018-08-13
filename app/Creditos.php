@@ -21,6 +21,7 @@ class Creditos extends Authenticatable
     use HasRolesAndAbilities;
 
     protected $fillable = ['id_atencion','monto','descripcion'];
+    
    
     
 }

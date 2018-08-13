@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Existencias;
 use App\Gastos;
 use App\Creditos;
 use App\Empresas;
+use App\CreditosProductos;
 use App\Locales;
 use Carbon\Carbon;
 use DB;
@@ -60,7 +61,7 @@ class OtrosIngresosController extends Controller
             } else {
 
          $otrosingresos = DB::table('creditos as a')
-        ->select('a.id','a.id_atencion','a.descripcion','a.monto','a.origen','a.id_empresa','a.id_sucursal','a.created_at')
+        ->select('a.id','a.id_atencion','a.descripcion','a.monto','a.origen','a.tipo_ingreso','a.causa','a.id_empresa','a.id_sucursal','a.created_at')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->where('a.id_empresa','=', $usuarioEmp)
@@ -70,8 +71,8 @@ class OtrosIngresosController extends Controller
         ->orderby('a.created_at','desc')
         ->paginate(10);
 }
-
-        return view('existencias.otrosingresos.index', compact('otrosingresos'));
+$creditosproductos = new CreditosProductos();
+        return view('existencias.otrosingresos.index', compact('otrosingresos','creditosproductos'));
     }
 
     /**
@@ -84,7 +85,7 @@ class OtrosIngresosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-          $sector = DB::table('productos')
+          $product = DB::table('productos')
                // ->where('clvregion' , $id)
                 
               /*->where([
@@ -96,7 +97,7 @@ class OtrosIngresosController extends Controller
                 ->pluck('name', 'id')
                 ->prepend('Lelecciones los Item', '');
  $relations = [            
-            'sector' => $sector,
+            'product' => $product,
            
             
         ];
@@ -135,8 +136,20 @@ class OtrosIngresosController extends Controller
        $otrosingresos->causa     =$request->causa;
        $otrosingresos->id_empresa= $usuarioEmp;
        $otrosingresos->id_sucursal =$usuarioSuc;
+    //   dd($request->product[0]);
        $otrosingresos->save();
+       if (!is_null($request->product[0])) {
+        foreach ($request->product as $data) {
+       $creditosproductos = new CreditosProductos();
+            $creditosproductos->id_producto = $data;
+            $creditosproductos->id_credito = $otrosingresos->id;
+       $creditosproductos->save();
+            //dd($data);
+        }
 
+    } 
+
+       
 
 
         return redirect()->route('admin.otrosingresos.index');
