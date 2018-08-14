@@ -300,6 +300,7 @@ class AtencionController extends Controller
       return view('existencias.atencion.dataServicios',['servicios'=>$servicios]);
 
     }   
+
     public function cardainput($id, Request $request){
         $filter=explode('*', $id);
 
@@ -320,8 +321,7 @@ class AtencionController extends Controller
         ->first();
         $precio=$paquetes->costo;
         $porcentaje='';
-    }
-
+    } 
 
         $precio = 0;
         $porcentaje = 0;
@@ -454,6 +454,7 @@ class AtencionController extends Controller
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
        $atenciondetalle->costoa          =$request->costoa;
+       $atenciondetalle->pendiente       =($request->precio-$request->costoa);
        $atenciondetalle->tarjeta         =$request->tarjeta;
        $atenciondetalle->observaciones   =$request->observaciones;
        $atenciondetalle->save();

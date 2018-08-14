@@ -70,6 +70,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('otrosingresos_mass_destroy', ['uses' => 'Existencias\OtrosIngresosController@massDestroy', 'as' => 'otrosingresos.mass_destroy']);
     Route::resource('resultados', 'Existencias\ResultadosController');
     Route::post('resultados_mass_destroy', ['uses' => 'Existencias\ResultadosController@massDestroy', 'as' => 'resultados.mass_destroy']);
+
+    Route::resource('cuentasporcobrar', 'Existencias\CuentasporCobrarController');
+    Route::post('cuentasporcobrar_mass_destroy', ['uses' => 'Existencias\CuentasporCobrarController@massDestroy', 'as' => 'cuentasporcobrar.mass_destroy']);
+    
     Route::resource('atenciondiaria', 'Reportes\PdfController');
     Route::post('atenciondiaria_mass_destroy', ['uses' => 'Reportes\PdfController@massDestroy', 'as' => 'atenciondiaria.mass_destroy']);
 });
