@@ -53,7 +53,7 @@ class PacientesController extends Controller
         ->where('a.id_sucursal','=',$usuarioSuc)
         ->where('a.estatus','=','1')
         ->orderby('a.created_at','desc')
-        ->paginate(10);
+        ->paginate(5000);
 
         $provincia= Provincia::with('nombre');
         $distrito = Distrito::with('nombre');
