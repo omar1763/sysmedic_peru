@@ -22,14 +22,6 @@
                         <th>@lang('global.pacientes.fields.dni')</th>
                         <th>@lang('global.pacientes.fields.nombres')</th>
                         <th>@lang('global.pacientes.fields.apellidos')</th>
-                        <th>@lang('global.pacientes.fields.direccion')</th>
-                        <th>@lang('global.pacientes.fields.provincia')</th>
-                        <th>@lang('global.pacientes.fields.distrito')</th>
-                        <th>@lang('global.pacientes.fields.telefono')</th>
-                        <th>@lang('global.pacientes.fields.fechanac')</th>
-                        <th>@lang('global.pacientes.fields.gradoinstruccion')</th>
-                        <th>@lang('global.pacientes.fields.ocupacion')</th>
-                        <th>@lang('global.pacientes.fields.edocivil')</th>
                          <th>@lang('global.pacientes.fields.historia')</th>
                         <th>&nbsp;</th>
 
@@ -45,14 +37,6 @@
                                 <td>{{ $pac->dni }}</td>
                                 <td>{{ $pac->nombres }}</td>
                                 <td>{{ $pac->apellidos }}</td>
-                                <td>{{ $pac->direccion }}</td>
-                                <td>{{ $pac->provincia }}</td>
-                                <td>{{ $pac->distrito }}</td>
-                                <td>{{ $pac->telefono }}</td>
-                                <td>{{ $pac->fechanac }}</td>
-                                <td>{{ $pac->gradoinstruccion }}</td>
-                                <td>{{ $pac->ocupacion }}</td>
-                                <td>{{ $pac->edocivil }}</td>
                                 <td>{{ $pac->historia }}</td>
                             
                                 <td>
