@@ -10,23 +10,23 @@
 
 
 
-           <div class="row">
-                <div class="col-md-4">
-                    {!! Form::label('fecha', 'Seleccione una Fecha', ['class' => 'control-label']) !!}
-                    {!! Form::date('fecha', old('fechanac'), ['id'=>'fecha','class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('fecha'))
-                        <p class="help-block">
-                            {{ $errors->first('fecha') }}
-                        </p>
-                    @endif
-                </div>
-                <div class="col-md-4">
-                {!! Form::submit(trans('global.app_search'), array('class' => 'btn btn-info')) !!}
-                {!! Form::close() !!}
+      <div class="row">
+        <div class="col-md-4">
+            {!! Form::label('fecha', 'Seleccione una Fecha', ['class' => 'control-label']) !!}
+            {!! Form::date('fecha', old('fechanac'), ['id'=>'fecha','class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+            <p class="help-block"></p>
+            @if($errors->has('fecha'))
+            <p class="help-block">
+                {{ $errors->first('fecha') }}
+            </p>
+            @endif
+        </div>
+        <div class="col-md-4">
+            {!! Form::submit(trans('global.app_search'), array('class' => 'btn btn-info')) !!}
+            {!! Form::close() !!}
 
-                </div>
-            </div>
+        </div>
+    </div>
      
     <div class="panel panel-default">
         <div class="panel-heading">

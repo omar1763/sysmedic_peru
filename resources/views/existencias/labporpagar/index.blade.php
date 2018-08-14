@@ -34,6 +34,7 @@
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
 
                         <th>@lang('global.labporpagar.fields.id_atencion')</th>
+                        <th>@lang('global.labporpagar.fields.paciente')</th>
                         <th>@lang('global.labporpagar.fields.name')</th>
                         <th>@lang('global.labporpagar.fields.monto')</th>
                         <th>&nbsp;</th>
@@ -48,6 +49,7 @@
                                 <td></td>
 
                                 <td>{{ $lab->id_atencion }}</td>
+                                <td>{{ $lab->nombres }},{{ $lab->apellidos }}</td>
                                 <td>{{ $lab->name }}</td>
                                 <td>{{ $lab->costlab }}</td>
                                 <td>

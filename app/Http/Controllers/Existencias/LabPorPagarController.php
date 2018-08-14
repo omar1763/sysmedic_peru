@@ -48,10 +48,12 @@ class LabPorPagarController extends Controller
     if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
         $labporpagar = DB::table('atencion_laboratorios as a')
-        ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name')
+        ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('analises as d','a.id_analisis','d.id')
+        ->join('atencion_detalles as e','e.id_atencion','a.id_atencion')
+        ->join('pacientes as f','f.id','e.id_paciente')
         ->where('a.pagado','=',FALSE)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
@@ -61,10 +63,12 @@ class LabPorPagarController extends Controller
     } else {
 
          $labporpagar = DB::table('atencion_laboratorios as a')
-        ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name')
+       ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('analises as d','a.id_analisis','d.id')
+        ->join('atencion_detalles as e','e.id_atencion','a.id_atencion')
+        ->join('pacientes as f','f.id','e.id_paciente')
         ->where('a.pagado','=',FALSE)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
