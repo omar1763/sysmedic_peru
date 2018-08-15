@@ -221,6 +221,14 @@
                             </span>
                         </a>
                     </li>
+                    <li class="{{ $request->segment(2) == 'atenciondiaria' ? 'active active-sub' : '' }}">
+                        <a href="{{action('ReportesController@filtrogeneral')}}" >
+                            <i class="fa fa-file"></i>
+                            <span class="title">
+                                @lang('global.reportes.tipos_perortes.general')
+                            </span>
+                        </a>
+                    </li>
                 </ul>
                     
              

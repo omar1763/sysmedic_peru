@@ -22,6 +22,7 @@
                     @endif
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('servicio', 'Servicios', ['class' => 'control-label']) !!}

@@ -8,6 +8,7 @@ use App\Servicios;
 use App\Empresas;
 use App\Analisis;
 use App\PaquetesAnalisis;
+
 use App\Locales;
 use DB;
 use Silber\Bouncer\Database\Role;
@@ -101,8 +102,9 @@ class PaquetesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-       $servicio = Servicios::get()->pluck('detalle');
-       $analisis = Analisis::get()->pluck('name');
+       $servicio = Servicios::get()->pluck('detalle', 'id');
+     //  dd($servicio);
+       $analisis = Analisis::get()->pluck('name','id');
     
         return view('archivos.paquetes.create', compact('servicio','analisis'));
     }
@@ -116,6 +118,7 @@ class PaquetesController extends Controller
         }
           //  print_r($request->all());
           //  die();
+          //   dd($request->analisis);
            $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
@@ -146,6 +149,7 @@ class PaquetesController extends Controller
          $paquetesserv->id_servicio    =$value;
          $paquetesserv->save();
        }
+
        foreach ($request->analisis as $key_a => $value_a) {
          $paquetesanalisis = new PaquetesAnalisis();
          $paquetesanalisis->id_paquete  =$paquetes->id;
@@ -153,6 +157,16 @@ class PaquetesController extends Controller
        $paquetesanalisis->save();
        }
       
+
+
+
+
+
+
+
+
+
+
 
         return redirect()->route('admin.paquetes.index');
     }

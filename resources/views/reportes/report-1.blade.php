@@ -1,0 +1,161 @@
+<html>
+<head>
+  <style>
+    @page { margin: 100px 25px; }
+    header { position: fixed; top: -60px; left: 0px; right: 0px; background-color: lightblue; height: 50px; }
+    footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: lightblue; height: 50px; }
+    p { page-break-after: always; }
+    p:last-child { page-break-after: never; }
+  </style>
+</head>
+<body>
+ 
+  <main>
+    <table>
+      <caption>table title and/or explanatory text</caption>
+      <thead>
+        <tr>
+          <th>header</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>data</td>
+        </tr>
+        
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+        <tr>
+          <td>data</td>
+        </tr>
+      </tbody>
+    </table>
+   
+  </main>
+  <footer>footer on each page</footer>
+</body>
+</html>

@@ -123,9 +123,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/prueba','Existencias\AtencionController@prueba');
 
 
-  /*Route for config*/
-    Route::group(['prefix' => 'jjma'], function () {
-        Route::get('select-producto', 'JjmaController@selectproducto');
+  
+    Route::group(['prefix' => 'reportes'], function () {
+        Route::post('reportegeneral', 'ReportesController@reportegeneral');
+        Route::get('filtro-general', 'ReportesController@filtrogeneral');
         
     });
 

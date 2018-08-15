@@ -14,7 +14,7 @@ use Hash;
  * @property string $id_servicio
 
 */
-class PaquetesAnalises extends Authenticatable
+class PaquetesAnalisis extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;

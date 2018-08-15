@@ -30,7 +30,16 @@ class PdfController extends Controller
 
 {
 
- public function index()
+ public function indexfiltro()
+    {
+        if (! Gate::allows('users_manage')) {
+            return abort(401);
+        }
+
+
+        return view('reportes.index');
+    }
+     public function index()
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
