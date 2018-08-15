@@ -9,16 +9,16 @@
   <main>
     <table>
       
-      <thead>
+      <thead">
         <tr><th colspan="5" rowspan="" headers="" scope="">
           REPORTE GENERAL
         </th></tr>
         <tr>
-          <th>monto</th>
-          <th>descripcion</th>
-          <th>origen</th>
-          <th>tipo_ingreso</th>
-          <th>causa</th>
+          <th>Monto</th>
+          <th>Descripcion</th>
+          <th>Origen</th>
+          <th>Tipo Ingreso</th>
+          <th>Causa</th>
         </tr>
       </thead>
       <tbody>
@@ -38,6 +38,16 @@
     </table>
    
   </main>
-  <footer>footer on each page</footer>
+  <footer>Generado el
+<?php
+ 
+$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
+echo $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y');
+
+ 
+?>
+  </footer>
 </body>
 </html>
