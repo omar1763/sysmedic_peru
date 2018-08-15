@@ -16,7 +16,7 @@
                 <div class="row">
         <div class="col-md-3">
             {!! Form::label('desde', 'Desde', ['class' => 'control-label']) !!}
-            {!! Form::date('desde', old('desde'), ['id'=>'desde','class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+            {!! Form::date('desde', old('desde'), ['id'=>'desde','class' => 'form-control', 'placeholder' => '',]) !!}
             <p class="help-block"></p>
             @if($errors->has('desde'))
             <p class="help-block">
@@ -26,7 +26,7 @@
         </div>
           <div class="col-md-3">
             {!! Form::label('hasta', 'Hasta', ['class' => 'control-label']) !!}
-            {!! Form::date('hasta', old('hasta'), ['id'=>'hasta','class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+            {!! Form::date('hasta', old('hasta'), ['id'=>'hasta','class' => 'form-control', 'placeholder' => '', ]) !!}
             <p class="help-block"></p>
             @if($errors->has('hasta'))
             <p class="help-block">

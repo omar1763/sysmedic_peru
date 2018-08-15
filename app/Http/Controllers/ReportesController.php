@@ -54,25 +54,32 @@ class ReportesController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
-
-    $desde = $_POST['desde'] !='no' ? " and created_at >= '". $_POST['desde']."'"    : null ;
-    $hasta = $_POST['hasta'] !='no' ? " and created_at <= '". $_POST['hasta']."'"    : null ;
-     $tipo_ingreso = $_POST['tipo_ingreso'] !='no' ? " tipo_ingreso = '".$_POST['tipo_ingreso']."' "    : " tipo_ingreso IS NOT NULL" ;
-    $origen = $_POST['origen'] !='no' ? " and origen = '".$_POST['origen']."' "    : " and id_empresa=".$usuarioEmp." and id_sucursal=".$usuarioSuc ;
-    $sql=$desde.$hasta.$tipo_ingreso.$origen;
-    dd( $sql);
+$datos_usuario=" id_empresa=".$usuarioEmp." and id_sucursal=".$usuarioSuc." ";
+       $desde = $_POST['desde'] !='' ? " and created_at >= '". $_POST['desde']."'"    : null ;
+    $hasta = $_POST['hasta'] !='' ? " and created_at <= '". $_POST['hasta']."'"    : null ;
+     $tipo_ingreso = $_POST['tipo_ingreso'] !='' ? " and tipo_ingreso = '".$_POST['tipo_ingreso']."' "    : null ;
+    $origen = $_POST['origen'] !='' ? " and origen = '".$_POST['origen']."' "    : null;
+    $sql=$datos_usuario.$desde.$hasta.$tipo_ingreso.$origen;
+   // dd( $sql);
       $model=\DB::select("SELECT * from creditos
              where  ".$sql);
+     /* $con=0;
+      foreach ($model as $key => $value) {
+        $con++;
+          echo "Id".$value->id.'Recorrido:'.$con.'<br>';
+      }
+      exit();*/
 $data=[
+    'model'=>$model
 
 ];
       
 
 $view = \View::make("reportes.report-1",$data);
 $pdf = \App::make('dompdf.wrapper');
-       //$pdf->loadHTML($view)->setPaper('letter', 'portrait');
+       //$pdf->loadHTML($view)->setPaper('letter', 'landscape');
 
-$pdf->loadHTML($view)->setPaper('letter', 'landscape');$pdf->output();
+$pdf->loadHTML($view)->setPaper('letter', 'portrait');$pdf->output();
 $dom_pdf = $pdf->getDomPDF();
 
 $canvas = $dom_pdf ->get_canvas();

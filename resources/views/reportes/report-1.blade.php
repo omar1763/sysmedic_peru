@@ -1,157 +1,39 @@
 <html>
 <head>
-  <style>
-    @page { margin: 100px 25px; }
-    header { position: fixed; top: -60px; left: 0px; right: 0px; background-color: lightblue; height: 50px; }
-    footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: lightblue; height: 50px; }
-    p { page-break-after: always; }
-    p:last-child { page-break-after: never; }
-  </style>
-</head>
+  <title>Reporte de Atenciones Diarias</title>
+    <link rel="stylesheet" type="text/css" href="css/pdf.css">
+
+  </head>
 <body>
  
   <main>
     <table>
-      <caption>table title and/or explanatory text</caption>
+      
       <thead>
+        <tr><th colspan="5" rowspan="" headers="" scope="">
+          REPORTE GENERAL
+        </th></tr>
         <tr>
-          <th>header</th>
+          <th>monto</th>
+          <th>descripcion</th>
+          <th>origen</th>
+          <th>tipo_ingreso</th>
+          <th>causa</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>data</td>
-        </tr>
-        
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
-        <tr>
-          <td>data</td>
-        </tr>
+       @foreach($model as $key => $value)
+       <tr>
+        <td>{{$value->monto}}</td>
+        <td>{{$value->descripcion}}</td>
+        <td>{{$value->origen}}</td>
+        <td>{{$value->tipo_ingreso}}</td>
+        <td>{{$value->causa}}</td>
+       
+      </tr>
+
+
+       @endforeach
       </tbody>
     </table>
    
