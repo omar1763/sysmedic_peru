@@ -25,10 +25,19 @@
        @foreach($model as $key => $value)
        <tr>
         <td>{{$value->monto}}</td>
-        <td>{{$value->descripcion}}</td>
+        <td>{{$value->descripcion!=''? $value->descripcion:'Si Especificar' }}</td>
         <td>{{$value->origen}}</td>
-        <td>{{$value->tipo_ingreso}}</td>
-        <td>{{$value->causa}}</td>
+
+        <td>
+           @if($value->tipo_ingreso=="EF")
+
+        Ingreso en Efectivo
+        @else
+        Ingreso con Tarjeta
+
+        @endif
+        </td>
+        <td>{{$value->causa!=''? $value->causa:'Si Especificar' }}</td>
        
       </tr>
 
