@@ -54,6 +54,21 @@ class UsersController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
+    public function dataUser() {
+                   
+         $id_usuario = Auth::id();
+
+         $users = DB::table('users as a')
+        ->select('a.id','a.name','a.email','b.nombre as empresa','c.nombres as sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id','=',$id_usuario)
+        ->orderby('a.created_at','desc')
+        ->paginate(10);
+
+      return view('partials.topbar', compact('users'));
+
+    }
     /**
      * Store a newly created User in storage.
      *

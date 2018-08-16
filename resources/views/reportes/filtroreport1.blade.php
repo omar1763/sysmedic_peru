@@ -75,7 +75,39 @@
               {!! Form::submit('GENERAR REPORTE', ['class' => 'btn btn-danger']) !!}
               </div>
             
-          </div>
+</div>
+
+  <div class="panel panel-default">
+        <div class="panel-heading">
+            @lang('global.app_list')
+        </div>
+
+        <div class="panel-body table-responsive">
+            <table class="table table-bordered table-striped dt-select">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
+                        <th>@lang('global.atencion.fields.monto')</th>
+                        <th>@lang('global.atencion.fields.descripcion')</th>
+                        <th>@lang('global.atencion.fields.origen')</th>
+                        <th>@lang('global.atencion.fields.tipoingreso')</th>
+                        <th>@lang('global.atencion.fields.causa')</th>
+                        <th>&nbsp;</th>
+
+                    </tr>
+                </thead>
+                
+                <tbody>
+                   
+                        <tr>
+                            <td colspan="9">@lang('global.app_no_entries_in_table')</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 
  {!! Form::close() !!}
      

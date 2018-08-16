@@ -222,6 +222,75 @@ class PdfController extends Controller
 
       }
 
+       public function atenciondiariaCUENTASPORCOBRAR(){
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       
+
+          $creditos = DB::table('creditos as a')
+               ->select(DB::raw('COUNT(a.origen) as total_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
+               //->select('SUM(a.monto) as total_monto','a.id_empresa','a.id_sucursal','a.created_at')
+               ->where('a.id_empresa','=', $usuarioEmp)
+               ->where('a.id_sucursal','=', $usuarioSuc)
+               ->where('a.causa','=','CC')
+               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+               ->get();
+
+
+          if(!is_null($creditos)){
+            return $creditos;
+         }else{
+            return false;
+         }  
+          }  
+
+         public function atenciondiariaCUENTASPORCOBRARMONTO(){
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+              $creditos = DB::table('creditos as a')
+               ->select(DB::raw('SUM(a.monto) as total_monto_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
+               ->where('a.id_empresa','=', $usuarioEmp)
+               ->where('a.id_sucursal','=', $usuarioSuc)
+               ->where('a.causa','=','CC')
+               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+               ->havingRaw('SUM(a.monto) > ?', [0])
+               ->get();
+
+
+
+          if(!is_null($creditos)){
+            return $creditos;
+         }else{
+            return false;
+         }  
+
+      }
+
          public function atenciondiariaTOTALEGRESOS(){
 
         $id_usuario = Auth::id();
@@ -398,18 +467,22 @@ class PdfController extends Controller
        $creditosSERVICIOSMONTO =PdfController::atenciondiariaSERVICIOSMONTO();
        $creditosOTROSINGRESOS =PdfController::atenciondiariaOTROSINGRESOS();
        $creditosOTROSINGRESOMONTO =PdfController::atenciondiariaOTROSINGRESOSMONTO();
+       $creditosCXC =PdfController::atenciondiariaCUENTASPORCOBRAR();
+       $creditosCXCMONTO =PdfController::atenciondiariaCUENTASPORCOBRARMONTO();
        $debitosSUMATOTAL =PdfController::atenciondiariaTOTALEGRESOS();
        $debitosDETALLE =PdfController::atenciondiariaDETALLEEGRESOS();
        $creditosEF =PdfController::ingresosEF();
        $creditosTJ =PdfController::ingresosTJ();
        $empresaSucursal =PdfController::empresaSucursal();
-       $view = \View::make('reportes.listado_atenciondiaria_ver')->with('creditos', $creditosSUMATOTALINGRESOS)->with('servicios', $creditosSERVICIOS)->with('serviciosmonto', $creditosSERVICIOSMONTO)->with('otrosingresos', $creditosOTROSINGRESOS)->with('otrosingresosmonto', $creditosOTROSINGRESOMONTO)->with('debitostotal', $debitosSUMATOTAL)->with('debitosdetalle', $debitosDETALLE)->with('ingresosef', $creditosEF)->with('ingresostj', $creditosTJ)->with('empresasucursal', $empresaSucursal);
+
+       $view = \View::make('reportes.listado_atenciondiaria_ver')->with('creditos', $creditosSUMATOTALINGRESOS)->with('servicios', $creditosSERVICIOS)->with('serviciosmonto', $creditosSERVICIOSMONTO)->with('otrosingresos', $creditosOTROSINGRESOS)->with('otrosingresosmonto', $creditosOTROSINGRESOMONTO)->with('debitostotal', $debitosSUMATOTAL)->with('debitosdetalle', $debitosDETALLE)->with('ingresosef', $creditosEF)->with('ingresostj', $creditosTJ)->with('empresasucursal', $empresaSucursal)->with('ingresoscxc', $creditosCXC)->with('ingresoscxcmonto', $creditosCXCMONTO);
        $pdf = \App::make('dompdf.wrapper');
        $pdf->loadHTML($view);
        
         return $pdf->stream('atenciondiaria');
 
     }
+
 
      public function verHistoriaPaciente($id){
        

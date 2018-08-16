@@ -6,23 +6,18 @@
 
   </head>
   <body>
- @foreach($creditos as $ingresos)
-  @foreach($servicios as $serv)
-  @foreach($serviciosmonto as $servmonto)
-   @foreach($otrosingresos as $otros)
-    @foreach($otrosingresosmonto as $otrosmonto)
 
- @foreach($empresasucursal as $es)
+  <p style="text-align: left;"><center><STRONG>EMPRESA:</STRONG>{{Auth::user()->empresa}}</center></p>
+  <p style="text-align: left;"><center><STRONG>SUCURSAL:</STRONG>{{Auth::user()->sucursal}}</center></p>
 
-  	<p style="text-align: left;"><center><STRONG>EMPRESA:</STRONG>{{ $es->empresa}}</center></p>
-    <p style="text-align: left;"><center><STRONG>SUCURSAL:</STRONG>{{ $es->sucursal}}</center></p>
- @endforeach
   <br>
  
   <p style="margin-left: 15px; float: left;">Fecha:<?=date('d/m/Y');?></p>
   <p style="margin-left: 450px; float:left;">Hora:<?=date('g:ia');?></p>
  
   <br><br><br>
+ @foreach($creditos as $ingresos)
+
 <table>
   <tr>
     <th scope="col">INGRESOS</th>
@@ -31,20 +26,33 @@
   </tr>
   <tr>
     <td>Servicios</td>
+    @foreach($servicios as $serv)
     <td>{{ $serv->total_servicios}}</td>
+    @endforeach
+    @foreach($serviciosmonto as $servmonto)
     <td>{{ $servmonto->total_monto_servicios}}</td>
+    @endforeach
   </tr>
  
   <tr>
     <td>Otros Ingresos</td>
+     @foreach($otrosingresos as $otros)
     <td>{{ $otros->total_otrosingresos}}</td>
+     @endforeach
+    @foreach($otrosingresosmonto as $otrosmonto)
     <td>{{ $otrosmonto->total_monto_otrosingresos}}</td>
+    @endforeach
+
   </tr>
  
   <tr>
     <td>Cuentas por Cobrar</td>
-    <td>0</td>
-    <td>0</td>
+    @foreach($ingresoscxc as $cxc)
+    <td>{{ $cxc->total_cxc}}</td>
+    @endforeach
+    @foreach($ingresoscxcmonto as $cxcmonto)
+    <td>{{ $cxcmonto->total_monto_cxc}}</td>
+    @endforeach
   </tr>
  
   <tr>
@@ -54,10 +62,6 @@
     <td><strong>{{ $ingresos->total_monto}}</strong></td>
   </tr>
 </table>
- @endforeach
- @endforeach
-  @endforeach
- @endforeach
 
 
  @foreach($debitostotal as $egresostotal)

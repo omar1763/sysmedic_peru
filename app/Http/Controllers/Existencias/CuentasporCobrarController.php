@@ -121,6 +121,7 @@ class CuentasporCobrarController extends Controller
         $creditos->monto     =$montoDetalle;
         $creditos->id_atencion =$id_atencion;
         $creditos->origen     ='CUENTAS POR COBRAR';
+        $creditos->causa ='CC';
         $creditos->id_empresa     =$usuarioEmp;
         $creditos->id_sucursal     =$usuarioSuc;
         $creditos->save();

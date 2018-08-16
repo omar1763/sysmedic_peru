@@ -80,13 +80,11 @@ $pdf = \App::make('dompdf.wrapper');
        //$pdf->loadHTML($view)->setPaper('letter', 'landscape');
 
 $pdf->loadHTML($view)->setPaper('letter', 'portrait');$pdf->output();
-/*$dom_pdf = $pdf->getDomPDF();
 
-$canvas = $dom_pdf ->get_canvas();
-$canvas->page_text(350, 550, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));*/
 
        
         return $pdf->download('historiapaciente');
+
      // return view("reportes.report-1",$data);
     }
      
