@@ -59,7 +59,7 @@ class LabPorPagarController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.created_at','=', $f1)
         ->orderby('a.created_at','desc')
-        ->paginate(100);
+        ->paginate(5000);
     } else {
 
          $labporpagar = DB::table('atencion_laboratorios as a')
@@ -74,7 +74,7 @@ class LabPorPagarController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(100);
+        ->paginate(5000);
 }
 
 
@@ -89,7 +89,7 @@ class LabPorPagarController extends Controller
         }
 
          $id_usuario = Auth::id();
-
+      
         $searchUsuarioID = DB::table('users')
                     ->select('*')
                    // ->where('estatus','=','1')
@@ -101,11 +101,22 @@ class LabPorPagarController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
+           
+        $searchAtencionLaboratorio =  DB::table('atencion_laboratorios')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id)
+                    ->get();
+
+        foreach ($searchAtencionLaboratorio as $ateclab) {
+                    $idAnalisis = $ateclab->id_analisis;
+                }
+
 
         $searchAnalisis = DB::table('analises')
                     ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id)
+                    ->where('id','=', $idAnalisis)
                     ->get();
 
             foreach ($searchAnalisis as $analisis) {

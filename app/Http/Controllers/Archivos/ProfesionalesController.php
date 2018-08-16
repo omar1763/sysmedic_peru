@@ -50,7 +50,7 @@ class ProfesionalesController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->orderby('a.created_at','desc')
-        ->paginate(10);
+        ->paginate(5000);
 
 
         $centro = Centros::with('centro');
