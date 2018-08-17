@@ -347,7 +347,7 @@ class AtencionController extends Controller
 
                     $request->session()->put('service_price', $precio);
                     
-                    $precio = $precio + $request->session()->get('analises_price');
+                    $precio = $precio;
                     
                 break;
         }
@@ -355,7 +355,6 @@ class AtencionController extends Controller
 
     return response()->json([
       'precioserv' => $precio
-      //'preciototal' => $precio
   ]);
 
 }
@@ -364,7 +363,7 @@ public function cardainput2($id, Request $request){
 
         $filter=explode('*', $id);
 
-        $precio='';
+        $preciopublicoana='';
         if ($filter[1]=='analises') {          
          $analises= DB::table('analises')
          ->select('preciopublico')     
@@ -384,15 +383,14 @@ public function cardainput2($id, Request $request){
                         ->select('preciopublico')     
                         ->whereIn('id',explode(',', $filter[0]))
                         ->get();
-                    
                     foreach ($analises as $ana) {
                         $preciopublicoana += (float)$ana->preciopublico;
                     }
 
                     //$request->session()->put('analisis_price', $preciopublicoana);
                    // $request->session()->put('analises', explode(',', $filter[0]));
-                    
-                    $preciopublico = $preciopublicoana;
+                    //$request->session()->put('analisis_price', $preciopublicoana);
+                    $preciopublicoana = $preciopublicoana;
                    /* $request->session()->put('analises_price', $precio);
                     $request->session()->put('analises', explode(',', $filter[0]));
 
@@ -404,7 +402,7 @@ public function cardainput2($id, Request $request){
 
 
     return response()->json([
-      'preciopublico' => $preciopublico
+      'preciopublico' => $preciopublicoana
   ]);
 
 }
@@ -500,7 +498,7 @@ public function cardainput3($id, Request $request){
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
-       $atenciondetalle->costo           =$request->preciototal;
+       $atenciondetalle->costo           =$request->precio;
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
        $atenciondetalle->costoa          =$request->costoa;

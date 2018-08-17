@@ -232,10 +232,10 @@ function ajaxLoadSelect(fileame, selectLoad,stateID) {
     },
     success: function (data) {
         var total = $("#preciototal").val()? $("#preciototal").val():0;
-        var total_ = $("#precioserv").val()? $("#precioserv").val():0;
+       // var total_ = $("#precioserv").val()? $("#precioserv").val():0;
         
-        $("#precioserv").val(parseFloat(data.precioserv)+parseFloat(total_));
-        $("#preciototal").val(parseFloat(data.precioserv)+parseFloat(total));
+        $("#precioserv").val(parseFloat(data.precioserv));
+        $("#preciototal").val(parseFloat(data.precioserv));
         
 
      
@@ -255,16 +255,17 @@ function ajaxLoadSelect2(fileame, selectLoad,stateID) {
     beforeSend: function() {     
     },
     success: function (data) {
+       // alert(data.preciopublico);
        
-
-        var total_ = $("#preciopublico").val()? $("#preciopublico").val():0;
-         var total = $("#preciototal").val()? $("#preciototal").val():0;
         
-        $("#preciopublico").val(parseFloat(data.preciopublico)+parseFloat(total_));
-        $("#preciototal").val(parseFloat(data.preciopublico)+parseFloat(total));
-        
+       var total = $("#precioserv").val()? $("#precioserv").val():0;
+       var suma_precio_publico = parseFloat(data.preciopublico);
+       
+       var total_resta=suma_precio_publico;
+        $("#preciopublico").val(suma_precio_publico);
+        $("#preciototal").val(total_resta+ parseFloat(total));
 
-     
+
     }
   });
  } else {
