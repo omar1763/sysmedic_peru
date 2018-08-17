@@ -355,6 +355,7 @@ class AtencionController extends Controller
 
     return response()->json([
       'precioserv' => $precio
+      //'preciototal' => $precio
   ]);
 
 }
@@ -499,7 +500,7 @@ public function cardainput3($id, Request $request){
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
-       $atenciondetalle->costo           =$request->precio;
+       $atenciondetalle->costo           =$request->preciototal;
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
        $atenciondetalle->costoa          =$request->costoa;
