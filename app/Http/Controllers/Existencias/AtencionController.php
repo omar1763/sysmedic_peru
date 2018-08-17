@@ -350,34 +350,6 @@ class AtencionController extends Controller
                     $precio = $precio + $request->session()->get('analises_price');
                     
                 break;
-
-            case 'analises':
-
-                    $analises= DB::table('analises')
-                        ->select('preciopublico')     
-                        ->whereIn('id',explode(',', $filter[0]))
-                        ->get();
-                    
-                    foreach ($analises as $a) {
-                        $precio += (float)$a->preciopublico;
-                    }
-
-                    $request->session()->put('analises_price', $precio);
-                    $request->session()->put('analises', explode(',', $filter[0]));
-
-                    $precio = $precio + $request->session()->get('service_price');
-                    
-                break;
-            
-            default:
-                    $paquetes= DB::table('paquetes')
-                        ->select('costo')     
-                        ->where('id','=',$filter[0])
-                        ->first();
-                    
-                    $precio = $paquetes->costo;
-
-                break;
         }
 
 
@@ -388,6 +360,7 @@ class AtencionController extends Controller
 }
 
 public function cardainput2($id, Request $request){
+
         $filter=explode('*', $id);
 
         $precio='';
@@ -397,16 +370,12 @@ public function cardainput2($id, Request $request){
          ->where('id','=',$filter[0])
          ->first();
 
-         $preciopublico=$analises->preciopublico;
+         $preciopublicoana=$analises->preciopublico;
      } else {
-        $paquetes= DB::table('paquetes')
-        ->select('costo')     
-        ->where('id','=',$filter[0])
-        ->first();
-        $precio=$paquetes->costo;
+       
     } 
 
-        $precio = 0;
+        $preciopublicoana = 0;
 
         switch ($filter[1]) {
             case 'analises':
@@ -416,13 +385,18 @@ public function cardainput2($id, Request $request){
                         ->get();
                     
                     foreach ($analises as $ana) {
-                        $preciopublico += (float)$ana->preciopublico;
+                        $preciopublicoana += (float)$ana->preciopublico;
                     }
 
-                    $request->session()->put('analisis_price', $preciopublico);
+                    //$request->session()->put('analisis_price', $preciopublicoana);
+                   // $request->session()->put('analises', explode(',', $filter[0]));
                     
-                    $preciopublico = $preciopublico + $request->session()->get('analises_price');
+                    $preciopublico = $preciopublicoana;
+                   /* $request->session()->put('analises_price', $precio);
+                    $request->session()->put('analises', explode(',', $filter[0]));
 
+                    $precio = $precio + $request->session()->get('service_price');
+*/
                 break;
 
         }
