@@ -64,14 +64,14 @@ class AtencionController extends Controller
         $f1 = $request->fecha;
 
           $atencion = DB::table('atencions as a')
-         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','g.id_paquete')
+         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
         ->join('pacientes as e','d.id_paciente','e.id')
         ->join('servicios as f','d.id_servicio','f.id')
-        ->join('atencion_paquetes as g','g.id_atencion','a.id')
-        ->join('paquetes as h','h.id','g.id_paquete')
+        //->join('atencion_paquetes as g','g.id_atencion','a.id')
+        //->join('paquetes as h','h.id','g.id_paquete')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.created_at','=', $f1)
@@ -84,14 +84,15 @@ class AtencionController extends Controller
     } else {
 
           $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','g.id_paquete')
+        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
+
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
         ->join('pacientes as e','d.id_paciente','e.id')
         ->join('servicios as f','d.id_servicio','f.id')
-        ->join('atencion_paquetes as g','g.id_atencion','a.id')
-        ->join('paquetes as h','h.id','g.id_paquete')
+      //  ->join('atencion_paquetes as g','g.id_atencion','a.id')
+        //->join('paquetes as h','h.id','g.id_paquete')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
@@ -387,15 +388,9 @@ public function cardainput2($id, Request $request){
                         $preciopublicoana += (float)$ana->preciopublico;
                     }
 
-                    //$request->session()->put('analisis_price', $preciopublicoana);
-                   // $request->session()->put('analises', explode(',', $filter[0]));
-                    //$request->session()->put('analisis_price', $preciopublicoana);
+                    
                     $preciopublicoana = $preciopublicoana;
-                   /* $request->session()->put('analises_price', $precio);
-                    $request->session()->put('analises', explode(',', $filter[0]));
-
-                    $precio = $precio + $request->session()->get('service_price');
-*/
+                  
                 break;
 
         }
@@ -529,27 +524,27 @@ public function cardainput3($id, Request $request){
          }
 
 //var_dump($request->servicio);
-          if(isset($request->servicios)){
-         foreach ($request->servicios as $key => $value) {
-       $serviciosatencion = new AtencionServicios;
-       $serviciosatencion->id_atencion =$atencion->id;
-       $serviciosatencion->id_servicio    =$value;
-       $serviciosatencion->id_sucursal =$usuarioSuc;
-       $serviciosatencion->id_empresa =$usuarioEmp;
-       $serviciosatencion->save();
-       }
-       }
+         if(isset($request->servicios)){
+           foreach ($request->servicios as $key => $value) {
+             $serviciosatencion = new AtencionServicios;
+             $serviciosatencion->id_atencion =$atencion->id;
+             $serviciosatencion->id_servicio    =$value;
+             $serviciosatencion->id_sucursal =$usuarioSuc;
+             $serviciosatencion->id_empresa =$usuarioEmp;
+             $serviciosatencion->save();
+         }
+     }
 
-           if(isset($request->paquetes)){
-         foreach ($request->paquetes as $key => $value) {
-       $paquetesatencion = new AtencionPaquetes;
-       $paquetesatencion->id_atencion =$atencion->id;
-       $paquetesatencion->id_paquete    =$value;
-       $paquetesatencion->id_sucursal =$usuarioSuc;
-       $paquetesatencion->id_empresa =$usuarioEmp;
-       $paquetesatencion->save();
-       }
-       }
+       if(isset($request->paquetes)){
+           foreach ($request->paquetes as $key => $value) {
+             $paquetesatencion = new AtencionPaquetes;
+             $paquetesatencion->id_atencion =$atencion->id;
+             $paquetesatencion->id_paquete    =$value;
+             $paquetesatencion->id_sucursal =$usuarioSuc;
+             $paquetesatencion->id_empresa =$usuarioEmp;
+             $paquetesatencion->save();
+         } 
+     }
       
       
 
