@@ -493,11 +493,11 @@ public function cardainput3($id, Request $request){
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
-       $atenciondetalle->costo           =$request->precio;
+       $atenciondetalle->costo           =$request->preciototal;
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
        $atenciondetalle->costoa          =$request->costoa;
-       $atenciondetalle->pendiente       =($request->precio-$request->costoa);
+       $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
        $atenciondetalle->tarjeta         =$request->tarjeta;
        $atenciondetalle->observaciones   =$request->observaciones;
        $atenciondetalle->save();
