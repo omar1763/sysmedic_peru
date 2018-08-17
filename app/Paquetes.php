@@ -42,5 +42,32 @@ class Paquetes extends Authenticatable
     return $array;
               //  return $id;
 }
+
+   public function selectAllPaquetes($id)
+    {
+
+        $array='';
+        $data = \DB::table('atencion_paquetes')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id_atencion', $id)
+        ->get();
+        $descripcion='';
+        
+        
+        foreach ($data as $key => $value) {
+
+            $datapaquetes = \DB::table('paquetes')
+            ->select('*')
+            ->where('id', $value->id_paquete)
+            ->get();
+
+        foreach ($datapaquetes as $keydataanalisis => $valuedataanalisis) {
+                $descripcion.= $valuedataanalisis->name.',';
+                          # code...
+            }
+        }  
+        return substr($descripcion, 0, -1);  
+    }
     
 }

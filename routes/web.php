@@ -107,7 +107,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
 
 
-        Route::get('/existencias/atencion/cardainput/{id}','Existencias\AtencionController@cardainput');
+   Route::get('/existencias/atencion/cardainput/{id}','Existencias\AtencionController@cardainput');
+   Route::get('/existencias/atencion/cardainput2/{id}','Existencias\AtencionController@cardainput2');
+   Route::get('/existencias/atencion/cardainput3/{id}','Existencias\AtencionController@cardainput3');
+
 
 
    Route::get('/indexFecha/{fecha}','Existencias\AtencionController@indexFecha');

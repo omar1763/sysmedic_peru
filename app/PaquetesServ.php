@@ -20,6 +20,7 @@ class PaquetesServ extends Authenticatable
     use HasRolesAndAbilities;
 
     protected $fillable = ['name','costo'];
+    
      public function selectAllServicios($id)
     {
 

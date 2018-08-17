@@ -65,36 +65,99 @@
           </div>
             
            <div class="row">
-           	<div class="col-md-6">
-           <div id="tipo_servicio" class="form-group error-status">
-                {!! Form::label("tipo_servicio","* Tipo de Servicio",["class"=>""]) !!}
-                <div class="input-icon">
-                    <div class="input-icon">
-                        <i class="icon-eye  font-red"></i>
-                        
-                        {!! Form::select('tipo_servicio', ['0' => 'Seleccionar Tipo de Servicio','P' => 'Paquete', 'S' => 'Servicio'], null, ['id'=>'tipo', 'class'=>'form-control select2']) !!}
-                    </div>
-
-                </div>
-            </div> 
-        </div>
-
-                <div class="col-md-6" id="servbyemp">
-                </div>
-        </div>
-
-        <div class="row">
-                <div class="col-md-6">
-                    {!! Form::label('analisis', 'Analisis de Laboratorio*', ['class' => 'control-label']) !!}
-                    {!! Form::select('analisis[]', $analisis, old('analisis'), ['class' => 'form-control select2', 'multiple' => 'multiple', 'onchange'=>"ajaxLoadSelect('/existencias/atencion/cardainput', 'analises',$(this).val())"]) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('analisis'))
-                        <p class="help-block">
-                            {{ $errors->first('analisis') }}
-                        </p>
-                    @endif
-                </div>
+             <div class="col-md-9">
+              {!! Form::label('servicios', 'Servicio*', ['class' => 'control-label']) !!}
+              {!! Form::select('servicios[]', $servicios, old('servicios'), ['onchange'=>"ajaxLoadSelect('/existencias/atencion/cardainput', 'servicios',$(this).val())", 'id'=>'servicios','class' => 'form-control select2', 'multiple' => 'multiple']) !!}
+              <p class="help-block"></p>
+              @if($errors->has('servicios'))
+              <p class="help-block">
+                {{ $errors->first('servicios') }}
+              </p>
+              @endif
             </div>
+            <div class="col-md-3">
+              {!! Form::label('precioserv', 'Monto Servicios', ['class' => 'control-label']) !!}
+              {!! Form::text('precioserv', old('precioserv'), ['class' => 'form-control', 'placeholder' => '']) !!}
+              <p class="help-block"></p>
+              @if($errors->has('precioserv'))
+              <p class="help-block">
+                {{ $errors->first('precioserv') }}
+              </p>
+              @endif
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9">
+              {!! Form::label('analises', 'Analisis de Laboratorio*', ['class' => 'control-label']) !!}
+              {!! Form::select('analises[]', $analises, old('analises'), ['class' => 'form-control select2', 'multiple' => 'multiple', 'onchange'=>"ajaxLoadSelect2('/existencias/atencion/cardainput2', 'analises',$(this).val())"]) !!}
+              <p class="help-block"></p>
+              @if($errors->has('analises'))
+              <p class="help-block">
+                {{ $errors->first('analises') }}
+              </p>
+              @endif
+            </div>
+
+             <div class="col-md-3">
+
+              {!! Form::label('preciopublico', 'Monto Analisis', ['class' => 'control-label']) !!}
+              {!! Form::text('preciopublico', old('preciopublico'), ['class' => 'form-control', 'placeholder' => '']) !!}
+              <p class="help-block"></p>
+              @if($errors->has('preciopublico'))
+              <p class="help-block">
+                {{ $errors->first('preciopublico') }}
+              </p>
+              @endif
+          </div>
+        </div>
+
+          <div class="row"> 
+           <div class="col-md-9">
+            {!! Form::label('paquetes', 'Paquetes*', ['class' => 'control-label']) !!}
+            {!! Form::select('paquetes[]', $paquetes, old('paquetes'), ['class' => 'form-control select2', 'multiple' => 'multiple', 'onchange'=>"ajaxLoadSelect3('/existencias/atencion/cardainput3', 'analises',$(this).val())"]) !!}
+            <p class="help-block"></p>
+            @if($errors->has('paquetes'))
+            <p class="help-block">
+              {{ $errors->first('paquetes') }}
+            </p>
+            @endif
+          </div>
+
+          <div class="col-md-3">
+
+            {!! Form::label('costo', 'Monto Paquetes', ['class' => 'control-label']) !!}
+            {!! Form::text('costo', old('costo'), ['class' => 'form-control', 'placeholder' => '']) !!}
+            <p class="help-block"></p>
+            @if($errors->has('costo'))
+            <p class="help-block">
+              {{ $errors->first('costo') }}
+            </p>
+            @endif
+          </div>
+
+        </div>
+          <div class="row">
+
+               <div class="col-md-9">
+               </div>
+
+              <div class="col-md-3"">
+
+              {!! Form::label('preciototal', 'Monto Total', ['id'=>'MiTotal','class' => 'control-label']) !!}
+              {!! Form::text('preciototal', old('preciototal'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+              <p class="help-block"></p>
+              @if($errors->has('preciototal'))
+              <p class="help-block">
+                {{ $errors->first('preciototal') }}
+              </p>
+              @endif
+            </div>
+            
+
+          </div>
+
+
 
         <div class="row">
           
@@ -126,40 +189,6 @@
                     
                 </div>
         </div>
-
-        <div class="row">
-           <div class="col-md-6">
-                <div class="row">
-                <div class="col-xs-12 form-group">
-                    {!! Form::label('precio', 'Precio', ['class' => 'control-label']) !!}
-                    {!! Form::text('precio', old('precio'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('precio'))
-                        <p class="help-block">
-                            {{ $errors->first('precio') }}
-                        </p>
-                    @endif
-                </div>
-            </div>
-
-           </div>
-           <div class="col-md-6">
-                <div class="row">
-                <div class="col-xs-12 form-group">
-                    {!! Form::label('porcentaje', 'Porcentaje*', ['class' => 'control-label']) !!}
-                    {!! Form::text('porcentaje', old('porcentaje'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('porcentaje'))
-                        <p class="help-block">
-                            {{ $errors->first('porcentaje') }}
-                        </p>
-                    @endif
-                </div>
-            </div>
-             
-           </div>
-        </div>
-
         <div class="row">
            <div class="col-md-6">
                 {!! Form::label("acuenta","*A cuenta",["class"=>""]) !!}
@@ -167,7 +196,7 @@
                     <div class="input-icon">
                         <i class="icon-eye  font-red"></i>
                         
-                        {!! Form::select('acuenta', ['0' => 'Seleccione una Opciòn','EF' => 'Pago Adelantado', 'TJ' => 'Pago con Tarjeta'], null, ['id'=>'pago', 'class'=>'form-control select2']) !!}
+                        {!! Form::select('acuenta', ['0' => 'Seleccione una Opciòn','EF' => 'Pago en Efectivo', 'TJ' => 'Pago con Tarjeta'], null, ['id'=>'pago', 'class'=>'form-control select2']) !!}
                     </div>
 
                 </div>
@@ -381,6 +410,45 @@
     clearOnEmpty: true
     });
     </script>
+
+<script>
+      function sumar() {
+
+        var total = 0;
+
+        $(".monto").each(function() {
+
+          if (isNaN(parseFloat($(this).val()))) {
+
+            total += 0;
+
+          } else {
+
+            total += parseFloat($(this).val());
+
+          }
+
+        });
+
+  //alert(total);
+  document.getElementById('spTotal').innerHTML = total;
+}
+</script>
+
+<script type="text/javascript">
+/* Funcion suma. */
+function SumarAutomatico (valor) {
+    var TotalSuma = 0;  
+    valor = parseInt(valor); // Convertir a numero entero (número).
+    TotalSuma = document.getElementById('MiTotal').innerHTML;
+    // Valida y pone en cero "0".
+    TotalSuma = (TotalSuma == null || TotalSuma == undefined || TotalSuma == "") ? 0 : TotalSuma;
+    /* Variable genrando la suma. */
+    TotalSuma = (parseInt(TotalSuma) + parseInt(valor));
+    // Escribir el resultado en una etiqueta "span".
+    document.getElementById('MiTotal').innerHTML = TotalSuma;
+}
+</script>
 
 
 

@@ -73,20 +73,21 @@
                               </td>
 
 
-
-
-
-
-
                                 
                                 <td> 
-                                  @if($paquete->selectPaquete($atec->id_paquete))
-                                  {{$paquete->selectPaquete($atec->id_paquete)}}
+                                  @if($paquete->selectAllPaquetes($atec->id_atencion))
+                                  {{$paquete->selectAllPaquetes($atec->id_atencion)}}
                                   @else
-                                  <small class="label pull-right bg-red">Sin Paquete</small>
+                                  <small class="label pull-right bg-red">Sin Paquetes</small>
                                   @endif
                               </td>
-                                <td> {{$analisis->selectAllAnalisis($atec->id_atencion)}}</td>
+                                <td>
+                                 @if($analisis->selectAllAnalisis($atec->id_atencion))
+                                 {{$analisis->selectAllAnalisis($atec->id_atencion)}}
+                                 @else
+                                  <small class="label pull-right bg-red">Sin Analisis</small>
+                                @endif
+                                </td>
                              
                               
                                
@@ -100,7 +101,7 @@
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
                                         'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
-                                        'route' => ['admin.ingresos.destroy', $atec->id])) !!}
+                                        'route' => ['admin.atencion.destroy', $atec->id])) !!}
                                     {!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
                                 </td>

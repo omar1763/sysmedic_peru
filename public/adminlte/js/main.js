@@ -231,7 +231,7 @@ function ajaxLoadSelect(fileame, selectLoad,stateID) {
     beforeSend: function() {     
     },
     success: function (data) {
-        $("#precio").val(data.precio);
+        $("#precioserv").val(data.precioserv);
         $("#porcentaje").val(data.porcentaje);
      
     }
@@ -240,6 +240,45 @@ function ajaxLoadSelect(fileame, selectLoad,stateID) {
    $('select[name="'+selectLoad+'"]').empty();
  }
 }
+
+function ajaxLoadSelect2(fileame, selectLoad,stateID) { 
+ if (stateID) {
+   $.ajax({
+    url: fileame+'/' + stateID+'*'+selectLoad,
+    type: "GET",
+    dataType: "json",
+    beforeSend: function() {     
+    },
+    success: function (data) {
+        $("#preciopublico").val(data.preciopublico);
+     
+    }
+  });
+ } else {
+   $('select[name="'+selectLoad+'"]').empty();
+ }
+}
+
+function ajaxLoadSelect3(fileame, selectLoad,stateID) { 
+ if (stateID) {
+   $.ajax({
+    url: fileame+'/' + stateID+'*'+selectLoad,
+    type: "GET",
+    dataType: "json",
+    beforeSend: function() {     
+    },
+    success: function (data) {
+        $("#costo").val(data.costo);
+     
+    }
+  });
+ } else {
+   $('select[name="'+selectLoad+'"]').empty();
+ }
+}
+
+
+
 function ajaxLoad(filename, content) {
     $.ajax({
         type: "GET",

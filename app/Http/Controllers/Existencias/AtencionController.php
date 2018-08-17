@@ -15,6 +15,7 @@ use App\Paquetes;
 use App\Laboratorios;
 use App\AtencionLaboratorio;
 use App\AtencionServicios;
+use App\AtencionPaquetes;
 use App\Creditos;
 use App\Ingresos;
 use Carbon\Carbon;
@@ -63,35 +64,39 @@ class AtencionController extends Controller
         $f1 = $request->fecha;
 
           $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','d.id_paquete')
+         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','g.id_paquete')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
         ->join('pacientes as e','d.id_paciente','e.id')
         ->join('servicios as f','d.id_servicio','f.id')
+        ->join('atencion_paquetes as g','g.id_atencion','a.id')
+        ->join('paquetes as h','h.id','g.id_paquete')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.created_at','=', $f1)
         //->orwhereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-         ->paginate(100);
+         ->paginate(1000);
  //      ->toSql();
 //dd($atencion);
        // dd(DB::getQueryLog());
     } else {
 
           $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','d.id_paquete')
+        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle','g.id_paquete')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
         ->join('pacientes as e','d.id_paciente','e.id')
         ->join('servicios as f','d.id_servicio','f.id')
+        ->join('atencion_paquetes as g','g.id_atencion','a.id')
+        ->join('paquetes as h','h.id','g.id_paquete')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(100);
+        ->paginate(1000);
 //dd($atencion);
       //  dd(DB::getQueryLog());
     }
@@ -195,13 +200,16 @@ class AtencionController extends Controller
        $servicios = Servicios::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('detalle','id');
+       $paquetes = Paquetes::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('name','id');
        $personal = Personal::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','name');
        $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('dni','id');
-       $analisis = Analisis::where('id_empresa',$usuarioEmp)
+       $analises = Analisis::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','id');
        $profesionales = Profesionales::where('id_empresa',$usuarioEmp)
@@ -211,7 +219,7 @@ class AtencionController extends Controller
         $request->session()->put('service_price', 0);
         $request->session()->put('analises_price', 0);
 
-        return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesionales','analisis'));
+        return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesionales','analises','paquetes'));
     }
 
      public function dataPacientes($id){
@@ -371,39 +379,107 @@ class AtencionController extends Controller
 
                 break;
         }
-        // if ($filter[1]=='servicios') {          
-        //     $servicios= DB::table('servicios')
-        //     ->select('precio','porcentaje')     
-        //     ->whereIn('id',explode(',', $filter[0]))
-        //     ->get();
-        
-        //     foreach ($servicios as $servicio) {
-        //         $precio += (float)$servicio->precio;
-        //     }
-            
-        //     $request->session()->put('service_price', $precio);
-
-        //     $porcentaje=$servicios[0]->porcentaje;
-        //  } else {
-        //     $paquetes= DB::table('paquetes')
-        //     ->select('costo')     
-        //     ->where('id','=',$filter[0])
-        //     ->first();
-        //     $precio=$paquetes->costo;
-        //     $porcentaje='';
-        // }
 
 
     return response()->json([
-      'precio' => $precio,
-      'porcentaje' => $porcentaje      
+      'precioserv' => $precio
   ]);
-
-
 
 }
 
+public function cardainput2($id, Request $request){
+        $filter=explode('*', $id);
 
+        $precio='';
+        if ($filter[1]=='analises') {          
+         $analises= DB::table('analises')
+         ->select('preciopublico')     
+         ->where('id','=',$filter[0])
+         ->first();
+
+         $preciopublico=$analises->preciopublico;
+     } else {
+        $paquetes= DB::table('paquetes')
+        ->select('costo')     
+        ->where('id','=',$filter[0])
+        ->first();
+        $precio=$paquetes->costo;
+    } 
+
+        $precio = 0;
+
+        switch ($filter[1]) {
+            case 'analises':
+                    $analises= DB::table('analises')
+                        ->select('preciopublico')     
+                        ->whereIn('id',explode(',', $filter[0]))
+                        ->get();
+                    
+                    foreach ($analises as $ana) {
+                        $preciopublico += (float)$ana->preciopublico;
+                    }
+
+                    $request->session()->put('analisis_price', $preciopublico);
+                    
+                    $preciopublico = $preciopublico + $request->session()->get('analises_price');
+
+                break;
+
+        }
+
+
+    return response()->json([
+      'preciopublico' => $preciopublico
+  ]);
+
+}
+
+public function cardainput3($id, Request $request){
+        $filter=explode('*', $id);
+
+        $precio='';
+        if ($filter[1]=='paquetes') {          
+         $paquetes= DB::table('paquetes')
+         ->select('costo')     
+         ->where('id','=',$filter[0])
+         ->first();
+
+         $costo=$paquetes->costo;
+     } else {
+        $paquetes= DB::table('paquetes')
+        ->select('costo')     
+        ->where('id','=',$filter[0])
+        ->first();
+        $costo=$paquetes->costo;
+    } 
+
+        $precio = 0;
+
+        switch ($filter[1]) {
+            case 'paquetes':
+                    $paquetes= DB::table('paquetes')
+                        ->select('costo')     
+                        ->whereIn('id',explode(',', $filter[0]))
+                        ->get();
+                    
+                    foreach ($paquetes as $paq) {
+                        $costo += (float)$paq->costo;
+                    }
+
+                    $request->session()->put('paquetes_price', $costo);
+                    
+                    $costo = $costo + $request->session()->get('paquetes_price');
+
+                break;
+
+        }
+
+
+    return response()->json([
+      'costo' => $costo
+  ]);
+
+}
 
      public function servbyemp($id)
     {
@@ -449,7 +525,6 @@ class AtencionController extends Controller
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
-       $atenciondetalle->id_paquete      =isset($request->paquetes)? $request->paquetes: 0;
        $atenciondetalle->costo           =$request->precio;
        $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
@@ -469,8 +544,8 @@ class AtencionController extends Controller
        $creditos->save();
 
       
-        if(! is_null($request->analisis)){
-        foreach ($request->analisis as $key => $value) {
+        if(! is_null($request->analises)){
+        foreach ($request->analises as $key => $value) {
        $analisisatencion = new AtencionLaboratorio;
        $analisisatencion->id_atencion =$atencion->id;
        $analisisatencion->id_analisis    =$value;
@@ -481,14 +556,25 @@ class AtencionController extends Controller
          }
 
 //var_dump($request->servicio);
-          if(isset($request->servicio)){
-         foreach ($request->servicio as $key => $value) {
+          if(isset($request->servicios)){
+         foreach ($request->servicios as $key => $value) {
        $serviciosatencion = new AtencionServicios;
        $serviciosatencion->id_atencion =$atencion->id;
        $serviciosatencion->id_servicio    =$value;
        $serviciosatencion->id_sucursal =$usuarioSuc;
        $serviciosatencion->id_empresa =$usuarioEmp;
        $serviciosatencion->save();
+       }
+       }
+
+           if(isset($request->paquetes)){
+         foreach ($request->paquetes as $key => $value) {
+       $paquetesatencion = new AtencionPaquetes;
+       $paquetesatencion->id_atencion =$atencion->id;
+       $paquetesatencion->id_paquete    =$value;
+       $paquetesatencion->id_sucursal =$usuarioSuc;
+       $paquetesatencion->id_empresa =$usuarioEmp;
+       $paquetesatencion->save();
        }
        }
       
@@ -561,8 +647,20 @@ class AtencionController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $ingresos = Ingresos::findOrFail($id);
-        $ingresos->delete();
+        $atencion = Atencion::findOrFail($id);
+        $atencion->delete();
+
+        $atenciondetalle = AtencionDetalle::findOrFail($id);
+        $atenciondetalle->delete();
+
+        $atencionlab = AtencionLaboratorio::findOrFail($id);
+        $atencionlab->delete();
+
+        $atencionser = AtencionServicios::findOrFail($id);
+        $atencionser->delete();
+
+        $creditos = Creditos::findOrFail($id);
+        $creditos->delete();
 
         return redirect()->route('admin.ingresos.index');
     }
@@ -578,7 +676,7 @@ class AtencionController extends Controller
             return abort(401);
         }
         if ($request->input('ids')) {
-            $ingresos = Ingresos::whereIn('id', $request->input('ids'))->get();
+            $atencion = Atencion::whereIn('id', $request->input('ids'))->get();
 
             foreach ($entries as $entry) {
                 $entry->delete();
