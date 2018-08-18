@@ -78,7 +78,20 @@ class ResultadosController extends Controller
             return abort(401);
         }
         $id=$_GET['id'];
-        return view('existencias.resultados.create',compact('id'));
+        $exists;
+        $comentario;
+        if (RedactarResultados::where('id_atencion_servicio', '=', $_GET['id'])->exists()) {
+            $modelRR=RedactarResultados::where('id_atencion_servicio', '=', $_GET['id'])->first();
+            $comentario=$modelRR->descripcion;
+            $exists=true;
+
+        }
+        else{
+            $exists=false;
+            $comentario='';
+
+        }
+        return view('existencias.resultados.create',compact('id','exists','comentario'));
     }
 
     /**Ll

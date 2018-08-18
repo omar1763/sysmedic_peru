@@ -18,10 +18,32 @@
                     
 
                     <div class="container-fluid">
-                       
-                            <textarea class="ckeditor" name="editor1" id="editor1" rows="10" cols="80">
-                                Este es el textarea que es modificado por la clase ckeditor
-                            </textarea>
+                      @if (!$exists)
+                      <textarea class="ckeditor" name="editor1" id="editor1" rows="10" cols="80">
+                        Este es el textarea que es modificado por la clase ckeditor
+                      </textarea>
+                      @else
+                      <div class="info-box info-box bg-green">
+            <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">El Resultado ya Fue Procesado</span>
+              
+
+              
+                  <span class="progress-description">
+                    <h4>
+                      
+                  
+                  {!! $comentario !!}
+                  
+                  
+                    </h4>
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+                      @endif
                        
                     </div>
              
@@ -30,7 +52,10 @@
               <!-- /.box-body -->
 
               <div class="box-footer " style="text-align: right;">
+                @if (!$exists)
+                     
               {!! Form::submit('GUARDAR', ['class' => 'btn btn-danger']) !!}
+                      @endif
               </div>
 
 
