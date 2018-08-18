@@ -168,87 +168,94 @@
 
         <div class="row">
           
-          <div class="col-md-6">
-          <div id="origen_paciente" class="form-group error-status">
-                {!! Form::label("origen_paciente","* Origen del Paciente",["class"=>""]) !!}
+          <div class="col-md-4">
+            <div id="origen_paciente" class="form-group error-status">
+              {!! Form::label("origen_paciente","* Origen del Paciente",["class"=>""]) !!}
+              <div class="input-icon">
                 <div class="input-icon">
-                    <div class="input-icon">
-                        <i class="icon-eye  font-red"></i>
-                        
-                        {!! Form::select('origen_paciente', ['0' => 'Seleccionar Origen del Paciente','P' => 'Personal', 'PR' => 'Profesional'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
-                    </div>
-
+                  <i class="icon-eye  font-red"></i>
+                  
+                  {!! Form::select('origen_paciente', ['0' => 'Seleccionar Origen del Paciente','PER' => 'Personal', 'PRO' => 'Profesional'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
                 </div>
+
+              </div>
             </div> 
-        </div>
-        <div class="col-md-6 id="pac">
+          </div>
+
+          <div class="col-md-4">   
+            {!! Form::label('profesional', 'Prof. de Apoyo*', ['class' => 'control-label']) !!}
+            {!! Form::select('profesional', $profesional, old('profesional'), ['class' => 'form-control select2', 'required' => 'required']) !!}
+            <p class="help-block"></p>
+            @if($errors->has('profesional'))
+            <p class="help-block">
+              {{ $errors->first('profesional') }}
+            </p>
+            @endif
+
+          </div>
+
+          <div class="col-md-4">   
+            {!! Form::label('personal', 'Personal*', ['class' => 'control-label']) !!}
+            {!! Form::select('personal', $personal, old('personal'), ['class' => 'form-control select2', 'required' => 'required']) !!}
+            <p class="help-block"></p>
+            @if($errors->has('personal'))
+            <p class="help-block">
+              {{ $errors->first('personal') }}
+            </p>
+            @endif
+          </div>
 
         </div>
 
-        <div class="col-md-6" id="origen">
-                    
-                </div>
-        </div>
         <div class="row">
-           <div class="col-md-6">
-                {!! Form::label("acuenta","*A cuenta",["class"=>""]) !!}
-                <div class="input-icon">
-                    <div class="input-icon">
-                        <i class="icon-eye  font-red"></i>
-                        
-                        {!! Form::select('acuenta', ['0' => 'Seleccione una Opciòn','EF' => 'Pago en Efectivo', 'TJ' => 'Pago con Tarjeta'], null, ['id'=>'pago', 'class'=>'form-control select2']) !!}
-                    </div>
-
-                </div>
-        </div>
-
          <div class="col-md-6">
-                    {!! Form::label('costoa', 'Monto a Abonar', ['class' => 'control-label']) !!}
-                    {!! Form::text('costoa', old('costoa'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('costoa'))
-                        <p class="help-block">
-                            {{ $errors->first('costoa') }}
-                        </p>
-                    @endif
-         </div>
-        </div>
+          {!! Form::label("acuenta","*A cuenta",["class"=>""]) !!}
+          <div class="input-icon">
+            <div class="input-icon">
+              <i class="icon-eye  font-red"></i>
 
-        <div class="row">
-              <div class="col-md-6">
-                <div class="row">
-                <div class="col-xs-12 form-group">
-                    {!! Form::label('tarjeta', 'Datos de Tarjeta', ['class' => 'control-label']) !!}
-                    {!! Form::text('tarjeta', old('tarjeta'), ['class' => 'form-control', 'placeholder' => '']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('tarjeta'))
-                        <p class="help-block">
-                            {{ $errors->first('tarjeta') }}
-                        </p>
-                    @endif
-                </div>
+              {!! Form::select('acuenta', ['0' => 'Seleccione una Opciòn','EF' => 'Pago en Efectivo', 'TJ' => 'Pago con Tarjeta'], null, ['id'=>'pago', 'class'=>'form-control select2']) !!}
             </div>
 
-           </div>
+          </div>
         </div>
+
+        <div class="col-md-6">
+          {!! Form::label('costoa', 'Monto a Abonar', ['class' => 'control-label']) !!}
+          {!! Form::text('costoa', old('costoa'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+          <p class="help-block"></p>
+          @if($errors->has('costoa'))
+          <p class="help-block">
+            {{ $errors->first('costoa') }}
+          </p>
+          @endif
+        </div>
+      </div>
 
         <div class="row">
-              <div class="col-md-6">
-                <div class="row">
-                <div class="col-xs-12 form-group">
-                    {!! Form::label('observaciones', 'Observaciones', ['class' => 'control-label']) !!}
-                    {!! Form::text('observaciones', old('observaciones'), ['class' => 'form-control', 'placeholder' => '']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('observaciones'))
-                        <p class="help-block">
-                            {{ $errors->first('observaciones') }}
-                        </p>
-                    @endif
-                </div>
-            </div>
-
-           </div>
+          <div class="col-md-6">
+            {!! Form::label('tarjeta', 'Datos de Tarjeta', ['class' => 'control-label']) !!}
+            {!! Form::text('tarjeta', old('tarjeta'), ['class' => 'form-control', 'placeholder' => '']) !!}
+            <p class="help-block"></p>
+            @if($errors->has('tarjeta'))
+            <p class="help-block">
+              {{ $errors->first('tarjeta') }}
+            </p>
+            @endif
+          </div>
+          <div class="col-md-6">
+            {!! Form::label('observaciones', 'Observaciones', ['class' => 'control-label']) !!}
+            {!! Form::text('observaciones', old('observaciones'), ['class' => 'form-control', 'placeholder' => '']) !!}
+            <p class="help-block"></p>
+            @if($errors->has('observaciones'))
+            <p class="help-block">
+              {{ $errors->first('observaciones') }}
+            </p>
+            @endif
+          </div>
         </div>
+
+   
              
              
         </div>
@@ -287,30 +294,7 @@
        }
     </script>
 
-    <script type="text/javascript">
-      $(document).ready(function(){
-        $('#tipoO').on('change',function(){
-          var link;
-          if ($(this).val() == 'P') {
-            link = '/existencias/atencion/perbyemp/';
-          }else{
-            link = '/existencias/atencion/probyemp/';
-          }
 
-          $.ajax({
-                 type: "get",
-                 url:  link,
-                 success: function(a) {
-                    $('#origen').html(a);
-                 }
-          });
-
-        });
-        
-
-      });
-       
-    </script>
 
 
      <script type="text/javascript">
@@ -411,23 +395,29 @@
     });
     </script>
 
+    <script>
+    $('#precioserv').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+    </script>
 
-<script type="text/javascript">
-/* Funcion suma. */
-function SumarAutomatico (valor) {
-    var TotalSuma = 0;  
-    valor = parseInt(valor); // Convertir a numero entero (número).
-    TotalSuma = document.getElementById('MiTotal').innerHTML;
-    // Valida y pone en cero "0".
-    TotalSuma = (TotalSuma == null || TotalSuma == undefined || TotalSuma == "") ? 0 : TotalSuma;
-    /* Variable genrando la suma. */
-    TotalSuma = (parseInt(TotalSuma) + parseInt(valor));
-    // Escribir el resultado en una etiqueta "span".
-    document.getElementById('MiTotal').innerHTML = TotalSuma;
-}
-</script>
+     <script>
+    $('#preciopublico').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+    </script>
 
-
+     <script>
+    $('#preciototal').priceFormat({
+    prefix: '',
+    thousandsSeparator: '',
+    clearOnEmpty: true
+    });
+     </script>
 
 @endsection
 

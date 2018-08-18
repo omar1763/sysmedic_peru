@@ -16,6 +16,8 @@ use App\Laboratorios;
 use App\AtencionLaboratorio;
 use App\AtencionServicios;
 use App\AtencionPaquetes;
+use App\AtencionProfesionalesServicio;
+use App\AtencionProfesionalesLaboratorio;
 use App\Creditos;
 use App\Ingresos;
 use Carbon\Carbon;
@@ -206,21 +208,21 @@ class AtencionController extends Controller
                              ->get()->pluck('name','id');
        $personal = Personal::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('name','name');
+                             ->get()->pluck('name','id');
        $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('dni','id');
        $analises = Analisis::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','id');
-       $profesionales = Profesionales::where('id_empresa',$usuarioEmp)
+       $profesional = Profesionales::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('name','name');
+                             ->get()->pluck('name','id');
 
         $request->session()->put('service_price', 0);
         $request->session()->put('analises_price', 0);
 
-        return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesionales','analises','paquetes'));
+        return view('existencias.atencion.create', compact('servicios','personal','pacientes','profesional','analises','paquetes'));
     }
 
      public function dataPacientes($id){
@@ -483,7 +485,7 @@ public function cardainput3($id, Request $request){
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-       
+    
 
        $atencion = new Atencion;
        $atencion->id_empresa     =$usuarioEmp;
@@ -520,6 +522,15 @@ public function cardainput3($id, Request $request){
        $analisisatencion->id_sucursal =$usuarioSuc;
        $analisisatencion->id_empresa =$usuarioEmp;
        $analisisatencion->save();
+
+       $analisisprof = new AtencionProfesionalesLaboratorio;
+       $analisisprof->id_atencion =$atencion->id;
+       $analisisprof->id_profesional =$request->profesional;
+       $analisisprof->id_laboratorio   =$value;
+       $analisisprof->id_sucursal =$usuarioSuc;
+       $analisisprof->id_empresa =$usuarioEmp;
+       $analisisprof->save();
+
        }
          }
 
@@ -532,9 +543,17 @@ public function cardainput3($id, Request $request){
              $serviciosatencion->id_sucursal =$usuarioSuc;
              $serviciosatencion->id_empresa =$usuarioEmp;
              $serviciosatencion->save();
+
+             $serviciosprof = new AtencionProfesionalesServicio;
+             $serviciosprof->id_atencion =$atencion->id;
+             $serviciosprof->id_profesional =$request->profesional;
+             $serviciosprof->id_servicio    =$value;
+             $serviciosprof->id_sucursal =$usuarioSuc;
+             $serviciosprof->id_empresa =$usuarioEmp;
+             $serviciosprof->save();
          }
      }
-
+       
        if(isset($request->paquetes)){
            foreach ($request->paquetes as $key => $value) {
              $paquetesatencion = new AtencionPaquetes;

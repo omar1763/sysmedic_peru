@@ -78,7 +78,8 @@ class ProfesionalesController extends Controller
              $profesional = DB::table('profesionales as a')
                      ->where('a.id_empresa','=', $usuarioEmp)
                      ->where('a.id_sucursal','=', $usuarioSuc)
-                     ->get()->pluck('name','id','apellidos');
+                     ->get()->pluck('name');
+
             
          if(!is_null($profesional)){
            return view("existencias.atencion.probyemp",['profesional'=>$profesional]);

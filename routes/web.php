@@ -73,7 +73,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
     Route::resource('cuentasporcobrar', 'Existencias\CuentasporCobrarController');
     Route::post('cuentasporcobrar_mass_destroy', ['uses' => 'Existencias\CuentasporCobrarController@massDestroy', 'as' => 'cuentasporcobrar.mass_destroy']);
-    
+
+    Route::resource('comisionesporpagar', 'Existencias\ComisionesPorPagarController');
+    Route::post('comisionesporpagar_mass_destroy', ['uses' => 'Existencias\ComisionesPorPagarController@massDestroy', 'as' => 'comisionesporpagar.mass_destroy']);
+    Route::resource('comisionespagadas', 'Existencias\ComisionesPagadasController');
+    Route::post('comisionespagadas_mass_destroy', ['uses' => 'Existencias\ComisionesPagadasController@massDestroy', 'as' => 'comisionespagadas.mass_destroy']);
+
     Route::resource('atenciondiaria', 'Reportes\PdfController');
     Route::post('atenciondiaria_mass_destroy', ['uses' => 'Reportes\PdfController@massDestroy', 'as' => 'atenciondiaria.mass_destroy']);
 });
@@ -121,6 +126,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
   Route::get('reportes/index','PdfController@index');
   Route::get('listado_atenciondiaria_ver','Reportes\PdfController@listado_atenciondiaria_ver');
   Route::get('/historia_pacientes_ver/{id}','Reportes\PdfController@historia_pacientes_ver');
+  Route::get('/recibo_profesionales_ver/{id}','Reportes\PdfController@recibo_profesionales_ver');
+
 
 
     Route::get('/prueba','Existencias\AtencionController@prueba');
