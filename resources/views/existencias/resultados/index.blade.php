@@ -40,7 +40,11 @@
                                 <td>{{ $serv->created_at }}</td>
 
                                 <td>
-                                    <a href="{{ route('admin.resultados.create') }}" class="btn btn-xs btn-info">@lang('global.app_create_resultado')</a>
+                                     @if ($serv->status_redactar_resultados==1)
+                                     <a href="{{ route('admin.resultados.create',['id'=>$serv->id]) }}" class="btn btn-xs btn-success">@lang('global.app_view')</a>
+                                     @else
+                                    <a href="{{ route('admin.resultados.create',['id'=>$serv->id]) }}" class="btn btn-xs btn-info">@lang('global.app_create_resultado')</a>
+                                     @endif
                                 </td>
 
                             </tr>
