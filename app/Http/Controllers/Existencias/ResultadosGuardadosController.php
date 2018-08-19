@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Movimientos\StoreResultadosRequest;
 use App\Http\Requests\Movimientos\UpdateResultadosRequest;
 
-class ResultadosController extends Controller
+class ResultadosGuardadosController extends Controller
 {
     /**
      * Display a listing of User.
@@ -25,66 +25,47 @@ class ResultadosController extends Controller
      */
     public function index(Request $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+    	if (! Gate::allows('users_manage')) {
+    		return abort(401);
+    	}
 
-        
-          $id_usuario = Auth::id();
 
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
+    	$id_usuario = Auth::id();
+
+    	$searchUsuarioID = DB::table('users')
+    	->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
+    	->where('id','=', $id_usuario)
+    	->get();
 
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-         
-
-                $f1 = date('YYYY-m-d');
-
-                if(! is_null($request->fecha)) {
-                    $f1 = $request->fecha;
-
-                $servicios = DB::table('atencion_servicios as a')
-                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
-                ->join('empresas as b','a.id_empresa','b.id')
-                ->join('locales as c','a.id_sucursal','c.id')
-                ->join('servicios as d','a.id_servicio','d.id')
-                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
-                ->join('pacientes as f','f.id','e.id_paciente')
-                ->where('a.status_redactar_resultados','=',0)
-                ->where('a.id_empresa','=', $usuarioEmp)
-                ->where('a.id_sucursal','=', $usuarioSuc)
-                ->where('a.created_at','=', $f1)
-                    //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-                ->orderby('a.created_at','desc')
-                ->paginate(100);
-                    //->toSql();
-                 //   dd($servicios);
-        } else {
-
-             $servicios = DB::table('atencion_servicios as a')
-                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
-                ->join('empresas as b','a.id_empresa','b.id')
-                ->join('locales as c','a.id_sucursal','c.id')
-                ->join('servicios as d','a.id_servicio','d.id')
-                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
-                ->join('pacientes as f','f.id','e.id_paciente')
-                ->where('a.status_redactar_resultados','=',0)
-                ->where('a.id_empresa','=', $usuarioEmp)
-                ->where('a.id_sucursal','=', $usuarioSuc)
-                ->where('a.created_at','=', $f1)
-                ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-                ->orderby('a.created_at','desc')
-                ->paginate(100);
-        }
+    	foreach ($searchUsuarioID as $usuario) {
+    		$usuarioEmp = $usuario->id_empresa;
+    		$usuarioSuc = $usuario->id_sucursal;
+    	}
 
 
-        return view('existencias.resultados.index', compact('servicios'));
+    	$f1 = date('YYYY-m-d');
+    	$f2 = date('YYYY-m-d');
+
+    	$f1 = $request->fecha;
+    	$f2 = $request->fecha2;
+
+    	$servicios = DB::table('atencion_servicios as a')
+    	->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
+    	->join('empresas as b','a.id_empresa','b.id')
+    	->join('locales as c','a.id_sucursal','c.id')
+    	->join('servicios as d','a.id_servicio','d.id')
+    	->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
+    	->join('pacientes as f','f.id','e.id_paciente')
+    	->where('a.status_redactar_resultados','=',1)
+    	->where('a.id_empresa','=', $usuarioEmp)
+    	->where('a.id_sucursal','=', $usuarioSuc)
+    	->whereBetween('a.created_at', [$f1, $f2])
+    	->orderby('a.created_at','desc')
+    	->paginate(1000);
+
+
+    	return view('existencias.resultadosguardados.index', compact('servicios'));
     }
 
     /**

@@ -190,6 +190,17 @@
                         </a>
                     </li>
                 </ul>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadosguardados' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadosguardados.index') }}">
+                            <i class="fa fa-search"></i>
+                            <span class="title">
+                                @lang('global.resultadosguardados.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
                  <ul class="treeview-menu">
 
                     <li class="{{ $request->segment(2) == 'cuentasporcobrar' ? 'active active-sub' : '' }}">
