@@ -26,5 +26,8 @@ class Personal extends Authenticatable
     protected $fillable = ['name', 'apellidos', 'dni','email', 'telefono','direccion'];
     
         
-    
+     public function getNameAndApellidosAttribute()
+    {
+        return $this->name . ' ' . $this->apellidos;
+    }
 }

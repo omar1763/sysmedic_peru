@@ -56,6 +56,13 @@ class PersonalController extends Controller
         return view('archivos.personal.index', compact('personal'));
     }
 
+
+    public function getNameAndApellidosAttribute()
+    {
+        return $this->name . ' ' . $this->apellidos;
+    }
+
+
      public static function perbyemp(){
 
 
@@ -73,10 +80,12 @@ class PersonalController extends Controller
                 }
 
 
-             $personal = DB::table('personals as a')
-                     ->where('a.id_empresa','=', $usuarioEmp)
-                     ->where('a.id_sucursal','=', $usuarioSuc)
-                     ->get()->pluck('name','id','apellidos');
+
+             $personal   = Personal::select(
+             DB::raw("CONCAT(name,' ',apellidos) AS descripcion"),'id')                  
+                             ->where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('descripcion','id');
             
          if(!is_null($personal)){
            return view("existencias.atencion.perbyemp",['personal'=>$personal]);

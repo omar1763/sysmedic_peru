@@ -75,10 +75,11 @@ class ProfesionalesController extends Controller
                 }
 
 
-             $profesional = DB::table('profesionales as a')
-                     ->where('a.id_empresa','=', $usuarioEmp)
-                     ->where('a.id_sucursal','=', $usuarioSuc)
-                     ->get()->pluck('name');
+             $profesional   = Profesionales::select(
+             DB::raw("CONCAT(name,' ',apellidos) AS descripcion"),'id')                  
+                             ->where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('descripcion','id');
 
             
          if(!is_null($profesional)){

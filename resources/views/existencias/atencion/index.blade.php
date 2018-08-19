@@ -59,7 +59,7 @@
                             <tr data-entry-id="{{ $atec->id }}">
                                 <td></td>
                                 <td>{{ $atec->nombres.' '.$atec->apellidos }}</td>
-                                <td>{{ $atec->acuenta=='PR'? Profesional:'Personal' }}</td>
+                                <td>{{ $atec->acuenta=='PR'? Profesional:'Profesional' }}</td>
 
 
 

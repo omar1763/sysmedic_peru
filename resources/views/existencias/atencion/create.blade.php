@@ -168,41 +168,26 @@
 
         <div class="row">
           
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div id="origen_paciente" class="form-group error-status">
               {!! Form::label("origen_paciente","* Origen del Paciente",["class"=>""]) !!}
               <div class="input-icon">
                 <div class="input-icon">
                   <i class="icon-eye  font-red"></i>
                   
-                  {!! Form::select('origen_paciente', ['0' => 'Seleccionar Origen del Paciente','PER' => 'Personal', 'PRO' => 'Profesional'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
+                  {!! Form::select('origen_paciente', ['0' => 'Seleccionar Origen del Paciente','P' => 'Personal', 'PRO' => 'Profesional'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
                 </div>
 
               </div>
             </div> 
           </div>
 
-          <div class="col-md-4">   
-            {!! Form::label('profesional', 'Prof. de Apoyo*', ['class' => 'control-label']) !!}
-            {!! Form::select('profesional', $profesional, old('profesional'), ['class' => 'form-control select2', 'required' => 'required']) !!}
-            <p class="help-block"></p>
-            @if($errors->has('profesional'))
-            <p class="help-block">
-              {{ $errors->first('profesional') }}
-            </p>
-            @endif
+         <div class="col-md-6 id="pac">
 
           </div>
 
-          <div class="col-md-4">   
-            {!! Form::label('personal', 'Personal*', ['class' => 'control-label']) !!}
-            {!! Form::select('personal', $personal, old('personal'), ['class' => 'form-control select2', 'required' => 'required']) !!}
-            <p class="help-block"></p>
-            @if($errors->has('personal'))
-            <p class="help-block">
-              {{ $errors->first('personal') }}
-            </p>
-            @endif
+          <div class="col-md-6" id="origen">
+
           </div>
 
         </div>
@@ -253,6 +238,18 @@
             </p>
             @endif
           </div>
+        </div>
+
+        <div class="row">     
+
+          <div class="col-md-6 id="pac">
+
+          </div>
+
+          <div class="col-md-6" id="origen">
+
+          </div>
+
         </div>
 
    
@@ -312,6 +309,31 @@
                  url:  link,
                  success: function(a) {
                     $('#pagocuenta').html(a);
+                 }
+          });
+
+        });
+        
+
+      });
+       
+    </script>
+
+     <script type="text/javascript">
+      $(document).ready(function(){
+        $('#tipoO').on('change',function(){
+          var link;
+          if ($(this).val() == 'P') {
+            link = '/existencias/atencion/perbyemp/';
+          }else{
+            link = '/existencias/atencion/probyemp/';
+          }
+
+          $.ajax({
+                 type: "get",
+                 url:  link,
+                 success: function(a) {
+                    $('#origen').html(a);
                  }
           });
 

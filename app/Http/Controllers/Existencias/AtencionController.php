@@ -12,6 +12,7 @@ use App\Pacientes;
 use App\Profesionales;
 use App\Analisis;
 use App\Paquetes;
+use App\PaquetesServ;
 use App\Laboratorios;
 use App\AtencionLaboratorio;
 use App\AtencionServicios;
@@ -108,11 +109,12 @@ class AtencionController extends Controller
         $servicios = new Servicios();
         $analisis = new Analisis();
         $paquete = new Paquetes();
+        $paquetes = new PaquetesServ();
         $personal = Personal::with('dni');
         $pacientes = Pacientes::with('dni');
         $profesionales = Profesionales::with('nombre');
 
-        return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','personal','pacientes','profesionales'));
+        return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','paquetes','personal','pacientes','profesionales'));
     }
 
       public function indexFecha(Request $request)
@@ -215,9 +217,11 @@ class AtencionController extends Controller
        $analises = Analisis::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','id');
-       $profesional = Profesionales::where('id_empresa',$usuarioEmp)
+       $profesional   = Profesionales::select(
+       DB::raw("CONCAT(name,' ',apellidos) AS descripcion"),'id')                  
+                             ->where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('name','id');
+                             ->get()->pluck('descripcion','id');
 
         $request->session()->put('service_price', 0);
         $request->session()->put('analises_price', 0);
@@ -522,14 +526,15 @@ public function cardainput3($id, Request $request){
        $analisisatencion->id_sucursal =$usuarioSuc;
        $analisisatencion->id_empresa =$usuarioEmp;
        $analisisatencion->save();
+       
+         $analisisprof = new AtencionProfesionalesLaboratorio;
+         $analisisprof->id_atencion =$atencion->id;
+         $analisisprof->id_profesional =$request->profesional;
+         $analisisprof->id_laboratorio   =$value;
+         $analisisprof->id_sucursal =$usuarioSuc;
+         $analisisprof->id_empresa =$usuarioEmp;
+         $analisisprof->save();
 
-       $analisisprof = new AtencionProfesionalesLaboratorio;
-       $analisisprof->id_atencion =$atencion->id;
-       $analisisprof->id_profesional =$request->profesional;
-       $analisisprof->id_laboratorio   =$value;
-       $analisisprof->id_sucursal =$usuarioSuc;
-       $analisisprof->id_empresa =$usuarioEmp;
-       $analisisprof->save();
 
        }
          }
@@ -581,14 +586,59 @@ public function cardainput3($id, Request $request){
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
+
+        }  
+
+        $id_usuario = Auth::id();
+
+        $searchUsuarioID = DB::table('users')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id','=', $id_usuario)
+        ->get();
+
+        foreach ($searchUsuarioID as $usuario) {
+            $usuarioEmp = $usuario->id_empresa;
+            $usuarioSuc = $usuario->id_sucursal;   
+            }
+
+            dd($id);
+            die();
+           
+            $paquetes = Paquetes::where('id_empresa',$usuarioEmp)
+            ->where('id_sucursal',$usuarioSuc)
+            ->get()->pluck('name','id');
+            $personal = Personal::where('id_empresa',$usuarioEmp)
+            ->where('id_sucursal',$usuarioSuc)
+            ->get()->pluck('name','id');
+            $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
+            ->where('id_sucursal',$usuarioSuc)
+            ->get()->pluck('dni','id');
+            $profesional = Profesionales::where('id_empresa',$usuarioEmp)
+            ->where('id_sucursal',$usuarioSuc)
+            ->get()->pluck('name','id');
+
+
+
+
+       $servicioIds = [];
+       $analisisIds = [];
+       $servicio = Servicios::all();
+       $analises = Analisis::all();
+       $atenserv = AtencionServicios::all()->where('id',$id );
+       $atenlab = AtencionLaboratorio::all()->where('id',$id );
+
+       foreach($atenserv as $value)
+       {
+        $servicioIds[] = $value->id_servicio;
+      } 
+      foreach($atenlab as $value_ana)
+      {
+        $analisisIds[] = $value_ana->id_analisis;
+      } 
+
+            return view('existencias.atencion.editar', compact('atencion','servicio','pacientes','paquetes','personal','analises','profesional','servicioIds','analisisIds'));
         }
-     
-
-        $ingresos = Ingresos::findOrFail($id);
-        $producto = Productos::get()->pluck('nombre', 'nombre');
-
-        return view('movimientos.ingresos.edit', compact('producto', 'ingresos'));
-    }
 
     /**
      * Update User in storage.
@@ -597,7 +647,7 @@ public function cardainput3($id, Request $request){
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateIngresosRequest $request, $id)
+    public function update(UpdateAtencionRequest $request, $id)
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
