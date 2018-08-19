@@ -215,9 +215,12 @@ class AtencionController extends Controller
        $analises = Analisis::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','id');
-       $profesional = Profesionales::where('id_empresa',$usuarioEmp)
+       $profesional = Profesionales::select(
+            DB::raw("CONCAT(name,' ',apellidos) AS descripcion"),'id')
+           
+       ->where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('name','id');
+                             ->get()->pluck('descripcion','id');
 
         $request->session()->put('service_price', 0);
         $request->session()->put('analises_price', 0);
