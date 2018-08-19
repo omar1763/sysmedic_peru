@@ -43,25 +43,43 @@ class ResultadosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
          
-         
-                      
-    
-                  $servicios = DB::table('atencion_servicios as a')
-         ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
-                    ->join('empresas as b','a.id_empresa','b.id')
-                    ->join('locales as c','a.id_sucursal','c.id')
-                    ->join('servicios as d','a.id_servicio','d.id')
-                    ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
-                    ->join('pacientes as f','f.id','e.id_paciente')
-                    ->where('a.id_empresa','=', $usuarioEmp)
-                    ->where('a.id_sucursal','=', $usuarioSuc)
-                   // ->where('a.created_at','=', $f1)
+
+                $f1 = date('YYYY-m-d');
+
+                if(! is_null($request->fecha)) {
+                    $f1 = $request->fecha;
+
+                $servicios = DB::table('atencion_servicios as a')
+                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
+                ->join('empresas as b','a.id_empresa','b.id')
+                ->join('locales as c','a.id_sucursal','c.id')
+                ->join('servicios as d','a.id_servicio','d.id')
+                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
+                ->join('pacientes as f','f.id','e.id_paciente')
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->where('a.created_at','=', $f1)
                     //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-                    ->orderby('a.created_at','desc')
-                    ->paginate(100);
+                ->orderby('a.created_at','desc')
+                ->paginate(100);
                     //->toSql();
                  //   dd($servicios);
-       
+        } else {
+
+             $servicios = DB::table('atencion_servicios as a')
+                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
+                ->join('empresas as b','a.id_empresa','b.id')
+                ->join('locales as c','a.id_sucursal','c.id')
+                ->join('servicios as d','a.id_servicio','d.id')
+                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
+                ->join('pacientes as f','f.id','e.id_paciente')
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->where('a.created_at','=', $f1)
+                ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+                ->orderby('a.created_at','desc')
+                ->paginate(100);
+        }
 
 
         return view('existencias.resultados.index', compact('servicios'));
