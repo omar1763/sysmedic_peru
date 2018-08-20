@@ -125,11 +125,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
    Route::get('/selectproduct/{id}','Existencias\AtencionController@selectproduct');
 
    Route::get('createmodal','Archivos\PacientesController@createmodal');
+   Route::get('/total','Reportes\PdfController@totalDiario');
 
   Route::get('reportes/index','PdfController@index');
   Route::get('listado_atenciondiaria_ver','Reportes\PdfController@listado_atenciondiaria_ver');
   Route::get('/historia_pacientes_ver/{id}','Reportes\PdfController@historia_pacientes_ver');
   Route::get('/recibo_profesionales_ver/{id}','Reportes\PdfController@recibo_profesionales_ver');
+  Route::get('/resultados_ver/{id}','Reportes\PdfController@resultados_ver')->name('resultados');
 
 
 

@@ -92,57 +92,7 @@
                 </tbody>
             </table>
         </div>
-          <div class="panel-body table-responsive">
-            <table class="table table-bordered table-striped {{ count($comisioneslab) > 0 ? 'datatable' : '' }} dt-select">
-                <thead>
-                    <tr>
-                        <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        <th>@lang('global.comisionesporpagar.fields.paciente')</th>
-                        <th>@lang('global.comisionesporpagar.fields.profesional')</th>
-                       
-                        <th>@lang('global.comisionesporpagar.fields.servicio')</th>
-                        <th>@lang('global.comisionesporpagar.fields.montototal')</th>
-                        
-                        <th>@lang('global.comisionesporpagar.fields.comision')</th>
-                        
-                        <th>@lang('global.comisionesporpagar.fields.fecha')</th>
-                        <th>&nbsp;</th>
-
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    @if (count($comisioneslab) > 0)
-                        @foreach ($comisioneslab as $comlab)
-                            <tr data-entry-id="{{ $comlab->id }}">
-                                <td></td>
-                                <td>{{ $comlab->nombres.' '.$comlab->apellidos }}</td>
-                                <td>{{ $comlab->profnombre.' '.$comlab->profapellido }}</td>
-                                <td>{{ $comlab->name}}</td>
-                                <td>{{ $comlab->costo}}</td>
-                                <td>{{ $comlab->porcentaje}}</td>
-                                <td>{{ $comlab->fecha}}</td>
-                                <td> 
-                   
-                                    {!! Form::open(array(
-                                        'style' => 'display: inline-block;',
-                                        'method' => 'DELETE',
-                                        'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
-                                        'route' => ['admin.comisionesporpagar.destroy', $comlab->id])) !!}
-                                    {!! Form::submit(trans('global.app_pay'), array('class' => 'btn btn-xs btn-danger')) !!}
-                                    {!! Form::close() !!}
-                                </td>
-
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="9">@lang('global.app_no_entries_in_table')</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-        </div>
+         
     </div>
 @stop
 

@@ -39,7 +39,6 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         <th>@lang('global.atencion.fields.nombres_apellidos')</th>
-                        <th>@lang('global.atencion.fields.origenpaciente')</th>
                        
                         <th>@lang('global.atencion.fields.servicio')</th>
                         <th>@lang('global.atencion.fields.paquete')</th>
@@ -59,7 +58,6 @@
                             <tr data-entry-id="{{ $atec->id }}">
                                 <td></td>
                                 <td>{{ $atec->nombres.' '.$atec->apellidos }}</td>
-                                <td>{{ $atec->acuenta=='PR'? Profesional:'Profesional' }}</td>
 
 
 

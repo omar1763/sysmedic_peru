@@ -212,7 +212,7 @@ class PersonalController extends Controller
             return abort(401);
         }
         if ($request->input('ids')) {
-            $entries = User::whereIn('id', $request->input('ids'))->get();
+            $entries = Personal::whereIn('id', $request->input('ids'))->get();
 
             foreach ($entries as $entry) {
                 $entry->delete();

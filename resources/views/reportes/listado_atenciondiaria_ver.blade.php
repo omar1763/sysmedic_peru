@@ -131,12 +131,22 @@
     <td>{{ $egresostotal->total_egresos}}</td>
 
   </tr>
- 
+
+  <?php 
+
+$ingresos = $ingresos->total_monto;
+$egresos = $egresostotal->total_egresos;
+$total = $ingresos-$egresos;
+
+print_r($total);
+
+  ;?>
+
   <tr>
     <th scope="row">TOTAL</th>
     <td></td>
     <td></td>
-    <td><strong>XX</strong></td>
+    <td><strong>{!!$total!!}</strong></td>
   </tr>
 </table>
      @endforeach

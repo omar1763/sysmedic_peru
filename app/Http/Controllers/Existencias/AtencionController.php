@@ -686,22 +686,17 @@ public function cardainput3($id, Request $request){
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $atencion = Atencion::findOrFail($id);
-        $atencion->delete();
 
-        $atenciondetalle = AtencionDetalle::findOrFail($id);
-        $atenciondetalle->delete();
+        $atencion=Atencion::find($id)->delete();
+        $atenciondetalle = AtencionDetalle::where('id_atencion',$id )->delete();
+        $atencionlab = AtencionLaboratorio::where('id_atencion',$id )->delete();
+        $atencionser = AtencionServicios::where('id_atencion',$id )->delete();
+        $atencionlab = AtencionLaboratorio::where('id_atencion',$id )->delete();
+        $atencionprofser = AtencionProfesionalesServicio::where('id_atencion',$id )->delete();
+        $atencionproflab = AtencionProfesionalesLaboratorio::where('id_atencion',$id )->delete();
+        $creditos = Creditos::where('id_atencion',$id )->delete();
 
-        $atencionlab = AtencionLaboratorio::findOrFail($id);
-        $atencionlab->delete();
-
-        $atencionser = AtencionServicios::findOrFail($id);
-        $atencionser->delete();
-
-        $creditos = Creditos::findOrFail($id);
-        $creditos->delete();
-
-        return redirect()->route('admin.ingresos.index');
+        return redirect()->route('admin.atencion.index');
     }
 
     /**

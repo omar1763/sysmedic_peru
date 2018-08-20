@@ -97,6 +97,19 @@ class ResultadosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
+         $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+                
         $id=$_GET['id'];
         $exists;
         $comentario;
@@ -111,7 +124,21 @@ class ResultadosController extends Controller
             $comentario='';
 
         }
-        return view('existencias.resultados.create',compact('id','exists','comentario'));
+
+         $servicios = DB::table('atencion_servicios as a')
+                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
+                ->join('empresas as b','a.id_empresa','b.id')
+                ->join('locales as c','a.id_sucursal','c.id')
+                ->join('servicios as d','a.id_servicio','d.id')
+                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
+                ->join('pacientes as f','f.id','e.id_paciente')
+                ->where('a.status_redactar_resultados','=',0)
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->orderby('a.created_at','desc')
+                ->paginate(100);
+
+        return view('existencias.resultados.create',compact('id','exists','comentario','servicios'));
     }
 
     /**Ll

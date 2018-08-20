@@ -55,23 +55,21 @@ class ComisionesPorPagarController extends Controller
         $f1 = $request->fecha;
         $f2 = $request->fecha2;
 
-        $comisiones = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_profesional','a.id_servicio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
-        ->join('atencion_detalles as b','a.id','b.id_atencion')
+         $comisionesserv = DB::table('atencion_profesionales_servicios as a')
+        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('servicios as d','d.id','a.id_servicio')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->where('a.pagado','=',0)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-        ->whereBetween('a.created_at', [$f1, $f2])
+        ->whereBetween('a.created_at', [$f1, $f2]);
        // ->where('a.created_at','=', $f1)
-        ->orderby('a.created_at','desc')
-        ->paginate(5000);
 
-         $comisioneslab = DB::table('atencion_profesionales_laboratorios as a')
-        ->select('a.id','a.id_profesional','a.id_laboratorio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.name','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
-        ->join('atencion_detalles as b','a.id','b.id_atencion')
+         $comisiones = DB::table('atencion_profesionales_laboratorios as a')
+        ->select('a.id','a.id_profesional','a.id_laboratorio','a.id_atencion','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.name as detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('analises as d','d.id','a.id_laboratorio')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
@@ -79,12 +77,13 @@ class ComisionesPorPagarController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
+        ->union($comisionesserv)
        // ->where('a.created_at','=', $f1)
-        ->orderby('a.created_at','desc')
-        ->paginate(5000);
+        ->orderby('fecha','desc')
+        ->get();
   
 
-        return view('existencias.comisiones.index', compact('comisiones','comisioneslab'));
+        return view('existencias.comisiones.index', compact('comisiones'));
     }
 
 
@@ -106,67 +105,70 @@ class ComisionesPorPagarController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
+                  
+                 $id_prof_serv ='';
 
-             
+                if($id_prof_serv == $id){
 
-         $searchAtecProSer = DB::table('atencion_profesionales_servicios')
-                    ->select('*')
+                   $searchAtecProSer = DB::table('atencion_profesionales_servicios')
+                   ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id)
-                    ->get();
+                   ->where('id','=', $id)
+                   ->get();
 
-            foreach ($searchAtecProSer as $atecpro) {
+                   foreach ($searchAtecProSer as $atecpro) {
+                    $id_prof_serv = $atecpro->id;
                     $id_atencion = $atecpro->id_atencion;
                     $id_servicio = $atecpro->id_servicio;
                 }
-               
-        $searchSer = DB::table('servicios')
-                    ->select('*')
-                   // ->where('estatus','=','1')
-                    ->where('id','=', $id_servicio)
-                    ->get();
 
-             foreach ($searchSer as $servicios) {
+
+
+                $searchSer = DB::table('servicios')
+                ->select('*')
+                   // ->where('estatus','=','1')
+                ->where('id','=', $id_servicio)
+                ->get();
+
+                foreach ($searchSer as $servicios) {
                     $detalle = $servicios->detalle;
                     $porcentaje = $servicios->porcentaje;
                 }
 
-         $searchAtecProLab = DB::table('atencion_profesionales_laboratorios')
-                    ->select('*')
+
+                $atencionproser = AtencionProfesionalesServicio::findOrFail($id);
+                $atencionproser->pagado = 1;
+                $atencionproser->update();
+
+                $debitos = new Debitos;
+                $debitos->descripcion =$detalle;
+                $debitos->monto     =$porcentaje;
+                $debitos->origen     ='COMISIONES POR PAGAR';
+                $debitos->id_empresa     =$usuarioEmp;
+                $debitos->id_sucursal     =$usuarioSuc;
+                $debitos->save();
+            } else {
+
+               
+               $searchAtecProLab = DB::table('atencion_profesionales_laboratorios')
+               ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id)
-                    ->get();
+               ->where('id','=', $id)
+               ->get();
 
-            foreach ($searchAtecProLab as $atecprolab) {
-                    $id_atencion = $atecprolab->id_atencion;
-                    $id_laboratorio = $atecprolab->id_laboratorio;
-                }
-     
-        if(! is_null($id_servicio)) {   
+               foreach ($searchAtecProLab as $atecprolab) {
+                $id_prof_lab = $atecprolab->id;
+                $id_atencion = $atecprolab->id_atencion;
+                $id_laboratorio = $atecprolab->id_laboratorio;
+            }
 
-        $atencionproser = AtencionProfesionalesServicio::findOrFail($id);
-        $atencionproser->pagado = 1;
-        $atencionproser->update();
 
-       $debitos = new Debitos;
-       $debitos->descripcion =$detalle;
-       $debitos->monto     =$porcentaje;
-       $debitos->origen     ='COMISIONES POR PAGAR';
-       $debitos->id_empresa     =$usuarioEmp;
-       $debitos->id_sucursal     =$usuarioSuc;
-       $debitos->save();
-       
-        } else if(! is_null($id_laboratorio)) {
-
-        
-        $atencionprolab = AtencionProfesionalesLaboratorio::findOrFail($id);
-        $atencionprolab->pagado = 1;
-        dd($id);
-        die();
-        $atencionprolab->update();
-
+            $atencionprolab = AtencionProfesionalesLaboratorio::findOrFail($id);
+            $atencionprolab->pagado = 1;
+            $atencionprolab->update();
 
         }
+      
        // 
       //  return view('existencias.comisiones.index');
        return redirect()->route('admin.comisionesporpagar.index');

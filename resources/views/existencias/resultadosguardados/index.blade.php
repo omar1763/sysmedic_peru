@@ -67,7 +67,7 @@
 
                                 <td>
                                      @if ($serv->status_redactar_resultados==1)
-                                     <a href="{{ route('admin.resultados.create',['id'=>$serv->id]) }}" class="btn btn-xs btn-success">@lang('global.app_view')</a>
+                                     <a href="{{ route('resultados',['id'=>$serv->id]) }}" target="_blank" class="btn btn-xs btn-success">@lang('global.app_view')</a>
                                      @else
                                     <a href="{{ route('admin.resultados.create',['id'=>$serv->id]) }}" class="btn btn-xs btn-info">@lang('global.app_create_resultado')</a>
                                      @endif

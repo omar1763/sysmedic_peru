@@ -81,51 +81,7 @@
                 </tbody>
             </table>
         </div>
-         <div class="panel-body table-responsive">
-            <table class="table table-bordered table-striped {{ count($comisionespagadaslab) > 0 ? 'datatable' : '' }} dt-select">
-                <thead>
-                    <tr>
-                        <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        <th>@lang('global.comisionesporpagar.fields.paciente')</th>
-                        <th>@lang('global.comisionesporpagar.fields.profesional')</th>
-                       
-                        <th>@lang('global.comisionesporpagar.fields.servicio')</th>
-                        <th>@lang('global.comisionesporpagar.fields.montototal')</th>
-                        
-                        <th>@lang('global.comisionesporpagar.fields.comision')</th>
-                        
-                        <th>@lang('global.comisionesporpagar.fields.fecha')</th>
-                        <th>&nbsp;</th>
-
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    @if (count($comisionespagadaslab) > 0)
-                        @foreach ($comisionespagadaslab as $com)
-                            <tr data-entry-id="{{ $com->id }}">
-                                <td></td>
-                                <td>{{ $com->nombres.' '.$com->apellidos }}</td>
-                                <td>{{ $com->profnombre.' '.$com->profapellido }}</td>
-                                <td>{{ $com->name}}</td>
-                                <td>{{ $com->costo}}</td>
-                                <td>{{ $com->porcentaje}}</td>
-                                <td>{{ $com->fecha}}</td>
-                                <td> 
-                   
-                                    <a  target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com->id}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
-                                </td>
-
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="9">@lang('global.app_no_entries_in_table')</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-        </div>
+      
     </div>
 @stop
 

@@ -18,6 +18,7 @@ use App\Creditos;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -461,6 +462,47 @@ class PdfController extends Controller
          }  
           }  
 
+      public function totalDiario(){
+
+       $id_usuario = Auth::id();
+
+       $searchUsuarioID = DB::table('users')
+       ->select('*')
+                   // ->where('estatus','=','1')
+       ->where('id','=', $id_usuario)
+       ->get();
+
+       foreach ($searchUsuarioID as $usuario) {
+        $usuarioEmp = $usuario->id_empresa;
+        $usuarioSuc = $usuario->id_sucursal;
+      }
+
+
+      $creditos = DB::table('creditos as a')
+      ->select(DB::raw('SUM(a.monto) as creditos'))
+      ->where('a.id_empresa','=', $usuarioEmp)
+      ->where('a.id_sucursal','=', $usuarioSuc)
+              // ->where('a.tipo_ingreso','=','EF')
+             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
+      ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+      ->first();
+
+      $debitos =DB::table('debitos as a')
+      ->select(DB::raw('SUM(a.monto) as debitos'))
+      ->where('a.id_empresa','=', $usuarioEmp)
+      ->where('a.id_sucursal','=', $usuarioSuc)
+              // ->where('a.tipo_ingreso','=','EF')
+             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
+      ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+      ->first();
+      
+      $totalDiario =($creditos - $debitos);
+    
+      return Response::json($totalDiario);
+
+
+    }
+
        public function listado_atenciondiaria_ver() 
     {
        
@@ -554,8 +596,8 @@ class PdfController extends Controller
 
 
          $reciboprofesional = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_profesional','a.id_servicio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro')
-        ->join('atencion_detalles as b','a.id','b.id_atencion')
+        ->select('a.id','a.id_servicio','a.id_atencion','a.id_profesional','a.id_servicio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('servicios as d','d.id','a.id_servicio')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
@@ -586,6 +628,66 @@ class PdfController extends Controller
        $pdf->loadHTML($view);
        
         return $pdf->stream('recibo_profesionales_ver');
+
+    }
+
+    public function verResultado($id){
+       
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+        
+                $servicios = DB::table('atencion_servicios as a')
+                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados','h.descripcion as resultado')
+                ->join('empresas as b','a.id_empresa','b.id')
+                ->join('locales as c','a.id_sucursal','c.id')
+                ->join('servicios as d','a.id_servicio','d.id')
+                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
+                ->join('pacientes as f','f.id','e.id_paciente')
+                ->join('redactar_resultados as h','a.id','h.id_atencion_servicio')
+                ->where('a.status_redactar_resultados','=',1)
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->where('a.id','=', $id)
+                    //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+                ->orderby('a.created_at','desc')
+                ->get();
+
+
+        if(!is_null($servicios)){
+            return $servicios;
+         }else{
+            return false;
+         }  
+
+     }
+
+
+
+
+       public function resultados_ver($id) 
+    {
+       
+     $servicios =PdfController::verResultado($id);
+
+     $view = \View::make('reportes.resultados_ver')->with('servicios', $servicios);
+     $pdf = \App::make('dompdf.wrapper');
+     $pdf->loadHTML($view);
+     
+       
+        return $pdf->stream('resultados_ver');
 
     }
 
