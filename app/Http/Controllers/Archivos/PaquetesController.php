@@ -142,20 +142,24 @@ class PaquetesController extends Controller
        $paquetes->id_sucursal     =$usuarioSuc;
        $paquetes->save();
 
-
-       foreach ($request->servicio as $key => $value) {
-         $paquetesserv = new PaquetesServ;
-         $paquetesserv->id_paquete =$paquetes->id;
-         $paquetesserv->id_servicio    =$value;
-         $paquetesserv->save();
+       if(!is_null($request->servicio)){
+         foreach ($request->servicio as $key => $value) {
+           $paquetesserv = new PaquetesServ;
+           $paquetesserv->id_paquete =$paquetes->id;
+           $paquetesserv->id_servicio    =$value;
+           $paquetesserv->save();
+         }
        }
 
+
+       if(!is_null($request->analisis)){
        foreach ($request->analisis as $key_a => $value_a) {
          $paquetesanalisis = new PaquetesAnalisis();
          $paquetesanalisis->id_paquete  =$paquetes->id;
          $paquetesanalisis->id_analisis=$value_a;
        $paquetesanalisis->save();
        }
+        }
       
 
 
