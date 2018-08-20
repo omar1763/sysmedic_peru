@@ -105,12 +105,8 @@ class ComisionesPorPagarController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
-                  
-                 $id_prof_serv ='';
 
-                if($id_prof_serv == $id){
-
-                   $searchAtecProSer = DB::table('atencion_profesionales_servicios')
+                  $searchAtecProSer = DB::table('atencion_profesionales_servicios')
                    ->select('*')
                    // ->where('estatus','=','1')
                    ->where('id','=', $id)
@@ -122,7 +118,19 @@ class ComisionesPorPagarController extends Controller
                     $id_servicio = $atecpro->id_servicio;
                 }
 
+                  $searchAtecProLab = DB::table('atencion_profesionales_laboratorios')
+               ->select('*')
+                   // ->where('estatus','=','1')
+               ->where('id','=', $id)
+               ->get();
 
+               foreach ($searchAtecProLab as $atecprolab) {
+                $id_prof_lab = $atecprolab->id;
+                $id_atencion = $atecprolab->id_atencion;
+                $id_laboratorio = $atecprolab->id_laboratorio;
+            }
+
+            if($id_prof_serv == $id){
 
                 $searchSer = DB::table('servicios')
                 ->select('*')
@@ -148,24 +156,12 @@ class ComisionesPorPagarController extends Controller
                 $debitos->id_sucursal     =$usuarioSuc;
                 $debitos->save();
             } else {
+           
+            $id_prof_lab == $id;
 
-               
-               $searchAtecProLab = DB::table('atencion_profesionales_laboratorios')
-               ->select('*')
-                   // ->where('estatus','=','1')
-               ->where('id','=', $id)
-               ->get();
-
-               foreach ($searchAtecProLab as $atecprolab) {
-                $id_prof_lab = $atecprolab->id;
-                $id_atencion = $atecprolab->id_atencion;
-                $id_laboratorio = $atecprolab->id_laboratorio;
-            }
-
-
-            $atencionprolab = AtencionProfesionalesLaboratorio::findOrFail($id);
-            $atencionprolab->pagado = 1;
-            $atencionprolab->update();
+            $atencionprolab=AtencionProfesionalesLaboratorio::findOrFail($id_prof_lab);
+            $atencionprolab->pagado=1;
+            $correlativo->update();
 
         }
       
