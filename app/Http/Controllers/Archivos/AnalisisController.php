@@ -102,7 +102,6 @@ class AnalisisController extends Controller
        $analisis->name =$request->name;
        $analisis->laboratorio     =$request->laboratorio;
        $analisis->preciopublico     =$request->preciopublico;
-       $analisis->porcentaje     =$request->porcentaje;
        $analisis->costlab     =$request->costlab;
        $analisis->id_empresa= $usuarioEmp;
        $analisis->id_sucursal =$usuarioSuc;

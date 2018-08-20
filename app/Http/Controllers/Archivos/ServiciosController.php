@@ -137,7 +137,6 @@ class ServiciosController extends Controller
        $servicios = new Servicios;
        $servicios->detalle =$request->detalle;
        $servicios->precio     =$request->precio;
-       $servicios->porcentaje     =$request->porcentaje;
        $servicios->id_empresa= $usuarioEmp;
        $servicios->id_sucursal =$usuarioSuc;
        $servicios->save();

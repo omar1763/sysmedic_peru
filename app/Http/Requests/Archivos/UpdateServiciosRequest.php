@@ -25,7 +25,6 @@ class UpdateServiciosRequest extends FormRequest
         return [
             'detalle' => 'required',
             'precio' => 'required',
-            'porcentaje' => 'required',
          
         ];
     }

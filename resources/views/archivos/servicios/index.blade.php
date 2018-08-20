@@ -20,7 +20,6 @@
 
                         <th>@lang('global.servicios.fields.detalle')</th>
                         <th>@lang('global.servicios.fields.precio')</th>
-                        <th>@lang('global.servicios.fields.porcentaje')</th>
                         <th>&nbsp;</th>
 
                     </tr>
@@ -34,7 +33,6 @@
 
                                 <td>{{ $ser->detalle }}</td>
                                 <td>{{ $ser->precio }}</td>
-                                <td>{{ $ser->porcentaje }}</td>
                                 <td>
                                     <a href="{{ route('admin.servicios.edit',[$ser->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(

@@ -25,7 +25,6 @@ class StoreServiciosRequest extends FormRequest
         return [
             'detalle' => 'required',
             'precio' => 'required',
-            'porcentaje' => 'required',
          
         ];
     }
