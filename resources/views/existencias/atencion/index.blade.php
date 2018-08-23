@@ -57,7 +57,7 @@
                         @foreach ($atencion as $atec)
                             <tr data-entry-id="{{ $atec->id }}">
                                 <td></td>
-                                <td>{{ $atec->nombres.' '.$atec->apellidos }}</td>
+                                <td>{{ $atenciondetalle->selectPaciente($atec->id_paciente) }}</td>
 
 
 

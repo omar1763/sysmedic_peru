@@ -87,20 +87,18 @@ class AtencionController extends Controller
     } else {
 
           $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
-        ->join('empresas as b','a.id_empresa','b.id')
-        ->join('locales as c','a.id_sucursal','c.id')
+        ->select('a.id','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','d.id_paciente')
+       
         ->join('atencion_detalles as d','a.id','d.id_atencion')
-        ->join('pacientes as e','d.id_paciente','e.id')
-        ->join('servicios as f','d.id_servicio','f.id')
-      //  ->join('atencion_paquetes as g','g.id_atencion','a.id')
-        //->join('paquetes as h','h.id','g.id_paquete')
+
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-        ->orderby('a.created_at','desc')
-        ->paginate(1000);
-//dd($atencion);
+      ->orderby('a.created_at','desc')
+      ->paginate(1000);
+//               ->toSql();
+//        dd($atencion);
+
       //  dd(DB::getQueryLog());
     }
 
@@ -109,11 +107,11 @@ class AtencionController extends Controller
         $analisis = new Analisis();
         $paquete = new Paquetes();
         $paquetes = new PaquetesServ();
-        $personal = Personal::with('dni');
-        $pacientes = Pacientes::with('dni');
-        $profesionales = Profesionales::with('nombre');
+        $atenciondetalle = new AtencionDetalle();
+        
+        
 
-        return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','paquetes','personal','pacientes','profesionales'));
+        return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','paquetes','atenciondetalle'));
     }
 
       public function indexFecha(Request $request)
@@ -476,7 +474,7 @@ public function cardainput3($id, Request $request){
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-
+//dd($request->profesional);
         $id_usuario = Auth::id();
 
         $searchUsuarioID = DB::table('users')
