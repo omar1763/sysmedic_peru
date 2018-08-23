@@ -97,7 +97,7 @@ class AtencionController extends Controller
       ->orderby('a.created_at','desc')
       ->paginate(1000);
 //               ->toSql();
-//        dd($atencion);
+//        dd($atencion); 
 
       //  dd(DB::getQueryLog());
     }

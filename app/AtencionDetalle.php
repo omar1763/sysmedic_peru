@@ -36,7 +36,7 @@ class AtencionDetalle extends Authenticatable
         
         $descripcion=$data->dni.'-'.$data->nombres.' '.$data->apellidos;
         
-        
+         
       
 
     return $descripcion;
