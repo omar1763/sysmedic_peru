@@ -46,11 +46,11 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-            
-                        <th>@lang('global.comisionespagadas.fields.profesional')</th>
-
-                        <th>@lang('global.comisionespagadas.fields.comision')</th>
                         
+                        <th>@lang('global.comisionespagadas.fields.paciente')</th>
+                        <th>@lang('global.comisionespagadas.fields.profesional')</th>
+                        <th>@lang('global.comisionespagadas.fields.origen')</th>
+                        <th>@lang('global.comisionespagadas.fields.comision')</th>
                         <th>@lang('global.comisionespagadas.fields.fecha')</th>
                         <th>&nbsp;</th>
 
@@ -62,8 +62,9 @@
                         @foreach ($comisionespagadas as $com)
                             <tr data-entry-id="{{ $com->id }}">
                                 <td></td>
-                              
+                                <td>{{ $com->nombres.' '.$com->apellidos }}</td>
                                 <td>{{ $com->profnombre.' '.$com->profapellido }}</td>
+                                <td>{{ $com->origen}}</td>
                                 <td>{{ $com->porcentaje}}</td>
                                 <td>{{ $com->fecha}}</td>
                                 <td> 

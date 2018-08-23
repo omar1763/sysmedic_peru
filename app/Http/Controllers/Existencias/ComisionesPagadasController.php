@@ -84,22 +84,25 @@ class ComisionesPagadasController extends Controller
         ->paginate(5000);
         */
 
-        $comisioneslab = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
+  $comisioneslab = DB::table('atencion_servicios as a')
+        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        ->join('servicios as d','d.id','a.id_servicio')
+        //->join('atencion_profesionales_servicios as c','a.id_profesional','c.id_profesional')
+        //->join('servicios as d','d.id','c.id_servicio')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
+        //->groupBy('a.id','a.id_profesional')
         ->where('a.pagado','=',1)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2]);
-       // ->where('a.created_at','=', $f1)
+        
 
-         $comisionespagadas = DB::table('atencion_profesionales_laboratorios as a')
-        ->select('a.id','a.id_profesional','a.id_laboratorio','a.id_atencion','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.name as detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
+        $comisionespagadas = DB::table('atencion_laboratorios as a')
+       ->select('a.id','a.id_analisis','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        ->join('analises as d','d.id','a.id_laboratorio')
+        //->join('atencion_profesionales_laboratorios as c','a.id_profesional','c.id_profesional')
+       // ->join('analises as d','d.id','c.id_laboratorio')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->where('a.pagado','=',1)
@@ -110,6 +113,9 @@ class ComisionesPagadasController extends Controller
        // ->where('a.created_at','=', $f1)
         ->orderby('fecha','desc')
         ->get();
+
+
+
 
 
         return view('existencias.comisionespagadas.index', compact('comisionespagadas'));

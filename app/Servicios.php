@@ -35,7 +35,7 @@ class Servicios extends Authenticatable
     {
 
         $array='';
-        $data = \DB::table('atencion_servicios')
+        $data = \DB::table('atencion_profesionales_servicios')
         ->select('*')
                    // ->where('estatus','=','1')
         ->where('id_atencion', $id)

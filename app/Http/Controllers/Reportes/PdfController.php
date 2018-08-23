@@ -594,21 +594,49 @@ class PdfController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-
-         $reciboprofesional = DB::table('atencion_profesionales_servicios as a')
+       
+      /*   $reciboprofesional = DB::table('atencion_profesionales_servicios as a')
         ->select('a.id','a.id_servicio','a.id_atencion','a.id_profesional','a.id_servicio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('servicios as d','d.id','a.id_servicio')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->where('a.pagado','=',1)
-        ->where('a.id','=',$id)
+        ->where('a.id_atencion','=',$id)
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->get();*/
+
+        /* $reciboprofesional = DB::table('atencion_servicios as a')
+        ->select('a.id','a.id_servicio','a.id_atencion','a.id_profesional','a.id_servicio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('servicios as d','d.id','a.id_servicio')
+        ->join('pacientes as e','e.id','b.id_paciente')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->where('a.pagado','=',1)
+        ->where('a.id_atencion','=',$id)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->orderby('a.created_at','desc')
         ->get();
+*/
 
+         $reciboprofesional = DB::table('atencion_servicios as a')
+        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro','d.detalle')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('atencion_profesionales_servicios as c','a.id_atencion','c.id_atencion')
+        ->join('servicios as d','d.id','c.id_servicio')
+        ->join('pacientes as e','e.id','b.id_paciente')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        //->groupBy('a.id','a.id_profesional')
+        ->where('a.id','=',$id)
+        ->where('a.pagado','=',1)
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->get();
 
+     
         if(!is_null($reciboprofesional)){
             return $reciboprofesional;
          }else{

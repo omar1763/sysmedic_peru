@@ -88,7 +88,6 @@ class AtencionController extends Controller
 
           $atencion = DB::table('atencions as a')
         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
-
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
@@ -118,7 +117,7 @@ class AtencionController extends Controller
     }
 
       public function indexFecha(Request $request)
-    {
+        {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
@@ -502,11 +501,11 @@ public function cardainput3($id, Request $request){
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
        $atenciondetalle->costo           =$request->preciototal;
-       $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->acuenta         =$request->acuenta;
        $atenciondetalle->costoa          =$request->costoa;
        $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
        $atenciondetalle->tarjeta         =$request->tarjeta;
+       $atenciondetalle->porcentaje      =($request->porcentaje*$request->preciototal)/100;
        $atenciondetalle->observaciones   =$request->observaciones;
        $atenciondetalle->save();
 
@@ -520,46 +519,58 @@ public function cardainput3($id, Request $request){
        $creditos->save();
 
       
-        if(! is_null($request->analises)){
-        foreach ($request->analises as $key => $value) {
-       $analisisatencion = new AtencionLaboratorio;
-       $analisisatencion->id_atencion =$atencion->id;
-       $analisisatencion->id_analisis    =$value;
-       $analisisatencion->id_sucursal =$usuarioSuc;
-       $analisisatencion->id_empresa =$usuarioEmp;
-       $analisisatencion->save();
-       
-         $analisisprof = new AtencionProfesionalesLaboratorio;
-         $analisisprof->id_atencion =$atencion->id;
-         $analisisprof->id_profesional =$request->profesional;
-         $analisisprof->id_laboratorio   =$value;
-         $analisisprof->id_sucursal =$usuarioSuc;
-         $analisisprof->id_empresa =$usuarioEmp;
-         $analisisprof->save();
+       if(! is_null($request->analises)){
+           $analisisatencion = new AtencionLaboratorio;
+           $analisisatencion->id_atencion =$atencion->id;
+           $analisisatencion->id_analisis    =0;
+           $analisisatencion->origen    ='Laboratorios';
+           $analisisatencion->id_profesional =$request->profesional;
+           $analisisatencion->porcentaje =($request->porcentajelab*$request->preciopublico)/100;
+           $analisisatencion->montolab = $request->preciopublico;
+           $analisisatencion->id_sucursal =$usuarioSuc;
+           $analisisatencion->id_empresa =$usuarioEmp;
+           $analisisatencion->save();
+
+           foreach ($request->analises as $key => $value) {
+                $serviciosproflab = new AtencionProfesionalesLaboratorio;
+                $serviciosproflab->id_atencion =$atencion->id;
+                $serviciosproflab->id_laboratorio    =$value;
+                $serviciosproflab->id_profesional =$request->profesional;
+                $serviciosproflab->porcentaje =($request->porcentajelab*$request->preciopublico)/100;
+                $serviciosproflab->montolab = $request->preciopublico;
+                $serviciosproflab->id_sucursal =$usuarioSuc;
+                $serviciosproflab->id_empresa =$usuarioEmp;
+                $serviciosproflab->save();
+           }
+   }
 
 
-       }
-         }
+         if(! is_null($request->servicios)){
 
-//var_dump($request->servicio);
-         if(isset($request->servicios)){
-           foreach ($request->servicios as $key => $value) {
-             $serviciosatencion = new AtencionServicios;
-             $serviciosatencion->id_atencion =$atencion->id;
-             $serviciosatencion->id_servicio    =$value;
-             $serviciosatencion->id_sucursal =$usuarioSuc;
-             $serviciosatencion->id_empresa =$usuarioEmp;
-             $serviciosatencion->save();
+                $serviciosatencion = new AtencionServicios;
+                $serviciosatencion->id_atencion =$atencion->id;
+                $serviciosatencion->id_servicio    =0;
+                $serviciosatencion->origen    ='Servicios';
+                $serviciosatencion->id_profesional =$request->profesional;
+                $serviciosatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
+                $serviciosatencion->montoser = $request->precioserv;
+                $serviciosatencion->id_sucursal =$usuarioSuc;
+                $serviciosatencion->id_empresa =$usuarioEmp;
+                $serviciosatencion->save();
+            foreach ($request->servicios as $key => $value) {
+                $serviciosprofatencion = new AtencionProfesionalesServicio;
+                $serviciosprofatencion->id_atencion =$atencion->id;
+                $serviciosprofatencion->id_servicio    =$value;
+                $serviciosprofatencion->id_profesional =$request->profesional;
+                $serviciosprofatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
+                $serviciosprofatencion->montoser = $request->precioserv;
+                $serviciosprofatencion->id_sucursal =$usuarioSuc;
+                $serviciosprofatencion->id_empresa =$usuarioEmp;
+                $serviciosprofatencion->save();
 
-             $serviciosprof = new AtencionProfesionalesServicio;
-             $serviciosprof->id_atencion =$atencion->id;
-             $serviciosprof->id_profesional =$request->profesional;
-             $serviciosprof->id_servicio    =$value;
-             $serviciosprof->id_sucursal =$usuarioSuc;
-             $serviciosprof->id_empresa =$usuarioEmp;
-             $serviciosprof->save();
-         }
-     }
+            }
+
+        }
        
        if(isset($request->paquetes)){
            foreach ($request->paquetes as $key => $value) {

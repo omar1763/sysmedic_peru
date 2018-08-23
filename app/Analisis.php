@@ -27,7 +27,7 @@ class Analisis extends Authenticatable
     {
 
     	$array='';
-    	$data = \DB::table('atencion_laboratorios')
+    	$data = \DB::table('atencion_profesionales_laboratorios')
     	->select('*')
                    // ->where('estatus','=','1')
     	->where('id_atencion', $id)
@@ -39,7 +39,7 @@ class Analisis extends Authenticatable
 
     		$dataanalisis = \DB::table('analises')
     		->select('*')
-    		->where('id', $value->id_analisis)
+    		->where('id', $value->id_laboratorio)
     		->get();
 
     	foreach ($dataanalisis as $keydataanalisis => $valuedataanalisis) {

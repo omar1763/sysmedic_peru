@@ -49,7 +49,8 @@
                         <th>@lang('global.comisionesporpagar.fields.paciente')</th>
                         <th>@lang('global.comisionesporpagar.fields.profesional')</th>
                        
-                        <th>@lang('global.comisionesporpagar.fields.servicio')</th>
+                       <th>@lang('global.comisionesporpagar.fields.origen')</th>
+
                         <th>@lang('global.comisionesporpagar.fields.montototal')</th>
                         
                         <th>@lang('global.comisionesporpagar.fields.comision')</th>
@@ -67,7 +68,7 @@
                                 <td></td>
                                 <td>{{ $com->nombres.' '.$com->apellidos }}</td>
                                 <td>{{ $com->profnombre.' '.$com->profapellido }}</td>
-                                <td>{{ $com->detalle}}</td>
+                                <td>{{ $com->origen}}</td>
                                 <td>{{ $com->costo}}</td>
                                 <td>{{ $com->porcentaje}}</td>
                                 <td>{{ $com->fecha}}</td>
