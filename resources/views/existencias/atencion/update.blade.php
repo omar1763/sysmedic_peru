@@ -92,13 +92,23 @@
            <div class="row">
              <div class="col-md-6">
               {!! Form::label('servicios', 'Servicio*', ['class' => 'control-label']) !!}
-              {!! Form::select('servicios[]', $servicios, old('servicios'), ['onchange'=>"ajaxLoadSelect('/existencias/atencion/cardainput', 'servicios',$(this).val())", 'id'=>'servicios','class' => 'form-control select2', 'multiple' => 'multiple']) !!}
-              <p class="help-block"></p>
-              @if($errors->has('servicios'))
-              <p class="help-block">
-                {{ $errors->first('servicios') }}
-              </p>
-              @endif
+
+             <select name="servicio[]" class="form-control select2"  multiple="multiple">
+                        @foreach($servicios as $data)
+                        
+                        @if(in_array($data->id, $servicioIds))
+                        <option value="{{ $data->id }}" selected="true">{{ $data->detalle }}</option>
+                        @else
+                        <option value="{{ $data->id }}">{{ $data->detalle }}</option>
+                        @endif 
+                        @endforeach
+                    </select>
+                    <p class="help-block"></p>
+                    @if($errors->has('servicios'))
+                        <p class="help-block">
+                            {{ $errors->first('servicios') }}
+                        </p>
+                    @endif
             </div>
             <div class="col-md-3">
               {!! Form::label('precioserv', 'Monto Servicios', ['class' => 'control-label']) !!}

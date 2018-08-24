@@ -612,10 +612,19 @@ public function cardainput3($id, Request $request){
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-       //$producto = Productos::get()->pluck('name', 'name');
-       $servicios = Servicios::where('id_empresa',$usuarioEmp)
-                             ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('detalle','id');
+                /**servicios*/
+                $servicioIds = [];
+                $dat_servicios = AtencionProfesionalesServicio::where('id_atencion',$id)->get();
+                //dd( $dat_servicios);
+                foreach($dat_servicios as $value)
+                {
+                    $servicioIds[] = $value->id_servicio;
+                }
+                $servicios = Servicios::where('id_empresa',$usuarioEmp)
+                ->where('id_sucursal',$usuarioSuc)->get();
+
+                /*****/
+
        $paquetes = Paquetes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','id');
@@ -638,7 +647,7 @@ public function cardainput3($id, Request $request){
 
         
 
-        return view('existencias.atencion.update', compact('servicios','personal','pacientes','profesional','analises','paquetes'));
+        return view('existencias.atencion.update', compact('servicios','personal','pacientes','profesional','analises','paquetes','servicioIds'));
         }
 
     /**
