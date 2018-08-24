@@ -599,56 +599,46 @@ public function cardainput3($id, Request $request){
             return abort(401);
 
         }  
+ $id_usuario = Auth::id();
 
-        $id_usuario = Auth::id();
-
-        $searchUsuarioID = DB::table('users')
-        ->select('*')
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
                    // ->where('estatus','=','1')
-        ->where('id','=', $id_usuario)
-        ->get();
+                    ->where('id','=', $id_usuario)
+                    ->get();
 
-        foreach ($searchUsuarioID as $usuario) {
-            $usuarioEmp = $usuario->id_empresa;
-            $usuarioSuc = $usuario->id_sucursal;   
-            }
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
 
-            dd($id);
-            die();
+       //$producto = Productos::get()->pluck('name', 'name');
+       $servicios = Servicios::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('detalle','id');
+       $paquetes = Paquetes::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('name','id');
+       $personal = Personal::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('name','id');
+       $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('dni','id');
+       $analises = Analisis::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('name','id');
+
+       $profesional = Profesionales::select(
+            DB::raw("CONCAT(name,' ',apellidos) AS descripcion"),'id')
            
-            $paquetes = Paquetes::where('id_empresa',$usuarioEmp)
-            ->where('id_sucursal',$usuarioSuc)
-            ->get()->pluck('name','id');
-            $personal = Personal::where('id_empresa',$usuarioEmp)
-            ->where('id_sucursal',$usuarioSuc)
-            ->get()->pluck('name','id');
-            $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
-            ->where('id_sucursal',$usuarioSuc)
-            ->get()->pluck('dni','id');
-            $profesional = Profesionales::where('id_empresa',$usuarioEmp)
-            ->where('id_sucursal',$usuarioSuc)
-            ->get()->pluck('name','id');
+       ->where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get()->pluck('descripcion','id');
 
+        
 
-
-
-       $servicioIds = [];
-       $analisisIds = [];
-       $servicio = Servicios::all();
-       $analises = Analisis::all();
-       $atenserv = AtencionServicios::all()->where('id',$id );
-       $atenlab = AtencionLaboratorio::all()->where('id',$id );
-
-       foreach($atenserv as $value)
-       {
-        $servicioIds[] = $value->id_servicio;
-      } 
-      foreach($atenlab as $value_ana)
-      {
-        $analisisIds[] = $value_ana->id_analisis;
-      } 
-
-            return view('existencias.atencion.editar', compact('atencion','servicio','pacientes','paquetes','personal','analises','profesional','servicioIds','analisisIds'));
+        return view('existencias.atencion.update', compact('servicios','personal','pacientes','profesional','analises','paquetes'));
         }
 
     /**
