@@ -95,7 +95,7 @@
 
              <select name="servicio[]" class="form-control select2"  multiple="multiple">
                         @foreach($servicios as $data)
-                        
+
                         @if(in_array($data->id, $servicioIds))
                         <option value="{{ $data->id }}" selected="true">{{ $data->detalle }}</option>
                         @else
@@ -136,13 +136,26 @@
           <div class="row">
             <div class="col-md-6">
               {!! Form::label('analises', 'Analisis de Laboratorio*', ['class' => 'control-label']) !!}
-              {!! Form::select('analises[]', $analises, old('analises'), ['class' => 'form-control select2', 'multiple' => 'multiple', 'onchange'=>"ajaxLoadSelect2('/existencias/atencion/cardainput2', 'analises',$(this).val())"]) !!}
+
+              <select name="analises[]" class="form-control select2"  multiple="multiple">
+                @foreach($analisis as $data)
+
+                @if(in_array($data->id, $analisisIds))
+                <option value="{{ $data->id }}" selected="true">{{ $data->name }}</option>
+                @else
+                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                @endif 
+                @endforeach
+              </select>
               <p class="help-block"></p>
-              @if($errors->has('analises'))
+              @if($errors->has('servicios'))
               <p class="help-block">
-                {{ $errors->first('analises') }}
+                {{ $errors->first('servicios') }}
               </p>
               @endif
+
+
+
             </div>
 
              <div class="col-md-3">

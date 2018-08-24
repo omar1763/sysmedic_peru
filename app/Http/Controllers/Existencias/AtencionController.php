@@ -66,8 +66,8 @@ class AtencionController extends Controller
     if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
 
-        $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','d.origen as origen','e.nombres','e.apellidos','f.id','f.detalle')
+          $atencion = DB::table('atencions as a')
+         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('atencion_detalles as d','a.id','d.id_atencion')
@@ -80,20 +80,20 @@ class AtencionController extends Controller
         ->where('a.created_at','=', $f1)
         //->orwhereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(1000);
+         ->paginate(1000);
  //      ->toSql();
 //dd($atencion);
        // dd(DB::getQueryLog());
     } else {
 
-      $atencion = DB::table('atencions as a')
-      ->select('a.id','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.origen as origen','d.porcentaje','d.acuenta','d.observaciones','d.id_paciente')
-      
-      ->join('atencion_detalles as d','a.id','d.id_atencion')
+          $atencion = DB::table('atencions as a')
+        ->select('a.id','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','d.id_paciente')
+       
+        ->join('atencion_detalles as d','a.id','d.id_atencion')
 
-      ->where('a.id_empresa','=', $usuarioEmp)
-      ->where('a.id_sucursal','=', $usuarioSuc)
-      ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
       ->orderby('a.created_at','desc')
       ->paginate(1000);
 //               ->toSql();
@@ -474,8 +474,7 @@ public function cardainput3($id, Request $request){
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-
-
+//dd($request->profesional);
         $id_usuario = Auth::id();
 
         $searchUsuarioID = DB::table('users')
@@ -502,7 +501,6 @@ public function cardainput3($id, Request $request){
        $atenciondetalle->costo           =$request->preciototal;
        $atenciondetalle->acuenta         =$request->acuenta;
        $atenciondetalle->costoa          =$request->costoa;
-       $atenciondetalle->origen          =$request->origen_paciente;
        $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
        $atenciondetalle->tarjeta         =$request->tarjeta;
        $atenciondetalle->porcentaje      =($request->porcentaje*$request->preciototal)/100;
@@ -627,6 +625,38 @@ public function cardainput3($id, Request $request){
 
                 /*****/
 
+
+
+
+
+         /**servicios*/
+                $analisisIds = [];
+                $dat_analisis = AtencionProfesionalesLaboratorio::where('id_atencion',$id)->get();
+                //dd( $dat_servicios);
+                foreach($dat_analisis as $value)
+                {
+                    $analisisIds[] = $value->id_laboratorio;
+                }
+                /*$dat_seanalisis = Servicios::where('id_empresa',$usuarioEmp)
+                ->where('id_sucursal',$usuarioSuc)->get();*/
+       $analisis = Analisis::where('id_empresa',$usuarioEmp)
+                             ->where('id_sucursal',$usuarioSuc)
+                             ->get();
+//dd($analisis);
+
+                /*****/
+
+
+
+
+
+
+
+
+
+
+                
+
        $paquetes = Paquetes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('name','id');
@@ -636,9 +666,6 @@ public function cardainput3($id, Request $request){
        $pacientes = Pacientes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('dni','id');
-       $analises = Analisis::where('id_empresa',$usuarioEmp)
-                             ->where('id_sucursal',$usuarioSuc)
-                             ->get()->pluck('name','id');
 
        $profesional = Profesionales::select(
             DB::raw("CONCAT(name,' ',apellidos) AS descripcion"),'id')
@@ -649,7 +676,7 @@ public function cardainput3($id, Request $request){
 
         
 
-        return view('existencias.atencion.update', compact('servicios','personal','pacientes','profesional','analises','paquetes','servicioIds'));
+        return view('existencias.atencion.update', compact('servicios','personal','pacientes','profesional','analisis','paquetes','servicioIds','analisisIds'));
         }
 
     /**
