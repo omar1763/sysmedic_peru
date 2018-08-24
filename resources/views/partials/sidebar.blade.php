@@ -319,6 +319,45 @@
 
             @endcan
 
+
+            @can('users_profesional')
+           
+           <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-check-square-o"></i>
+                    <span class="title">@lang('global.existenciass.title')</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultados' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultados.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.resultados.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadosguardados' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadosguardados.index') }}">
+                            <i class="fa fa-search"></i>
+                            <span class="title">
+                                @lang('global.resultadosguardados.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                 
+            </li>
+
+            @endcan
+
             <li class="{{ $request->segment(1) == 'change_password' ? 'active' : '' }}">
                 <a href="{{ route('auth.change_password') }}">
                     <i class="fa fa-key"></i>

@@ -73,7 +73,8 @@
                                 <td>{{ $com->porcentaje}}</td>
                                 <td>{{ $com->fecha}}</td>
                                 <td> 
-                   
+                                @if(Auth::user()->rol!="Recepcionista")
+
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
@@ -81,6 +82,8 @@
                                         'route' => ['admin.comisionesporpagar.destroy', $com->id])) !!}
                                     {!! Form::submit(trans('global.app_pay'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
+
+                                @endif
                                 </td>
 
                             </tr>

@@ -68,8 +68,10 @@
                                 <td>{{ $com->porcentaje}}</td>
                                 <td>{{ $com->fecha}}</td>
                                 <td> 
+                                 @if(Auth::user()->rol!="Recepcionista")
+
                                   <a  target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com->id}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
-                                    
+                                 @endif   
                                 </td>
 
                             </tr>

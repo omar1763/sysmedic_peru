@@ -55,6 +55,8 @@
                                 <td>{{ $gas->concepto }}</td>
                                 <td>{{ $gas->monto }}</td>
                                 <td>
+                               @if(Auth::user()->rol!="Recepcionista")
+
                                     <a href="{{ route('admin.gastos.edit',[$gas->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
@@ -63,6 +65,8 @@
                                         'route' => ['admin.gastos.destroy', $gas->id])) !!}
                                     {!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
+
+                                @endif
                                 </td>
 
                             </tr>

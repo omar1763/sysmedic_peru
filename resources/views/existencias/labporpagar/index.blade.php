@@ -53,6 +53,8 @@
                                 <td>{{ $lab->name }}</td>
                                 <td>{{ $lab->costlab }}</td>
                                 <td>
+                                 @if(Auth::user()->rol!="Recepcionista")
+
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
@@ -60,6 +62,8 @@
                                         'route' => ['admin.labporpagar.destroy', $lab->id])) !!}
                                     {!! Form::submit(trans('global.app_pay'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
+
+                                @endif
                                 </td>
 
                             </tr>
