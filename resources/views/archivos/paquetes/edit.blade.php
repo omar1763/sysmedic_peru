@@ -27,8 +27,8 @@
                 <div class="col-xs-12 form-group">
                     {!! Form::label('servicio', 'Servicios', ['class' => 'control-label']) !!}
                 
-                    <select name="servicio[]" class="form-control select2"  multiple="multiple">
-                        @foreach($servicio as $data)
+                    <select name="servicios[]" class="form-control select2"  multiple="multiple">
+                        @foreach($servicios as $data)
                         @if(in_array($data->id, $servicioIds))
                         <option value="{{ $data->id }}" selected="true">{{ $data->detalle }}</option>
                         @else
