@@ -677,7 +677,7 @@ class PdfController extends Controller
 
 
         
-                $servicios = DB::table('atencion_servicios as a')
+                $servicios = DB::table('atencion_profesionales_servicios as a')
                 ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados','h.descripcion as resultado')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')

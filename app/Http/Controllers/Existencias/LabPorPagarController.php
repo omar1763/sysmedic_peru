@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Existencias;
 
 use App\AtencionLaboratorio;
+use App\AtencionProfesionalesLaboratorio;
 use App\Analisis;
 use App\Debitos;
 use App\Empresas;
@@ -47,11 +48,11 @@ class LabPorPagarController extends Controller
 
     if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
-        $labporpagar = DB::table('atencion_laboratorios as a')
-        ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
+        $labporpagar = DB::table('atencion_profesionales_laboratorios as a')
+        ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
-        ->join('analises as d','a.id_analisis','d.id')
+        ->join('analises as d','a.id_laboratorio','d.id')
         ->join('atencion_detalles as e','e.id_atencion','a.id_atencion')
         ->join('pacientes as f','f.id','e.id_paciente')
         ->where('a.pagado','=',FALSE)
@@ -62,11 +63,11 @@ class LabPorPagarController extends Controller
         ->paginate(5000);
     } else {
 
-         $labporpagar = DB::table('atencion_laboratorios as a')
-       ->select('a.id','a.id_atencion','a.id_analisis','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
+         $labporpagar = DB::table('atencion_profesionales_laboratorios as a')
+       ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
-        ->join('analises as d','a.id_analisis','d.id')
+        ->join('analises as d','a.id_laboratorio','d.id')
         ->join('atencion_detalles as e','e.id_atencion','a.id_atencion')
         ->join('pacientes as f','f.id','e.id_paciente')
         ->where('a.pagado','=',FALSE)
@@ -102,14 +103,14 @@ class LabPorPagarController extends Controller
                 }
 
            
-        $searchAtencionLaboratorio =  DB::table('atencion_laboratorios')
+        $searchAtencionLaboratorio =  DB::table('atencion_profesionales_laboratorios')
                     ->select('*')
                    // ->where('estatus','=','1')
                     ->where('id','=', $id)
                     ->get();
 
         foreach ($searchAtencionLaboratorio as $ateclab) {
-                    $idAnalisis = $ateclab->id_analisis;
+                    $idAnalisis = $ateclab->id_laboratorio;
                 }
 
 
@@ -124,7 +125,7 @@ class LabPorPagarController extends Controller
                     $nameAnalisis = $analisis->name;
                 }
 
-        $atenciolab = AtencionLaboratorio::findOrFail($id);
+        $atenciolab = AtencionProfesionalesLaboratorio::findOrFail($id);
         $atenciolab->pagado = 1;
         $atenciolab->update();
 

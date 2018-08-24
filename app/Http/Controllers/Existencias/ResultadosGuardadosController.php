@@ -47,7 +47,7 @@ class ResultadosGuardadosController extends Controller
     	$f1 = $request->fecha;
     	$f2 = $request->fecha2;
 
-    	$servicios = DB::table('atencion_servicios as a')
+    	$servicios = DB::table('atencion_profesionales_servicios as a')
     	->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
     	->join('empresas as b','a.id_empresa','b.id')
     	->join('locales as c','a.id_sucursal','c.id')
@@ -98,9 +98,7 @@ class ResultadosGuardadosController extends Controller
      */
     public function store(StoreResultadosRequest $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+       
           $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
@@ -114,7 +112,7 @@ class ResultadosGuardadosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-        $atencionservicio = AtencionServicios::findOrFail($_POST['id']);     
+        $atencionservicio = AtencionProfesionalesServicios::findOrFail($_POST['id']);     
         $atencionservicio->status_redactar_resultados=1;
         $atencionservicio->update();
         $redactarresultados = new RedactarResultados();

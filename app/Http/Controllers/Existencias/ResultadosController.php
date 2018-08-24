@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Existencias;
 use App\AtencionLaboratorio;
 use App\AtencionServicios;
+use App\AtencionProfesionalesServicio;
 use App\Locales;
 use App\Empresas;
 use App\RedactarResultados;
@@ -45,7 +46,7 @@ class ResultadosController extends Controller
                 if(! is_null($request->fecha)) {
                     $f1 = $request->fecha;
 
-                $servicios = DB::table('atencion_servicios as a')
+                $servicios = DB::table('atencion_profesionales_servicios as a')
                 ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
@@ -63,7 +64,7 @@ class ResultadosController extends Controller
                  //   dd($servicios);
         } else {
 
-             $servicios = DB::table('atencion_servicios as a')
+             $servicios = DB::table('atencion_profesionales_servicios as a')
                 ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
@@ -120,14 +121,13 @@ class ResultadosController extends Controller
 
         }
 
-         $servicios = DB::table('atencion_servicios as a')
+          $servicios = DB::table('atencion_profesionales_servicios as a')
                 ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
                 ->join('servicios as d','a.id_servicio','d.id')
                 ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
                 ->join('pacientes as f','f.id','e.id_paciente')
-                ->where('a.status_redactar_resultados','=',0)
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
                 ->orderby('a.created_at','desc')
@@ -144,9 +144,7 @@ class ResultadosController extends Controller
      */
     public function store(StoreResultadosRequest $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
           $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
@@ -160,7 +158,7 @@ class ResultadosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-        $atencionservicio = AtencionServicios::findOrFail($_POST['id']);     
+        $atencionservicio = AtencionProfesionalesServicio::findOrFail($_POST['id']);     
         $atencionservicio->status_redactar_resultados=1;
         $atencionservicio->update();
         $redactarresultados = new RedactarResultados();
