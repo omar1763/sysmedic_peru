@@ -34,7 +34,7 @@ class AtencionDetalle extends Authenticatable
                    // ->where('estatus','=','1')
         ->where('id', $id)->first();
         
-        $descripcion=$data->dni.'-'.$data->nombres.' '.$data->apellidos;
+        $descripcion=$data->nombres.' '.$data->apellidos;
         
          
       

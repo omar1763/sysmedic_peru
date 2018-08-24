@@ -39,7 +39,7 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         <th>@lang('global.atencion.fields.nombres_apellidos')</th>
-                       
+                        <th>@lang('global.atencion.fields.origen')</th>
                         <th>@lang('global.atencion.fields.servicio')</th>
                         <th>@lang('global.atencion.fields.paquete')</th>
                         
@@ -60,7 +60,7 @@
                                 <td>{{ $atenciondetalle->selectPaciente($atec->id_paciente) }}</td>
 
 
-
+                                <td>{{ $atec->origen }}</td>
 
                            <td> 
                                   @if($servicios->selectAllServicios($atec->id_atencion))

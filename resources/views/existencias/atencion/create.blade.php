@@ -72,7 +72,7 @@
                 <div class="input-icon">
                   <i class="icon-eye  font-red"></i>
                   
-                  {!! Form::select('origen_paciente', ['0' => 'Seleccionar Origen del Paciente','P' => 'Personal', 'PRO' => 'Profesional'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
+                  {!! Form::select('origen_paciente', ['0' => 'Seleccionar Origen del Paciente','Personal' => 'Personal', 'Profesional' => 'Profesional'], null, ['id'=>'tipoO', 'class'=>'form-control select2']) !!}
                 </div>
 
               </div>
@@ -344,7 +344,7 @@
       $(document).ready(function(){
         $('#tipoO').on('change',function(){
           var link;
-          if ($(this).val() == 'P') {
+          if ($(this).val() == 'Personal') {
             link = '/existencias/atencion/perbyemp/';
           }else{
             link = '/existencias/atencion/probyemp/';
