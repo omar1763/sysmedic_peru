@@ -25,11 +25,7 @@ class ResultadosController extends Controller
      */
     public function index(Request $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
-
-        
+       
           $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')
@@ -94,9 +90,8 @@ class ResultadosController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+       
+
          $id_usuario = Auth::id();
 
          $searchUsuarioID = DB::table('users')

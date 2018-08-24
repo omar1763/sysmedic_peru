@@ -186,56 +186,9 @@ class ComisionesPorPagarController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        $id_usuario = Auth::id();
+       
 
-        $searchUsuarioID = DB::table('users')
-        ->select('*')
-                   // ->where('estatus','=','1')
-        ->where('id','=', $id_usuario)
-        ->get();
-
-        foreach ($searchUsuarioID as $usuario) {
-            $usuarioEmp = $usuario->id_empresa;
-            $usuarioSuc = $usuario->id_sucursal;
-        }
-
-        $searchAtecProSer = DB::table('atencion_profesionales_servicios')
-        ->select('*')
-                   // ->where('estatus','=','1')
-        ->where('id','=', $id)
-        ->get();
-
-        foreach ($searchAtecProSer as $atecpro) {
-            $id_prof_serv = $atecpro->id;
-            $id_atencion = $atecpro->id_atencion;
-            $id_servicio = $atecpro->id_servicio;
-        }
-
-        $searchAtecProLab = DB::table('atencion_profesionales_laboratorios')
-        ->select('*')
-                   // ->where('estatus','=','1')
-        ->where('id','=', $id)
-        ->get();
-
-        foreach ($searchAtecProLab as $atecprolab) {
-            $id_prof_lab = $atecprolab->id;
-            $id_atencion = $atecprolab->id_atencion;
-            $id_laboratorio = $atecprolab->id_laboratorio;
-        }
-
-
-        $searchSer = DB::table('servicios')
-        ->select('*')
-                   // ->where('estatus','=','1')
-        ->where('id','=', $id_servicio)
-        ->get();
-
-        foreach ($searchSer as $servicios) {
-            $detalle = $servicios->detalle;
-            $porcentaje = $servicios->porcentaje;
-        }
-
-
+      
         if ($request->input('ids')) {
             $entries = AtencionServicios::whereIn('id', $request->input('ids'))->get();
 
@@ -243,13 +196,7 @@ class ComisionesPorPagarController extends Controller
                 $entry->pagado= 1;
                 $entry->update();
 
-                $debitos = new Debitos;
-                $debitos->descripcion =$detalle;
-                $debitos->monto     =$porcentaje;
-                $debitos->origen     ='COMISIONES POR PAGAR';
-                $debitos->id_empresa     =$usuarioEmp;
-                $debitos->id_sucursal     =$usuarioSuc;
-                $debitos->save();
+               
             }
 
                 

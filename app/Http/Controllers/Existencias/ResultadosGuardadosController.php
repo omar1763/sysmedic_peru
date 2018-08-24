@@ -25,10 +25,7 @@ class ResultadosGuardadosController extends Controller
      */
     public function index(Request $request)
     {
-    	if (! Gate::allows('users_manage')) {
-    		return abort(401);
-    	}
-
+    	
 
     	$id_usuario = Auth::id();
 
@@ -75,9 +72,7 @@ class ResultadosGuardadosController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
         $id=$_GET['id'];
         $exists;
         $comentario;
