@@ -495,12 +495,40 @@ public function cardainput3($id, Request $request){
        $atencion->id_sucursal     =$usuarioSuc;
        $atencion->save();
 
+         if(! is_null($request->servicios)){
+
+                $serviciosatencion = new AtencionServicios;
+                $serviciosatencion->id_atencion =$atencion->id;
+                $serviciosatencion->id_servicio    =0;
+                $serviciosatencion->origen    ='Servicios';
+                $serviciosatencion->id_profesional =$request->profesional;
+                $serviciosatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
+                $serviciosatencion->montoser = $request->precioserv;
+                $serviciosatencion->id_sucursal =$usuarioSuc;
+                $serviciosatencion->id_empresa =$usuarioEmp;
+                $serviciosatencion->save();
+            foreach ($request->servicios as $key => $value) {
+                $serviciosprofatencion = new AtencionProfesionalesServicio;
+                $serviciosprofatencion->id_atencion =$atencion->id;
+                $serviciosprofatencion->id_servicio    =$value;
+                $serviciosprofatencion->id_profesional =$request->profesional;
+                $serviciosprofatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
+                $serviciosprofatencion->montoser = $request->precioserv;
+                $serviciosprofatencion->id_sucursal =$usuarioSuc;
+                $serviciosprofatencion->id_empresa =$usuarioEmp;
+                $serviciosprofatencion->save();
+
+            }
+
+        }
+
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
        $atenciondetalle->id_paciente     =$request->pacientes;
        $atenciondetalle->costo           =$request->preciototal;
        $atenciondetalle->origen           =$request->origen_paciente;
        $atenciondetalle->acuenta         =$request->acuenta;
+     //  $atenciondetalle->id_atec_servicio         =$serviciosatencion->id;
        $atenciondetalle->costoa          =$request->costoa;
        $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
        $atenciondetalle->tarjeta         =$request->tarjeta;
@@ -544,32 +572,7 @@ public function cardainput3($id, Request $request){
    }
 
 
-         if(! is_null($request->servicios)){
-
-                $serviciosatencion = new AtencionServicios;
-                $serviciosatencion->id_atencion =$atencion->id;
-                $serviciosatencion->id_servicio    =0;
-                $serviciosatencion->origen    ='Servicios';
-                $serviciosatencion->id_profesional =$request->profesional;
-                $serviciosatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
-                $serviciosatencion->montoser = $request->precioserv;
-                $serviciosatencion->id_sucursal =$usuarioSuc;
-                $serviciosatencion->id_empresa =$usuarioEmp;
-                $serviciosatencion->save();
-            foreach ($request->servicios as $key => $value) {
-                $serviciosprofatencion = new AtencionProfesionalesServicio;
-                $serviciosprofatencion->id_atencion =$atencion->id;
-                $serviciosprofatencion->id_servicio    =$value;
-                $serviciosprofatencion->id_profesional =$request->profesional;
-                $serviciosprofatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
-                $serviciosprofatencion->montoser = $request->precioserv;
-                $serviciosprofatencion->id_sucursal =$usuarioSuc;
-                $serviciosprofatencion->id_empresa =$usuarioEmp;
-                $serviciosprofatencion->save();
-
-            }
-
-        }
+       
        
        if(isset($request->paquetes)){
            foreach ($request->paquetes as $key => $value) {
@@ -624,13 +627,6 @@ public function cardainput3($id, Request $request){
                 $servicios = Servicios::where('id_empresa',$usuarioEmp)
                 ->where('id_sucursal',$usuarioSuc)->get();
 
-                /*****/
-
-
-
-
-
-         /**servicios*/
                 $analisisIds = [];
                 $dat_analisis = AtencionProfesionalesLaboratorio::where('id_atencion',$id)->get();
                 //dd( $dat_servicios);
@@ -643,20 +639,6 @@ public function cardainput3($id, Request $request){
        $analisis = Analisis::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
                              ->get();
-//dd($analisis);
-
-                /*****/
-
-
-
-
-
-
-
-
-
-
-                
 
        $paquetes = Paquetes::where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
