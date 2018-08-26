@@ -352,7 +352,6 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
-                
                 <ul class="treeview-menu">
 
                     <li class="{{ $request->segment(2) == 'resultados' ? 'active active-sub' : '' }}">
@@ -371,6 +370,28 @@
                             <i class="fa fa-search"></i>
                             <span class="title">
                                 @lang('global.resultadosguardados.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadoslab' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadoslab.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.resultadoslab.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadosguardadoslab' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadosguardadoslab.index') }}">
+                            <i class="fa fa-search"></i>
+                            <span class="title">
+                                @lang('global.resultadosguardadoslab.title')
                             </span>
                         </a>
                     </li>
