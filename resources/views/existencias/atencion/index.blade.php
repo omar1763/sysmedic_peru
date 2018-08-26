@@ -96,7 +96,7 @@
                                 <td>
                                   @if(Auth::user()->rol!="Recepcionista")
 
-                                    <a href="{{ route('admin.atencion.edit',[$atec->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
+                                    
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
