@@ -66,6 +66,7 @@ class CuentasporCobrarController extends Controller
                     ->where('b.id_empresa','=', $usuarioEmp)
                     ->where('b.id_sucursal','=', $usuarioSuc)
                     ->where('a.pagado','=', 0)
+                    ->where('a.pendiente','>', 0)
                    // ->where('a.created_at','=', $f1)
                     //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
                     ->orderby('a.created_at','desc')
