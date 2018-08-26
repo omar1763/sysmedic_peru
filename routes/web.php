@@ -71,8 +71,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::resource('resultados', 'Existencias\ResultadosController');
     Route::post('resultados_mass_destroy', ['uses' => 'Existencias\ResultadosController@massDestroy', 'as' => 'resultados.mass_destroy']);
 
+    Route::resource('resultadoslab', 'Existencias\ResultadosLabController');
+    Route::post('resultadoslab_mass_destroy', ['uses' => 'Existencias\ResultadosLabController@massDestroy', 'as' => 'resultadoslab.mass_destroy']);
+
     Route::resource('resultadosguardados', 'Existencias\ResultadosGuardadosController');
     Route::post('resultadosguardados_mass_destroy', ['uses' => 'Existencias\ResultadosGuardadosController@massDestroy', 'as' => 'resultadosguardados.mass_destroy']);
+
+    Route::resource('resultadosguardadoslab', 'Existencias\ResultadosGuardadosLabController');
+    Route::post('resultadosguardadoslab_mass_destroy', ['uses' => 'Existencias\ResultadosGuardadosLabController@massDestroy', 'as' => 'resultadosguardadoslab.mass_destroy']);
 
     Route::resource('cuentasporcobrar', 'Existencias\CuentasporCobrarController');
     Route::post('cuentasporcobrar_mass_destroy', ['uses' => 'Existencias\CuentasporCobrarController@massDestroy', 'as' => 'cuentasporcobrar.mass_destroy']);
@@ -132,6 +138,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
   Route::get('/historia_pacientes_ver/{id}','Reportes\PdfController@historia_pacientes_ver');
   Route::get('/recibo_profesionales_ver/{id}','Reportes\PdfController@recibo_profesionales_ver');
   Route::get('/resultados_ver/{id}','Reportes\PdfController@resultados_ver')->name('resultados');
+  Route::get('/resultados_lab_ver/{id}','Reportes\PdfController@resultados_lab_ver')->name('resultados_lab');
+
 
 
 

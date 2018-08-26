@@ -7,7 +7,7 @@ use App\AtencionProfesionalesServicio;
 use App\AtencionProfesionalesLaboratorio;
 use App\Locales;
 use App\Empresas;
-use App\RedactarResultados;
+use App\RedactarResultadosLab;
 use App\AtencionDetalle;
 use Carbon\Carbon;
 use DB;
@@ -18,7 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Movimientos\StoreResultadosRequest;
 use App\Http\Requests\Movimientos\UpdateResultadosRequest;
 
-class ResultadosController extends Controller
+class ResultadosLabController extends Controller
 {
     /**
      * Display a listing of User.
@@ -47,23 +47,9 @@ class ResultadosController extends Controller
                 if(! is_null($request->fecha)) {
                     $f1 = $request->fecha;
 
-                $servicios1 = DB::table('atencion_profesionales_servicios as a')
-                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
-                ->join('empresas as b','a.id_empresa','b.id')
-                ->join('locales as c','a.id_sucursal','c.id')
-                ->join('servicios as d','a.id_servicio','d.id')
-                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
-                ->join('pacientes as f','f.id','e.id_paciente')
-                ->where('a.status_redactar_resultados','=',0)
-                ->where('a.id_empresa','=', $usuarioEmp)
-                ->where('a.id_sucursal','=', $usuarioSuc)
-                ->where('a.created_at','=', $f1)
-                    //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-                ->orderby('a.created_at','desc')
-                ->get();
                 
 
-                /*  $servicios = DB::table('atencion_profesionales_laboratorios as a')
+                 $laboratorios = DB::table('atencion_profesionales_laboratorios as a')
                 ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.name as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
@@ -76,30 +62,13 @@ class ResultadosController extends Controller
                 ->where('a.created_at','=', $f1)
                     //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
                 ->orderby('a.created_at','desc')
-                ->union($servicios1)
-                ->get();*/
+                ->get();
 
 
                  
         } else {
 
-               $servicios = DB::table('atencion_profesionales_servicios as a')
-                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
-                ->join('empresas as b','a.id_empresa','b.id')
-                ->join('locales as c','a.id_sucursal','c.id')
-                ->join('servicios as d','a.id_servicio','d.id')
-                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
-                ->join('pacientes as f','f.id','e.id_paciente')
-                ->where('a.status_redactar_resultados','=',0)
-                ->where('a.id_empresa','=', $usuarioEmp)
-                ->where('a.id_sucursal','=', $usuarioSuc)
-               // ->where('a.created_at','=', $f1)
-                ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-                ->orderby('a.created_at','desc')
-                ->get();
-                
-
-               /**   $servicios = DB::table('atencion_profesionales_laboratorios as a')
+               $laboratorios = DB::table('atencion_profesionales_laboratorios as a')
                 ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.name as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
@@ -112,12 +81,11 @@ class ResultadosController extends Controller
                 //->where('a.created_at','=', $f1)
                 ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
                 ->orderby('a.created_at','desc')
-                ->union($servicios1)
-                ->get();*/
+                ->get();
         }
 
 
-        return view('existencias.resultados.index', compact('servicios'));
+        return view('existencias.resultadoslab.index', compact('laboratorios'));
     }
 
     /**
@@ -145,8 +113,8 @@ class ResultadosController extends Controller
         $id=$_GET['id'];
         $exists;
         $comentario;
-        if (RedactarResultados::where('id_atencion_servicio', '=', $_GET['id'])->exists()) {
-            $modelRR=RedactarResultados::where('id_atencion_servicio', '=', $_GET['id'])->first();
+        if (RedactarResultadosLab::where('id_atencion_lab', '=', $_GET['id'])->exists()) {
+            $modelRR=RedactarResultadosLab::where('id_atencion_lab', '=', $_GET['id'])->first();
             $comentario=$modelRR->descripcion;
             $exists=true;
 
@@ -157,19 +125,21 @@ class ResultadosController extends Controller
 
         }
 
-          $servicios = DB::table('atencion_profesionales_servicios as a')
-                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
+            $laboratorios = DB::table('atencion_profesionales_laboratorios as a')
+                ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.name as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
-                ->join('servicios as d','a.id_servicio','d.id')
+                ->join('analises as d','a.id_laboratorio','d.id')
                 ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
                 ->join('pacientes as f','f.id','e.id_paciente')
+                ->where('a.status_redactar_resultados','=',0)
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
+                //->where('a.created_at','=', $f1)
                 ->orderby('a.created_at','desc')
-                ->paginate(100);
+                ->get();
 
-        return view('existencias.resultados.create',compact('id','exists','comentario','servicios'));
+        return view('existencias.resultadoslab.create',compact('id','exists','comentario','laboratorios'));
     }
 
     /**Ll
@@ -195,17 +165,17 @@ class ResultadosController extends Controller
                 }
 
      
-        $atencionservicio = AtencionProfesionalesServicio::findOrFail($_POST['id']);     
-        $atencionservicio->status_redactar_resultados=1;
-        $atencionservicio->update();
+        $atencionlab = AtencionProfesionalesLaboratorio::findOrFail($_POST['id']);     
+        $atencionlab->status_redactar_resultados=1;
+        $atencionlab->update();
 
-        $redactarresultados = new RedactarResultados();
-        $redactarresultados->id_atencion_servicio  =$_POST['id'];
+        $redactarresultados = new RedactarResultadosLab();
+        $redactarresultados->id_atencion_lab  =$_POST['id'];
         $redactarresultados->descripcion   =$request->editor1;
-        $redactarresultados->tipo= 1;
+        $redactarresultados->tipo= 2;
         $redactarresultados->save();
 
-        return redirect()->route('admin.resultados.index');
+        return redirect()->route('admin.resultadoslab.index');
     }
 
 

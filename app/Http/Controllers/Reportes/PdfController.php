@@ -595,35 +595,8 @@ class PdfController extends Controller
                 }
 
        
-      /*   $reciboprofesional = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_atencion','a.id_profesional','a.id_servicio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro')
-        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        ->join('servicios as d','d.id','a.id_servicio')
-        ->join('pacientes as e','e.id','b.id_paciente')
-        ->join('profesionales as f','f.id','a.id_profesional')
-        ->where('a.pagado','=',1)
-        ->where('a.id_atencion','=',$id)
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
-        ->orderby('a.created_at','desc')
-        ->get();*/
-
-        /* $reciboprofesional = DB::table('atencion_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_atencion','a.id_profesional','a.id_servicio','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','b.costo','b.id_paciente','d.detalle','d.porcentaje','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro')
-        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        ->join('servicios as d','d.id','a.id_servicio')
-        ->join('pacientes as e','e.id','b.id_paciente')
-        ->join('profesionales as f','f.id','a.id_profesional')
-        ->where('a.pagado','=',1)
-        ->where('a.id_atencion','=',$id)
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
-        ->orderby('a.created_at','desc')
-        ->get();
-*/
-
-         $reciboprofesional = DB::table('atencion_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro','d.detalle')
+         $reciboprofesional = DB::table('atencion_profesionales_servicios as a')
+        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.id_atec_servicio','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro','d.detalle')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('atencion_profesionales_servicios as c','a.id_atencion','c.id_atencion')
         ->join('servicios as d','d.id','c.id_servicio')
@@ -634,9 +607,11 @@ class PdfController extends Controller
         ->where('a.pagado','=',1)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        //->groupBy('a.recibo')
         ->get();
 
      
+  
         if(!is_null($reciboprofesional)){
             return $reciboprofesional;
          }else{
@@ -678,16 +653,18 @@ class PdfController extends Controller
 
         
                 $servicios = DB::table('atencion_profesionales_servicios as a')
-                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados','h.descripcion as resultado')
+                ->select('a.id','a.id_atencion','a.id_servicio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.detalle as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados','h.descripcion as resultado','i.recibo')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
                 ->join('servicios as d','a.id_servicio','d.id')
                 ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
                 ->join('pacientes as f','f.id','e.id_paciente')
                 ->join('redactar_resultados as h','a.id','h.id_atencion_servicio')
+                ->join('atencion_servicios as i','i.id_atencion','a.id_atencion')
                 ->where('a.status_redactar_resultados','=',1)
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
+                ->groupBy('i.recibo')
                 ->where('a.id','=', $id)
                     //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
                 ->orderby('a.created_at','desc')
@@ -704,7 +681,6 @@ class PdfController extends Controller
 
 
 
-
        public function resultados_ver($id) 
     {
        
@@ -716,6 +692,66 @@ class PdfController extends Controller
      
        
         return $pdf->stream('resultados_ver');
+
+    }
+
+       public function verResultadoLab($id){
+       
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+        
+                $laboratorios = DB::table('atencion_profesionales_laboratorios as a')
+                ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.name as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados','h.descripcion as resultado','i.recibo')
+                ->join('empresas as b','a.id_empresa','b.id')
+                ->join('locales as c','a.id_sucursal','c.id')
+                ->join('analises as d','a.id_laboratorio','d.id')
+                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
+                ->join('pacientes as f','f.id','e.id_paciente')
+                ->join('redactar_resultados_labs as h','a.id','h.id_atencion_lab')
+                ->join('atencion_laboratorios as i','i.id_atencion','a.id_atencion')
+                ->where('a.status_redactar_resultados','=',1)
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->groupBy('i.recibo')
+                ->where('a.id','=', $id)
+                    //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+                ->orderby('a.created_at','desc')
+                ->get();
+             
+
+        if(!is_null($laboratorios)){
+            return $laboratorios;
+         }else{
+            return false;
+         }  
+
+     }
+
+
+        public function resultados_lab_ver($id) 
+    {
+       
+     $laboratorios =PdfController::verResultadoLab($id);
+
+     $view = \View::make('reportes.resultados_lab_ver')->with('laboratorios', $laboratorios);
+     $pdf = \App::make('dompdf.wrapper');
+     $pdf->loadHTML($view);
+     
+       
+        return $pdf->stream('resultados_lab_ver');
 
     }
 
