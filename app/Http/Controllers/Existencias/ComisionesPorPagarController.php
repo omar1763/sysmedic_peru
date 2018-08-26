@@ -147,13 +147,14 @@ class ComisionesPorPagarController extends Controller
                 $searchSer = DB::table('servicios')
                 ->select('*')
                    // ->where('estatus','=','1')
-                ->where('id','=', $id_servicio)
+                ->where('id','=', $id)
                 ->get();
 
                 foreach ($searchSer as $servicios) {
                     $detalle = $servicios->detalle;
                     $porcentaje = $servicios->porcentaje;
                 }
+
 
                 $recibo =rand(1,99999);
 
