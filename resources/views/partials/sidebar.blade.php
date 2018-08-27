@@ -179,6 +179,50 @@
                     </li>
                 </ul>
 
+               
+                 <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'cuentasporcobrar' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.cuentasporcobrar.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.cuentasporcobrar.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                  <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'comisionesporpagar' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.comisionesporpagar.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.comisionesporpagar.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                   <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'comisionespagadas' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.comisionespagadas.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.comisionespagadas.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+              <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-file-pdf-o"></i>
+                    <span class="title">@lang('global.resultadosmodulo.title')</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
                 <ul class="treeview-menu">
 
                     <li class="{{ $request->segment(2) == 'resultados' ? 'active active-sub' : '' }}">
@@ -223,39 +267,9 @@
                         </a>
                     </li>
                 </ul>
-                 <ul class="treeview-menu">
-
-                    <li class="{{ $request->segment(2) == 'cuentasporcobrar' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.cuentasporcobrar.index') }}">
-                            <i class="fa fa-clipboard"></i>
-                            <span class="title">
-                                @lang('global.cuentasporcobrar.title')
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-                  <ul class="treeview-menu">
-
-                    <li class="{{ $request->segment(2) == 'comisionesporpagar' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.comisionesporpagar.index') }}">
-                            <i class="fa fa-clipboard"></i>
-                            <span class="title">
-                                @lang('global.comisionesporpagar.title')
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-                   <ul class="treeview-menu">
-
-                    <li class="{{ $request->segment(2) == 'comisionespagadas' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.comisionespagadas.index') }}">
-                            <i class="fa fa-clipboard"></i>
-                            <span class="title">
-                                @lang('global.comisionespagadas.title')
-                            </span>
-                        </a>
-                    </li>
-                </ul>
+                    
+             
+                 
             </li>
 
                <li class="treeview">
@@ -289,6 +303,7 @@
              
                  
             </li>
+
 
             
             @endcan
@@ -346,8 +361,8 @@
            
            <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-check-square-o"></i>
-                    <span class="title">@lang('global.existenciass.title')</span>
+                    <i class="fa fa-file-pdf-o"></i>
+                    <span class="title">@lang('global.resultadosmodulo.title')</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -396,6 +411,8 @@
                         </a>
                     </li>
                 </ul>
+                    
+             
                  
             </li>
 
