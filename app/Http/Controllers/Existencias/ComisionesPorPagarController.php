@@ -134,7 +134,7 @@ class ComisionesPorPagarController extends Controller
                 $searchSer = DB::table('servicios')
                 ->select('*')
                    // ->where('estatus','=','1')
-                ->where('id','=', $id_servicio)
+                ->where('id','=', $id)
                 ->get();
 
                 foreach ($searchSer as $servicios) {
