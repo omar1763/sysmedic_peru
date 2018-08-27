@@ -131,23 +131,10 @@ class ComisionesPorPagarController extends Controller
                     $id_servicio = $atecpro->id_servicio;
                 }
 
-                  $searchAtecProLab = DB::table('atencion_profesionales_laboratorios')
-               ->select('*')
-                   // ->where('estatus','=','1')
-               ->where('id','=', $id_laboratorio)
-               ->get();
-
-               foreach ($searchAtecProLab as $atecprolab) {
-                $id_prof_lab = $atecprolab->id;
-                $id_atencion = $atecprolab->id_atencion;
-                $id_laboratorio = $atecprolab->id_laboratorio;
-            }
-
-
                 $searchSer = DB::table('servicios')
                 ->select('*')
                    // ->where('estatus','=','1')
-                ->where('id','=', $id)
+                ->where('id','=', $id_servicio)
                 ->get();
 
                 foreach ($searchSer as $servicios) {
