@@ -119,6 +119,8 @@ class ComisionesPorPagarController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
+             
+
                   $searchAtecProSer = DB::table('atencion_profesionales_servicios')
                    ->select('*')
                    // ->where('estatus','=','1')
@@ -134,7 +136,7 @@ class ComisionesPorPagarController extends Controller
                 $searchSer = DB::table('servicios')
                 ->select('*')
                    // ->where('estatus','=','1')
-                ->where('id','=', $id)
+                ->where('id','=', $id_servicio)
                 ->get();
 
                 foreach ($searchSer as $servicios) {
