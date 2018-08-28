@@ -71,17 +71,15 @@ class PdfController extends Controller
     $f2 = date('YYYY-m-d');
 
         $f1 = $request->fecha;
-        $f2 = $request->fecha2;
 
         if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
-            $f2 = $request->fecha2;
-
+            
           $creditos = DB::table('creditos as a')
                ->select(DB::raw('SUM(a.monto) as total_monto','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at as fecha'))
                ->where('a.id_empresa','=', $usuarioEmp)
                ->where('a.id_sucursal','=', $usuarioSuc)
-               ->whereBetween('a.created_at', [$f1, $f2])
+               ->where('a.created_at','=', $f1)
                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
                ->havingRaw('SUM(a.monto) > ?', [0])
                ->get();
@@ -125,18 +123,16 @@ class PdfController extends Controller
     $f2 = date('YYYY-m-d');
 
         $f1 = $request->fecha;
-        $f2 = $request->fecha2;
 
         if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
         $creditos = DB::table('creditos as a')
         ->select(DB::raw('COUNT(a.origen) as total_servicios','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.origen','=','INGRESO DE ATENCIONES')
-        ->whereBetween('a.created_at', [$f1, $f2])
+        ->where('a.created_at','=', $f1)
                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->get();
 
@@ -180,11 +176,10 @@ class PdfController extends Controller
             $f2 = date('YYYY-m-d');
 
             $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
             if(! is_null($request->fecha)) {
                $f1 = $request->fecha;
-            $f2 = $request->fecha2;
+           
 
 
               $creditos = DB::table('creditos as a')
@@ -192,7 +187,7 @@ class PdfController extends Controller
               ->where('a.id_empresa','=', $usuarioEmp)
               ->where('a.id_sucursal','=', $usuarioSuc)
               ->where('a.origen','=','INGRESO DE ATENCIONES')
-              ->whereBetween('a.created_at', [$f1, $f2])
+              ->where('a.created_at','=', $f1)
                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
               ->havingRaw('SUM(a.monto) > ?', [0])
               ->get();
@@ -241,11 +236,10 @@ class PdfController extends Controller
             $f2 = date('YYYY-m-d');
 
             $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
             if(! is_null($request->fecha)) {
                $f1 = $request->fecha;
-            $f2 = $request->fecha2;
+            
 
               $creditos = DB::table('creditos as a')
               ->select(DB::raw('COUNT(a.origen) as total_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
@@ -253,8 +247,8 @@ class PdfController extends Controller
               ->where('a.id_empresa','=', $usuarioEmp)
               ->where('a.id_sucursal','=', $usuarioSuc)
               ->where('a.origen','=','OTROS INGRESOS')
-              ->whereBetween('a.created_at', [$f1, $f2])
-               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+               ->where('a.created_at','=', $f1)
+                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
               ->get();
 
             } else {
@@ -298,18 +292,17 @@ class PdfController extends Controller
             $f2 = date('YYYY-m-d');
 
             $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
             if(! is_null($request->fecha)) {
                $f1 = $request->fecha;
-            $f2 = $request->fecha2;
+        
 
               $creditos = DB::table('creditos as a')
               ->select(DB::raw('SUM(a.monto) as total_monto_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
               ->where('a.id_empresa','=', $usuarioEmp)
               ->where('a.id_sucursal','=', $usuarioSuc)
               ->where('a.origen','=','OTROS INGRESOS')
-              ->whereBetween('a.created_at', [$f1, $f2])
+              ->where('a.created_at','=', $f1)
                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
               ->havingRaw('SUM(a.monto) > ?', [0])
               ->get();
@@ -358,11 +351,9 @@ class PdfController extends Controller
             $f2 = date('YYYY-m-d');
 
             $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
             if(! is_null($request->fecha)) {
                $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
 
               $creditos = DB::table('creditos as a')
@@ -371,7 +362,7 @@ class PdfController extends Controller
               ->where('a.id_empresa','=', $usuarioEmp)
               ->where('a.id_sucursal','=', $usuarioSuc)
               ->where('a.causa','=','CC')
-              ->whereBetween('a.created_at', [$f1, $f2])
+              ->where('a.created_at','=', $f1)
                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
               ->get();
             } else  {
@@ -416,11 +407,9 @@ class PdfController extends Controller
           $f2 = date('YYYY-m-d');
 
           $f1 = $request->fecha;
-          $f2 = $request->fecha2;
 
           if(! is_null($request->fecha)) {
             $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
 
             $creditos = DB::table('creditos as a')
@@ -428,7 +417,7 @@ class PdfController extends Controller
             ->where('a.id_empresa','=', $usuarioEmp)
             ->where('a.id_sucursal','=', $usuarioSuc)
             ->where('a.causa','=','CC')
-            ->whereBetween('a.created_at', [$f1, $f2])
+            ->where('a.created_at','=', $f1)
                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
             ->havingRaw('SUM(a.monto) > ?', [0])
             ->get();
@@ -474,20 +463,17 @@ class PdfController extends Controller
         }
 
         $f1 = date('YYYY-m-d');
-        $f2 = date('YYYY-m-d');
 
         $f1 = $request->fecha;
-        $f2 = $request->fecha2;
 
         if(! is_null($request->fecha)) {
            $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
           $debitos = DB::table('debitos as a')
           ->select(DB::raw('SUM(a.monto) as total_egresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion as descripcion'))
           ->where('a.id_empresa','=', $usuarioEmp)
           ->where('a.id_sucursal','=', $usuarioSuc)
-          ->whereBetween('a.created_at', [$f1, $f2])
+          ->where('a.created_at','=', $f1)
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
               // ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
           ->get();
@@ -529,20 +515,18 @@ class PdfController extends Controller
 
 
         $f1 = date('YYYY-m-d');
-        $f2 = date('YYYY-m-d');
+   
 
         $f1 = $request->fecha;
-        $f2 = $request->fecha2;
 
         if(! is_null($request->fecha)) {
            $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
           $debitos = DB::table('debitos as a')
           ->select('a.id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion','a.monto')
           ->where('a.id_empresa','=', $usuarioEmp)
           ->where('a.id_sucursal','=', $usuarioSuc)
-          ->whereBetween('a.created_at', [$f1, $f2])
+          ->where('a.created_at','=', $f1)
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
                //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
           ->get();
@@ -590,18 +574,16 @@ class PdfController extends Controller
         $f2 = date('YYYY-m-d');
 
         $f1 = $request->fecha;
-        $f2 = $request->fecha2;
 
         if(! is_null($request->fecha)) {
            $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
           $creditos = DB::table('creditos as a')
           ->select(DB::raw('SUM(a.monto) as total_monto_ef','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
           ->where('a.id_empresa','=', $usuarioEmp)
           ->where('a.id_sucursal','=', $usuarioSuc)
           ->where('a.tipo_ingreso','=','EF')
-          ->whereBetween('a.created_at', [$f1, $f2])
+          ->where('a.created_at','=', $f1)
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
               // ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
           ->get();
@@ -646,21 +628,18 @@ class PdfController extends Controller
 
 
       $f1 = date('YYYY-m-d');
-      $f2 = date('YYYY-m-d');
 
       $f1 = $request->fecha;
-      $f2 = $request->fecha2;
 
       if(! is_null($request->fecha)) {
          $f1 = $request->fecha;
-            $f2 = $request->fecha2;
 
         $creditos = DB::table('creditos as a')
         ->select(DB::raw('SUM(a.monto) as total_monto_tj','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.tipo_ingreso','=','TJ')
-        ->whereBetween('a.created_at', [$f1, $f2])
+        ->where('a.created_at','=', $f1)
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
               // ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->get();

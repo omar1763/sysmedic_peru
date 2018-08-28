@@ -8,7 +8,7 @@
 			<div class="card">
 				<div class="card-action">
 				<div class="col s6">
-					<b3>Reporte de Atenciòn Diaria</b3>
+					<h3>Reporte de Atenciòn Diaria</h3>
 				</div>	
 				 {!! Form::open(['method' => 'GET', 'route' => ['listado_atenciondiaria_ver']]) !!}
 
@@ -17,8 +17,8 @@
 				</div>
 				<div class="row">
 					<div class="col-md-4">
-						{!! Form::label('fecha', 'Fecha Inicio', ['class' => 'control-label']) !!}
-						{!! Form::date('fecha', old('fechanac'), ['id'=>'fecha','class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+						{!! Form::label('fecha', 'Fecha', ['class' => 'control-label']) !!}
+						{!! Form::date('fecha', old('fechanac'), ['id'=>'fecha','class' => 'form-control', 'placeholder' => '']) !!}
 						<p class="help-block"></p>
 						@if($errors->has('fecha'))
 						<p class="help-block">
@@ -26,42 +26,12 @@
 						</p>
 						@endif
 					</div>
-					<div class="col-md-4">
-						{!! Form::label('fecha2', 'Fecha Fin', ['class' => 'control-label']) !!}
-						{!! Form::date('fecha2', old('fecha2'), ['id'=>'fecha2','class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
-						<p class="help-block"></p>
-						@if($errors->has('fecha2'))
-						<p class="help-block">
-							{{ $errors->first('fecha2') }}
-						</p>
-						@endif
-					</div>
+					
 					<div class="col-md-4">
 						
 
 					</div>
 				</div>
-				<table class="table">
-					<thead>
-						<th>Id</th>
-						<th>Reporte</th>
-						
-						
-				</thead>
-				<tbody>
-					
-						<tr>
-							<td>1</td>
-							<td>Atenciòn Diarìa</td>
-				
-					
-						</tr>
-
-							
-					
-
-				</tbody>
-				</table>
 			
 			</div>
 		</div>
@@ -74,7 +44,7 @@
 
 <!-- Recursos javascript-ajax -->
 
- {!! Form::submit(trans('global.app_search'), array('class' => 'btn btn-info')) !!}
+ {!! Form::submit(trans('global.app_search'), array('class' => 'btn btn-danger')) !!}
  {!! Form::close() !!}
 @stop
 
