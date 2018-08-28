@@ -9,7 +9,9 @@
 				<div class="card-action">
 				<div class="col s6">
 					<b3>Reporte de Atenciòn Diaria</b3>
-				</div>			
+				</div>	
+				 {!! Form::open(['method' => 'GET', 'route' => ['listado_atenciondiaria_ver']]) !!}
+
 				<div class="input-field col s6">
 				</div>
 				</div>
@@ -35,8 +37,7 @@
 						@endif
 					</div>
 					<div class="col-md-4">
-						{!! Form::submit(trans('global.app_search'), array('class' => 'btn btn-info')) !!}
-						{!! Form::close() !!}
+						
 
 					</div>
 				</div>
@@ -44,10 +45,8 @@
 					<thead>
 						<th>Id</th>
 						<th>Reporte</th>
-						<th>Ver</th>
-						<th>Descargar</th>
 						
-
+						
 				</thead>
 				<tbody>
 					
@@ -55,14 +54,7 @@
 							<td>1</td>
 							<td>Atenciòn Diarìa</td>
 				
-							 <td>
-                                <a href="{{asset('listado_atenciondiaria_ver')}}" class=" waves-effect waves-light btn" target="_blank">Ver</a>
-                            </td>
-
-                              <td>
-                                <a href="{{asset('listado_enviadas_descargar')}}" class=" waves-effect waves-light btn">Descargar</a>
-                            </td>
-
+					
 						</tr>
 
 							
@@ -82,6 +74,8 @@
 
 <!-- Recursos javascript-ajax -->
 
+ {!! Form::submit(trans('global.app_search'), array('class' => 'btn btn-info')) !!}
+ {!! Form::close() !!}
 @stop
 
 @section('javascript') 

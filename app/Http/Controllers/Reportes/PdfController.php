@@ -52,7 +52,7 @@ class PdfController extends Controller
         return view('reportes.index');
     }
     
-      public function atenciondiariaSUMATOTAL(){
+      public function atenciondiariaSUMATOTAL(Request $request){
 
         $id_usuario = Auth::id();
 
@@ -67,8 +67,27 @@ class PdfController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
+    $f1 = date('YYYY-m-d');
+    $f2 = date('YYYY-m-d');
+
+        $f1 = $request->fecha;
+        $f2 = $request->fecha2;
+
+        if(! is_null($request->fecha)) {
+        $f1 = $request->fecha;
+            $f2 = $request->fecha2;
 
           $creditos = DB::table('creditos as a')
+               ->select(DB::raw('SUM(a.monto) as total_monto','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at as fecha'))
+               ->where('a.id_empresa','=', $usuarioEmp)
+               ->where('a.id_sucursal','=', $usuarioSuc)
+               ->whereBetween('a.created_at', [$f1, $f2])
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+               ->havingRaw('SUM(a.monto) > ?', [0])
+               ->get();
+        } else {
+
+        $creditos = DB::table('creditos as a')
                ->select(DB::raw('SUM(a.monto) as total_monto','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at as fecha'))
                ->where('a.id_empresa','=', $usuarioEmp)
                ->where('a.id_sucursal','=', $usuarioSuc)
@@ -76,6 +95,8 @@ class PdfController extends Controller
                ->havingRaw('SUM(a.monto) > ?', [0])
                ->get();
 
+
+        }
 
           if(!is_null($creditos)){
             return $creditos;
@@ -85,7 +106,7 @@ class PdfController extends Controller
 
           } 
 
-          public function atenciondiariaSERVICIOS(){
+          public function atenciondiariaSERVICIOS(Request $request){
 
         $id_usuario = Auth::id();
 
@@ -100,89 +121,38 @@ class PdfController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-      
+          $f1 = date('YYYY-m-d');
+    $f2 = date('YYYY-m-d');
 
-          $creditos = DB::table('creditos as a')
-               ->select(DB::raw('COUNT(a.origen) as total_servicios','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.origen','=','INGRESO DE ATENCIONES')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->get();
+        $f1 = $request->fecha;
+        $f2 = $request->fecha2;
 
+        if(! is_null($request->fecha)) {
+        $f1 = $request->fecha;
+            $f2 = $request->fecha2;
 
-          if(!is_null($creditos)){
-            return $creditos;
-         }else{
-            return false;
-         }  
-          }  
+        $creditos = DB::table('creditos as a')
+        ->select(DB::raw('COUNT(a.origen) as total_servicios','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.origen','=','INGRESO DE ATENCIONES')
+        ->whereBetween('a.created_at', [$f1, $f2])
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->get();
 
+      } else {
 
-           public function atenciondiariaSERVICIOSMONTO(){
+        $creditos = DB::table('creditos as a')
+        ->select(DB::raw('COUNT(a.origen) as total_servicios','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.origen','=','INGRESO DE ATENCIONES')
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->get();
 
-        $id_usuario = Auth::id();
-
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
-                   // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
-
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-
-
-                $creditos = DB::table('creditos as a')
-               ->select(DB::raw('SUM(a.monto) as total_monto_servicios','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.origen','=','INGRESO DE ATENCIONES')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->havingRaw('SUM(a.monto) > ?', [0])
-               ->get();
-
-
-
-
-
-          if(!is_null($creditos)){
-            return $creditos;
-         }else{
-            return false;
-         }  
 
       }
 
-      public function atenciondiariaOTROSINGRESOS(){
-
-        $id_usuario = Auth::id();
-
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
-                   // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
-
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-
-       
-
-          $creditos = DB::table('creditos as a')
-               ->select(DB::raw('COUNT(a.origen) as total_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
-               //->select('SUM(a.monto) as total_monto','a.id_empresa','a.id_sucursal','a.created_at')
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.origen','=','OTROS INGRESOS')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->get();
-
-
           if(!is_null($creditos)){
             return $creditos;
          }else{
@@ -190,245 +160,532 @@ class PdfController extends Controller
          }  
           }  
 
-    public function atenciondiariaOTROSINGRESOSMONTO(){
 
-        $id_usuario = Auth::id();
+          public function atenciondiariaSERVICIOSMONTO(Request $request){
 
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
+            $id_usuario = Auth::id();
+
+            $searchUsuarioID = DB::table('users')
+            ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
+            ->where('id','=', $id_usuario)
+            ->get();
 
             foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
+              $usuarioEmp = $usuario->id_empresa;
+              $usuarioSuc = $usuario->id_sucursal;
+            }
+
+            $f1 = date('YYYY-m-d');
+            $f2 = date('YYYY-m-d');
+
+            $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+            if(! is_null($request->fecha)) {
+               $f1 = $request->fecha;
+            $f2 = $request->fecha2;
 
 
               $creditos = DB::table('creditos as a')
-               ->select(DB::raw('SUM(a.monto) as total_monto_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.origen','=','OTROS INGRESOS')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->havingRaw('SUM(a.monto) > ?', [0])
-               ->get();
+              ->select(DB::raw('SUM(a.monto) as total_monto_servicios','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
+              ->where('a.id_empresa','=', $usuarioEmp)
+              ->where('a.id_sucursal','=', $usuarioSuc)
+              ->where('a.origen','=','INGRESO DE ATENCIONES')
+              ->whereBetween('a.created_at', [$f1, $f2])
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+              ->havingRaw('SUM(a.monto) > ?', [0])
+              ->get();
+            } else {
+
+              $creditos = DB::table('creditos as a')
+              ->select(DB::raw('SUM(a.monto) as total_monto_servicios','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
+              ->where('a.id_empresa','=', $usuarioEmp)
+              ->where('a.id_sucursal','=', $usuarioSuc)
+              ->where('a.origen','=','INGRESO DE ATENCIONES')
+              ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+              ->havingRaw('SUM(a.monto) > ?', [0])
+              ->get();
+
+
+            }
 
 
 
-          if(!is_null($creditos)){
-            return $creditos;
-         }else{
-            return false;
-         }  
 
-      }
+            if(!is_null($creditos)){
+              return $creditos;
+            }else{
+              return false;
+            }  
 
-       public function atenciondiariaCUENTASPORCOBRAR(){
+          }
 
-        $id_usuario = Auth::id();
 
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
+          public function atenciondiariaOTROSINGRESOS(Request $request){
+
+            $id_usuario = Auth::id();
+
+            $searchUsuarioID = DB::table('users')
+            ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
+            ->where('id','=', $id_usuario)
+            ->get();
 
             foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
+              $usuarioEmp = $usuario->id_empresa;
+              $usuarioSuc = $usuario->id_sucursal;
+            }
 
-       
+            $f1 = date('YYYY-m-d');
+            $f2 = date('YYYY-m-d');
 
-          $creditos = DB::table('creditos as a')
-               ->select(DB::raw('COUNT(a.origen) as total_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
+            $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+            if(! is_null($request->fecha)) {
+               $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+              $creditos = DB::table('creditos as a')
+              ->select(DB::raw('COUNT(a.origen) as total_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
                //->select('SUM(a.monto) as total_monto','a.id_empresa','a.id_sucursal','a.created_at')
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.causa','=','CC')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->get();
+              ->where('a.id_empresa','=', $usuarioEmp)
+              ->where('a.id_sucursal','=', $usuarioSuc)
+              ->where('a.origen','=','OTROS INGRESOS')
+              ->whereBetween('a.created_at', [$f1, $f2])
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+              ->get();
+
+            } else {
+              $creditos = DB::table('creditos as a')
+              ->select(DB::raw('COUNT(a.origen) as total_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
+               //->select('SUM(a.monto) as total_monto','a.id_empresa','a.id_sucursal','a.created_at')
+              ->where('a.id_empresa','=', $usuarioEmp)
+              ->where('a.id_sucursal','=', $usuarioSuc)
+              ->where('a.origen','=','OTROS INGRESOS')
+              ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+              ->get();
 
 
-          if(!is_null($creditos)){
-            return $creditos;
-         }else{
-            return false;
-         }  
+            }
+
+
+            if(!is_null($creditos)){
+              return $creditos;
+            }else{
+              return false;
+            }  
           }  
 
-         public function atenciondiariaCUENTASPORCOBRARMONTO(){
 
-        $id_usuario = Auth::id();
+          public function atenciondiariaOTROSINGRESOSMONTO(Request $request){
 
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
+            $id_usuario = Auth::id();
+
+            $searchUsuarioID = DB::table('users')
+            ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
+            ->where('id','=', $id_usuario)
+            ->get();
 
             foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
+              $usuarioEmp = $usuario->id_empresa;
+              $usuarioSuc = $usuario->id_sucursal;
+            }
+
+            $f1 = date('YYYY-m-d');
+            $f2 = date('YYYY-m-d');
+
+            $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+            if(! is_null($request->fecha)) {
+               $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+              $creditos = DB::table('creditos as a')
+              ->select(DB::raw('SUM(a.monto) as total_monto_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
+              ->where('a.id_empresa','=', $usuarioEmp)
+              ->where('a.id_sucursal','=', $usuarioSuc)
+              ->where('a.origen','=','OTROS INGRESOS')
+              ->whereBetween('a.created_at', [$f1, $f2])
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+              ->havingRaw('SUM(a.monto) > ?', [0])
+              ->get();
+
+            } else {
+
+              $creditos = DB::table('creditos as a')
+              ->select(DB::raw('SUM(a.monto) as total_monto_otrosingresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at'))
+              ->where('a.id_empresa','=', $usuarioEmp)
+              ->where('a.id_sucursal','=', $usuarioSuc)
+              ->where('a.origen','=','OTROS INGRESOS')
+              ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+              ->havingRaw('SUM(a.monto) > ?', [0])
+              ->get();
+
+
+            }
+
+
+            if(!is_null($creditos)){
+              return $creditos;
+            }else{
+              return false;
+            }  
+
+          }
+
+
+          public function atenciondiariaCUENTASPORCOBRAR(Request $request){
+
+            $id_usuario = Auth::id();
+
+            $searchUsuarioID = DB::table('users')
+            ->select('*')
+                   // ->where('estatus','=','1')
+            ->where('id','=', $id_usuario)
+            ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+              $usuarioEmp = $usuario->id_empresa;
+              $usuarioSuc = $usuario->id_sucursal;
+            }
+
+
+            $f1 = date('YYYY-m-d');
+            $f2 = date('YYYY-m-d');
+
+            $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+            if(! is_null($request->fecha)) {
+               $f1 = $request->fecha;
+            $f2 = $request->fecha2;
 
 
               $creditos = DB::table('creditos as a')
-               ->select(DB::raw('SUM(a.monto) as total_monto_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.causa','=','CC')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->havingRaw('SUM(a.monto) > ?', [0])
-               ->get();
+              ->select(DB::raw('COUNT(a.origen) as total_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
+               //->select('SUM(a.monto) as total_monto','a.id_empresa','a.id_sucursal','a.created_at')
+              ->where('a.id_empresa','=', $usuarioEmp)
+              ->where('a.id_sucursal','=', $usuarioSuc)
+              ->where('a.causa','=','CC')
+              ->whereBetween('a.created_at', [$f1, $f2])
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+              ->get();
+            } else  {
 
+             $creditos = DB::table('creditos as a')
+             ->select(DB::raw('COUNT(a.origen) as total_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
+               //->select('SUM(a.monto) as total_monto','a.id_empresa','a.id_sucursal','a.created_at')
+             ->where('a.id_empresa','=', $usuarioEmp)
+             ->where('a.id_sucursal','=', $usuarioSuc)
+             ->where('a.causa','=','CC')
+             ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+             ->get();
 
+           }
 
-          if(!is_null($creditos)){
+           if(!is_null($creditos)){
             return $creditos;
-         }else{
+          }else{
             return false;
-         }  
+          }  
+        }  
+
+
+        public function atenciondiariaCUENTASPORCOBRARMONTO(Request $request){
+
+          $id_usuario = Auth::id();
+
+          $searchUsuarioID = DB::table('users')
+          ->select('*')
+                   // ->where('estatus','=','1')
+          ->where('id','=', $id_usuario)
+          ->get();
+
+          foreach ($searchUsuarioID as $usuario) {
+            $usuarioEmp = $usuario->id_empresa;
+            $usuarioSuc = $usuario->id_sucursal;
+          }
+
+
+
+          $f1 = date('YYYY-m-d');
+          $f2 = date('YYYY-m-d');
+
+          $f1 = $request->fecha;
+          $f2 = $request->fecha2;
+
+          if(! is_null($request->fecha)) {
+            $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+
+            $creditos = DB::table('creditos as a')
+            ->select(DB::raw('SUM(a.monto) as total_monto_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
+            ->where('a.id_empresa','=', $usuarioEmp)
+            ->where('a.id_sucursal','=', $usuarioSuc)
+            ->where('a.causa','=','CC')
+            ->whereBetween('a.created_at', [$f1, $f2])
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+            ->havingRaw('SUM(a.monto) > ?', [0])
+            ->get();
+
+          } else {
+
+           $creditos = DB::table('creditos as a')
+           ->select(DB::raw('SUM(a.monto) as total_monto_cxc','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.causa'))
+           ->where('a.id_empresa','=', $usuarioEmp)
+           ->where('a.id_sucursal','=', $usuarioSuc)
+           ->where('a.causa','=','CC')
+           ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+           ->havingRaw('SUM(a.monto) > ?', [0])
+           ->get();
+
+
+
+         }
+
+
+
+         if(!is_null($creditos)){
+          return $creditos;
+        }else{
+          return false;
+        }  
 
       }
 
-         public function atenciondiariaTOTALEGRESOS(){
+      public function atenciondiariaTOTALEGRESOS(Request $request){
 
         $id_usuario = Auth::id();
 
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
+        $searchUsuarioID = DB::table('users')
+        ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
+        ->where('id','=', $id_usuario)
+        ->get();
 
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
+        foreach ($searchUsuarioID as $usuario) {
+          $usuarioEmp = $usuario->id_empresa;
+          $usuarioSuc = $usuario->id_sucursal;
+        }
 
-      
+        $f1 = date('YYYY-m-d');
+        $f2 = date('YYYY-m-d');
+
+        $f1 = $request->fecha;
+        $f2 = $request->fecha2;
+
+        if(! is_null($request->fecha)) {
+           $f1 = $request->fecha;
+            $f2 = $request->fecha2;
 
           $debitos = DB::table('debitos as a')
-               ->select(DB::raw('SUM(a.monto) as total_egresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion as descripcion'))
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
+          ->select(DB::raw('SUM(a.monto) as total_egresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion as descripcion'))
+          ->where('a.id_empresa','=', $usuarioEmp)
+          ->where('a.id_sucursal','=', $usuarioSuc)
+          ->whereBetween('a.created_at', [$f1, $f2])
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->get();
-
-
-          if(!is_null($debitos)){
-            return $debitos;
-         }else{
-            return false;
-         }  
-          }  
-
-          public function atenciondiariaDETALLEEGRESOS(){
-
-        $id_usuario = Auth::id();
-
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
-                   // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
-
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-
-      
+              // ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+          ->get();
+        } else {
 
           $debitos = DB::table('debitos as a')
-               ->select('a.id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion','a.monto')
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
+          ->select(DB::raw('SUM(a.monto) as total_egresos','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion as descripcion'))
+          ->where('a.id_empresa','=', $usuarioEmp)
+          ->where('a.id_sucursal','=', $usuarioSuc)
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->get();
+          ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+          ->get();
 
 
-          if(!is_null($debitos)){
-            return $debitos;
-         }else{
-            return false;
-         }  
-          }  
 
-       
-       
-         public function ingresosEF(){
+        }
+
+        if(!is_null($debitos)){
+          return $debitos;
+        }else{
+          return false;
+        }  
+      }  
+
+      public function atenciondiariaDETALLEEGRESOS(Request $request){
 
         $id_usuario = Auth::id();
 
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
+        $searchUsuarioID = DB::table('users')
+        ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
+        ->where('id','=', $id_usuario)
+        ->get();
 
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
+        foreach ($searchUsuarioID as $usuario) {
+          $usuarioEmp = $usuario->id_empresa;
+          $usuarioSuc = $usuario->id_sucursal;
+        }
 
-      
 
-          $creditos = DB::table('creditos as a')
-               ->select(DB::raw('SUM(a.monto) as total_monto_ef','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.tipo_ingreso','=','EF')
+        $f1 = date('YYYY-m-d');
+        $f2 = date('YYYY-m-d');
+
+        $f1 = $request->fecha;
+        $f2 = $request->fecha2;
+
+        if(! is_null($request->fecha)) {
+           $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+          $debitos = DB::table('debitos as a')
+          ->select('a.id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion','a.monto')
+          ->where('a.id_empresa','=', $usuarioEmp)
+          ->where('a.id_sucursal','=', $usuarioSuc)
+          ->whereBetween('a.created_at', [$f1, $f2])
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->get();
+               //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+          ->get();
+
+        } else {
+
+          $debitos = DB::table('debitos as a')
+          ->select('a.id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.descripcion','a.monto')
+          ->where('a.id_empresa','=', $usuarioEmp)
+          ->where('a.id_sucursal','=', $usuarioSuc)
+             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
+          ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+          ->get();
 
 
-          if(!is_null($creditos)){
-            return $creditos;
-         }else{
-            return false;
-         }  
-          }  
+        }
 
-        public function ingresosTJ(){
+
+        if(!is_null($debitos)){
+          return $debitos;
+        }else{
+          return false;
+        }  
+      }  
+
+
+       
+      public function ingresosEF(Request $request){
 
         $id_usuario = Auth::id();
 
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
+        $searchUsuarioID = DB::table('users')
+        ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
+        ->where('id','=', $id_usuario)
+        ->get();
 
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
+        foreach ($searchUsuarioID as $usuario) {
+          $usuarioEmp = $usuario->id_empresa;
+          $usuarioSuc = $usuario->id_sucursal;
+        }
 
-      
+
+        $f1 = date('YYYY-m-d');
+        $f2 = date('YYYY-m-d');
+
+        $f1 = $request->fecha;
+        $f2 = $request->fecha2;
+
+        if(! is_null($request->fecha)) {
+           $f1 = $request->fecha;
+            $f2 = $request->fecha2;
 
           $creditos = DB::table('creditos as a')
-               ->select(DB::raw('SUM(a.monto) as total_monto_tj','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
-               ->where('a.id_empresa','=', $usuarioEmp)
-               ->where('a.id_sucursal','=', $usuarioSuc)
-               ->where('a.tipo_ingreso','=','TJ')
+          ->select(DB::raw('SUM(a.monto) as total_monto_ef','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
+          ->where('a.id_empresa','=', $usuarioEmp)
+          ->where('a.id_sucursal','=', $usuarioSuc)
+          ->where('a.tipo_ingreso','=','EF')
+          ->whereBetween('a.created_at', [$f1, $f2])
              //  ->where('a.origen','=','INGRESO DE ATENCIONES')
-               ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-               ->get();
+              // ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+          ->get();
+
+        } else {
+
+         $creditos = DB::table('creditos as a')
+         ->select(DB::raw('SUM(a.monto) as total_monto_ef','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
+         ->where('a.id_empresa','=', $usuarioEmp)
+         ->where('a.id_sucursal','=', $usuarioSuc)
+         ->where('a.tipo_ingreso','=','EF')
+             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
+         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+         ->get();
 
 
-          if(!is_null($creditos)){
-            return $creditos;
-         }else{
-            return false;
-         }  
-          }  
+
+       }
+
+
+       if(!is_null($creditos)){
+        return $creditos;
+      }else{
+        return false;
+      }  
+    }  
+
+    public function ingresosTJ(Request $request){
+
+      $id_usuario = Auth::id();
+
+      $searchUsuarioID = DB::table('users')
+      ->select('*')
+                   // ->where('estatus','=','1')
+      ->where('id','=', $id_usuario)
+      ->get();
+
+      foreach ($searchUsuarioID as $usuario) {
+        $usuarioEmp = $usuario->id_empresa;
+        $usuarioSuc = $usuario->id_sucursal;
+      }
+
+
+      $f1 = date('YYYY-m-d');
+      $f2 = date('YYYY-m-d');
+
+      $f1 = $request->fecha;
+      $f2 = $request->fecha2;
+
+      if(! is_null($request->fecha)) {
+         $f1 = $request->fecha;
+            $f2 = $request->fecha2;
+
+        $creditos = DB::table('creditos as a')
+        ->select(DB::raw('SUM(a.monto) as total_monto_tj','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.tipo_ingreso','=','TJ')
+        ->whereBetween('a.created_at', [$f1, $f2])
+             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
+              // ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->get();
+
+      } else {
+
+       $creditos = DB::table('creditos as a')
+       ->select(DB::raw('SUM(a.monto) as total_monto_tj','id_empresa','a.id_sucursal','a.origen','a.id','a.created_at','a.tipo_ingreso'))
+       ->where('a.id_empresa','=', $usuarioEmp)
+       ->where('a.id_sucursal','=', $usuarioSuc)
+       ->where('a.tipo_ingreso','=','TJ')
+             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
+       ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+       ->get();
+
+     }
+
+
+     if(!is_null($creditos)){
+      return $creditos;
+    }else{
+      return false;
+    }  
+  }  
+
       
         public function empresaSucursal(){
 
@@ -462,61 +719,22 @@ class PdfController extends Controller
          }  
           }  
 
-      public function totalDiario(){
-
-       $id_usuario = Auth::id();
-
-       $searchUsuarioID = DB::table('users')
-       ->select('*')
-                   // ->where('estatus','=','1')
-       ->where('id','=', $id_usuario)
-       ->get();
-
-       foreach ($searchUsuarioID as $usuario) {
-        $usuarioEmp = $usuario->id_empresa;
-        $usuarioSuc = $usuario->id_sucursal;
-      }
-
-
-      $creditos = DB::table('creditos as a')
-      ->select(DB::raw('SUM(a.monto) as creditos'))
-      ->where('a.id_empresa','=', $usuarioEmp)
-      ->where('a.id_sucursal','=', $usuarioSuc)
-              // ->where('a.tipo_ingreso','=','EF')
-             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
-      ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-      ->first();
-
-      $debitos =DB::table('debitos as a')
-      ->select(DB::raw('SUM(a.monto) as debitos'))
-      ->where('a.id_empresa','=', $usuarioEmp)
-      ->where('a.id_sucursal','=', $usuarioSuc)
-              // ->where('a.tipo_ingreso','=','EF')
-             //  ->where('a.origen','=','INGRESO DE ATENCIONES')
-      ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-      ->first();
-      
-      $totalDiario =($creditos - $debitos);
     
-      return Response::json($totalDiario);
 
-
-    }
-
-       public function listado_atenciondiaria_ver() 
+       public function listado_atenciondiaria_ver(Request $request) 
     {
        
-       $creditosSUMATOTALINGRESOS =PdfController::atenciondiariaSUMATOTAL();
-       $creditosSERVICIOS =PdfController::atenciondiariaSERVICIOS();
-       $creditosSERVICIOSMONTO =PdfController::atenciondiariaSERVICIOSMONTO();
-       $creditosOTROSINGRESOS =PdfController::atenciondiariaOTROSINGRESOS();
-       $creditosOTROSINGRESOMONTO =PdfController::atenciondiariaOTROSINGRESOSMONTO();
-       $creditosCXC =PdfController::atenciondiariaCUENTASPORCOBRAR();
-       $creditosCXCMONTO =PdfController::atenciondiariaCUENTASPORCOBRARMONTO();
-       $debitosSUMATOTAL =PdfController::atenciondiariaTOTALEGRESOS();
-       $debitosDETALLE =PdfController::atenciondiariaDETALLEEGRESOS();
-       $creditosEF =PdfController::ingresosEF();
-       $creditosTJ =PdfController::ingresosTJ();
+       $creditosSUMATOTALINGRESOS =PdfController::atenciondiariaSUMATOTAL($request);
+       $creditosSERVICIOS =PdfController::atenciondiariaSERVICIOS($request);
+       $creditosSERVICIOSMONTO =PdfController::atenciondiariaSERVICIOSMONTO($request);
+       $creditosOTROSINGRESOS =PdfController::atenciondiariaOTROSINGRESOS($request);
+       $creditosOTROSINGRESOMONTO =PdfController::atenciondiariaOTROSINGRESOSMONTO($request);
+       $creditosCXC =PdfController::atenciondiariaCUENTASPORCOBRAR($request);
+       $creditosCXCMONTO =PdfController::atenciondiariaCUENTASPORCOBRARMONTO($request);
+       $debitosSUMATOTAL =PdfController::atenciondiariaTOTALEGRESOS($request);
+       $debitosDETALLE =PdfController::atenciondiariaDETALLEEGRESOS($request);
+       $creditosEF =PdfController::ingresosEF($request);
+       $creditosTJ =PdfController::ingresosTJ($request);
        $empresaSucursal =PdfController::empresaSucursal();
 
        $view = \View::make('reportes.listado_atenciondiaria_ver')->with('creditos', $creditosSUMATOTALINGRESOS)->with('servicios', $creditosSERVICIOS)->with('serviciosmonto', $creditosSERVICIOSMONTO)->with('otrosingresos', $creditosOTROSINGRESOS)->with('otrosingresosmonto', $creditosOTROSINGRESOMONTO)->with('debitostotal', $debitosSUMATOTAL)->with('debitosdetalle', $debitosDETALLE)->with('ingresosef', $creditosEF)->with('ingresostj', $creditosTJ)->with('empresasucursal', $empresaSucursal)->with('ingresoscxc', $creditosCXC)->with('ingresoscxcmonto', $creditosCXCMONTO);
