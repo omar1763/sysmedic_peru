@@ -49,7 +49,7 @@ class ProductosController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->orderby('a.created_at','desc')
-        ->paginate(10);
+        ->paginate(10000);
 
         $medida = Medidas::with('nombre');
 
