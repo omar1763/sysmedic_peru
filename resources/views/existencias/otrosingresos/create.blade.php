@@ -65,7 +65,7 @@
         <div class="input-icon">
             <i class="icon-eye  font-red"></i>
             
-            {!! Form::select('causa', ['0' => 'Seleccione Causa de Ingreso','V' => 'Ventas', 'CC' => 'Cuentas por Cobrar', 'O' => 'Otros'], null, ['id'=>'causa', 'class'=>'form-control select2']) !!}
+            {!! Form::select('causa', ['0' => 'Seleccione Causa de Ingreso','V' => 'Ventas','O' => 'Otros'], null, ['id'=>'causa', 'class'=>'form-control select2']) !!}
         </div>
 
     </div>
@@ -76,11 +76,22 @@
 
         
   <div  class="row" id="servbyemp" style="display: none;">
-      <div class="col-md-12">
+      <div class="col-md-6">
             {!! Form::label('product', 'Productos*', ['class' => 'control-label']) !!}
             {!! Form::select('product[]', $product, old('product'), ['id'=>'product','class' => 'form-control select2', 'multiple' => 'multiple','style'=>"width:100%"]) !!}
            
         </div>
+         <div class="col-md-6">
+            {!! Form::label('cant', 'Cantidad a Vender', ['class' => 'control-label']) !!}
+            {!! Form::number('cant', old('cant'), ['class' => 'form-control', 'placeholder' => 'Ingrese la cantidad a vender', 'required' => '']) !!}
+            <p class="help-block"></p>
+            @if($errors->has('cant'))
+            <p class="help-block">
+              {{ $errors->first('cant') }}
+            </p>
+            @endif
+          </div>  
+
                 </div>
 
 
@@ -143,6 +154,8 @@
     clearOnEmpty: true
     });
     </script>
+
+  
 
   
 @endsection

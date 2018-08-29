@@ -143,6 +143,7 @@ $creditosproductos = new CreditosProductos();
             $creditosproductos = new CreditosProductos();
             $creditosproductos->id_producto = $data;
             $creditosproductos->id_credito = $otrosingresos->id;
+            $creditosproductos->cantidad = $request->cant;
             $creditosproductos->save();
 
             $searchproducID = DB::table('productos')
@@ -161,7 +162,7 @@ $creditosproductos = new CreditosProductos();
 
                
                 $productos=Productos::where('id', '=' , $id_producto)->get()->first();
-                $productos->cantidad=$cantidadprod - 1;
+                $productos->cantidad=$cantidadprod - $request->cant;
                 $productos->update();
 
 
@@ -219,7 +220,7 @@ $creditosproductos = new CreditosProductos();
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-        
+
         $otrosingresos = Creditos::findOrFail($id);
         $otrosingresos->delete();
 
