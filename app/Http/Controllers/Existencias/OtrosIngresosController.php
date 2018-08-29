@@ -7,6 +7,7 @@ use App\Creditos;
 use App\Empresas;
 use App\CreditosProductos;
 use App\Locales;
+use App\Productos;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -135,14 +136,35 @@ $creditosproductos = new CreditosProductos();
        $otrosingresos->causa     =$request->causa;
        $otrosingresos->id_empresa= $usuarioEmp;
        $otrosingresos->id_sucursal =$usuarioSuc;
-    //   dd($request->product[0]);
        $otrosingresos->save();
+
        if (!is_null($request->product[0])) {
         foreach ($request->product as $data) {
-       $creditosproductos = new CreditosProductos();
+            $creditosproductos = new CreditosProductos();
             $creditosproductos->id_producto = $data;
             $creditosproductos->id_credito = $otrosingresos->id;
-       $creditosproductos->save();
+            $creditosproductos->save();
+
+            $searchproducID = DB::table('productos')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $request->product)
+                    ->get();
+
+            foreach ($searchproducID as $prod) {
+                       $id_producto = $prod->id;
+                      $nombreprod = $prod->name;
+                     $cantidadprod = $prod->cantidad;
+                }
+
+              //  $venta = 1;
+
+               
+                $productos=Productos::where('id', '=' , $id_producto)->get()->first();
+                $productos->cantidad=$cantidadprod - 1;
+                $productos->update();
+
+
             //dd($data);
         }
 
@@ -197,6 +219,7 @@ $creditosproductos = new CreditosProductos();
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
+        
         $otrosingresos = Creditos::findOrFail($id);
         $otrosingresos->delete();
 
