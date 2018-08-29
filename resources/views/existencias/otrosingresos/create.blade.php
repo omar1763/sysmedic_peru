@@ -37,17 +37,6 @@
         </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
         <div class="row">
   <div class="col-md-6">
     {!! Form::label('descripcion', 'Descripciòn de Ingreso*', ['class' => 'control-label']) !!}
@@ -82,8 +71,8 @@
            
         </div>
          <div class="col-md-6">
-            {!! Form::label('cant', 'Cantidad a Vender', ['class' => 'control-label']) !!}
-            {!! Form::number('cant', old('cant'), ['class' => 'form-control', 'placeholder' => 'Ingrese la cantidad a vender', 'required' => '']) !!}
+           {!! Form::label('cant', 'Cantidad', ['class' => 'control-label']) !!}
+            {!! Form::number('cant', old('cant'), ['class' => 'form-control', 'placeholder' => 'Ingrese Cantidad']) !!}
             <p class="help-block"></p>
             @if($errors->has('cant'))
             <p class="help-block">
@@ -92,13 +81,7 @@
             @endif
           </div>  
 
-                </div>
-
-
-                 
-
-
-
+  </div>
 
 
         </div>
@@ -126,24 +109,6 @@
         });
       
       });
-   
-   /*    $('#causa').on('select2:select', function(e) {
-  var data = e.params.data;
-  var stateID = data.id;
-  if (stateID=='V') {
-   
-    $("#id_div_producto").css("display", "");
-   
-    
-
-  }
-  else {
-    $("#id_div_producto").css("display", "none");
-
-  }
-    
-});*/
-
    
     </script>
     
