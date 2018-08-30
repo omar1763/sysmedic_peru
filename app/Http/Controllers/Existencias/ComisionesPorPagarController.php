@@ -70,6 +70,7 @@ class ComisionesPorPagarController extends Controller
         ->where('a.pagado','=',0)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        ->groupBy('a.id_atencion')
         ->whereBetween('a.created_at', [$f1, $f2]);
         
 
@@ -84,6 +85,7 @@ class ComisionesPorPagarController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
+        ->groupBy('a.id_atencion')
         ->union($comisionesserv)
        // ->where('a.created_at','=', $f1)
         ->orderby('fecha','desc')
@@ -119,7 +121,7 @@ class ComisionesPorPagarController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-             
+         
 
                   $searchAtecProSer = DB::table('atencion_profesionales_servicios')
                    ->select('*')
@@ -133,6 +135,7 @@ class ComisionesPorPagarController extends Controller
                     $id_servicio = $atecpro->id_servicio;
                 }
 
+
                 $searchSer = DB::table('servicios')
                 ->select('*')
                    // ->where('estatus','=','1')
@@ -144,14 +147,78 @@ class ComisionesPorPagarController extends Controller
                     $porcentaje = $servicios->porcentaje;
                 }
 
+                $recibo =rand(1,99999);
+
+
+                $atencionproser=AtencionServicios::where("id_atencion","=",$id_atencion)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
+
+                $atencionprofser=AtencionProfesionalesServicio::where("id_atencion","=",$id_atencion)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
+                $debitos = new Debitos;
+                $debitos->descripcion =$detalle;
+                $debitos->monto     =$porcentaje;
+                $debitos->origen     ='COMISIONES POR PAGAR';
+                $debitos->id_empresa     =$usuarioEmp;
+                $debitos->id_sucursal     =$usuarioSuc;
+                $debitos->save();
+
+             return redirect()->route('admin.comisionesporpagar.index');
+    }
+
+    public function destroylab($id)
+    {
+        if (! Gate::allows('users_manage')) {
+            return abort(401);
+        }
+
+         $id_usuario = Auth::id();
+      
+        $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+         
+
+                  $searchAtecProSer = DB::table('atencion_profesionales_laboratorios')
+                   ->select('*')
+                   // ->where('estatus','=','1')
+                   ->where('id','=', $id)
+                   ->get();
+
+                   foreach ($searchAtecProSer as $atecpro) {
+                    $id_prof_serv = $atecpro->id;
+                    $id_atencion = $atecpro->id_atencion;
+                    $id_laboratorio = $atecpro->id_laboratorio;
+                }
+
+
+                $searchSer = DB::table('analises')
+                ->select('*')
+                   // ->where('estatus','=','1')
+                ->where('id','=', $id_laboratorio)
+                ->get();
+
+                foreach ($searchSer as $servicios) {
+                    $detalle = $servicios->name;
+                    $porcentaje = $servicios->porcentaje;
+                }
 
                 $recibo =rand(1,99999);
 
-                $atencionproser = AtencionServicios::findOrFail($id);
-                $atencionproser->pagado = 1;
-                $atencionproser->recibo =$recibo;
-                $atencionproser->update();
 
+                $atencionproser=AtencionLaboratorio::where("id_atencion","=",$id_atencion)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
+
+                $atencionprofser=AtencionProfesionalesLaboratorio::where("id_atencion","=",$id_atencion)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
 
                 $debitos = new Debitos;
                 $debitos->descripcion =$detalle;
@@ -161,13 +228,7 @@ class ComisionesPorPagarController extends Controller
                 $debitos->id_sucursal     =$usuarioSuc;
                 $debitos->save();
 
-              //  $atencionprolab=AtencionLaboratorio::findOrFail($id);
-               // $atencionprolab->pagado=1;
-                //$atencionprolab->recibo =$recibo;
-                //$atencionprolab->update();
-
-      //  return view('existencias.comisiones.index');
-       return redirect()->route('admin.comisionesporpagar.index');
+             return redirect()->route('admin.comisionesporpagar.index');
     }
 
     /**
@@ -178,29 +239,44 @@ class ComisionesPorPagarController extends Controller
     public function massDestroy(Request $request)
     {
         
-
-       
       
         if ($request->input('ids')) {
             $entries = AtencionServicios::whereIn('id', $request->input('ids'))->get();
             $entries1 = AtencionLaboratorio::whereIn('id', $request->input('ids'))->get();
             $entries2 = AtencionProfesionalesServicio::whereIn('id', $request->input('ids'))->get();
-  
-           $recibo =rand(1,99999);
+            $entries3 = AtencionProfesionalesLaboratorio::whereIn('id', $request->input('ids'))->get();
 
-            foreach ($entries as $entry) {
-                $entry->pagado= 1;
-                $entry->recibo= $recibo;
-                $entry->update(); 
 
-            }
+          $recibo =rand(1,99999);
 
-             foreach ($entries2 as $entry) {
-                $entry->pagado= 1;
-                $entry->recibo= $recibo;
-                $entry->update(); 
+           foreach ($entries as $entry) {
+            $entry->pagado= 1;
+            $entry->recibo= $recibo;
+            $entry->update(); 
 
-            }
+          }
+
+          foreach ($entries1 as $entry) {
+            $entry->pagado= 1;
+            $entry->recibo= $recibo;
+            $entry->update(); 
+
+          }
+
+
+          foreach ($entries2 as $entry) {
+            $entry->pagado= 1;
+            $entry->recibo= $recibo;
+            $entry->update(); 
+
+          }
+
+          foreach ($entries3 as $entry) {
+            $entry->pagado= 1;
+            $entry->recibo= $recibo;
+            $entry->update(); 
+
+          }
 
                  
         }

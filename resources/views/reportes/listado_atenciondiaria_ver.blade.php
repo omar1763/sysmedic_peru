@@ -12,8 +12,11 @@
 
   <br>
  
-  <p style="margin-left: 15px; float: left;">Fecha:<?=date('d/m/Y');?></p>
-  <p style="margin-left: 450px; float:left;">Hora:<?=date('g:ia');?></p>
+  <p style="margin-left: 15px; float: left;">Fecha de Impresiòn:<?=date('d/m/Y');?></p>
+  <p style="margin-left: 350px; float:left;">Hora de Impresiòn:<?=date('g:ia');?></p>
+  <br>
+  <p style="margin-left: -178px; float: left;">Fecha de Consulta:<?=date('d/m/Y');?></p>
+
  
   <br><br><br>
  @foreach($creditos as $ingresos)

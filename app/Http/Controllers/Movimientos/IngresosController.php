@@ -67,7 +67,7 @@ class IngresosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-       $producto = Productos::get()->pluck('name', 'name');
+       $producto = Productos::get()->pluck('name', 'id');
 
 
         return view('movimientos.ingresos.create', compact('producto'));
@@ -98,7 +98,8 @@ class IngresosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-       
+       dd($request->producto);
+       die();
 
        $ingresos = new Ingresos;
        $ingresos->producto =$request->producto;
@@ -107,7 +108,7 @@ class IngresosController extends Controller
        $ingresos->id_empresa     =$usuarioEmp;
        $ingresos->id_sucursal     =$usuarioSuc;
        $ingresos->save();
-        
+
         $product =Productos::all();
         foreach ($product as $prod) {
                     $nombreprod = $prod->name;

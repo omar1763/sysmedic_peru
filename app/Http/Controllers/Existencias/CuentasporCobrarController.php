@@ -44,20 +44,7 @@ class CuentasporCobrarController extends Controller
                 }
          
          
-                      
-    /*
-                  $cuentasporcobrar = DB::table('atencions as a')
-                    ->select('a.id','a.id_empresa','a.created_at as fecha','a.id_sucursal','b.id_atencion','b.id_paciente','b.costo','b.costoa','b.pendiente','b.pagado','a.created_at','c.nombres as nombres','c.apellidos as apellidos')
-                    ->join('atencion_detalles as b','a.id','b.id_atencion')
-                    ->join('pacientes as c','c.id','b.id_paciente')
-                    ->where('a.id_empresa','=', $usuarioEmp)
-                    ->where('a.id_sucursal','=', $usuarioSuc)
-                    ->where('b.pagado','=', 0)
-                   // ->where('a.created_at','=', $f1)
-                    //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-                    ->orderby('a.created_at','desc')
-                    ->paginate(500);
-       */
+
 
                      $cuentasporcobrar = DB::table('atencion_detalles as a')
                     ->select('b.id','b.id_empresa','b.created_at as fecha','b.id_sucursal','a.id_atencion','a.id_paciente','a.costo','a.costoa','a.pendiente','a.pagado','a.created_at','c.nombres as nombres','c.apellidos as apellidos')
