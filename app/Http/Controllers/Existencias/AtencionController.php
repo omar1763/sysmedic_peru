@@ -516,7 +516,7 @@ public function cardainput3($id, Request $request){
                 $serviciosprofatencion->montoser = $request->precioserv;
                 $serviciosprofatencion->id_sucursal =$usuarioSuc;
                 $serviciosprofatencion->id_empresa =$usuarioEmp;
-                $serviciosprofatencion->id_atec_servicio =$serviciosatencion->id;
+                //$serviciosprofatencion->id_atec_servicio =$serviciosatencion->id;
                 $serviciosprofatencion->save();
 
             }
@@ -569,7 +569,7 @@ public function cardainput3($id, Request $request){
                $serviciosproflab->montolab = $request->preciopublico;
                $serviciosproflab->id_sucursal =$usuarioSuc;
                $serviciosproflab->id_empresa =$usuarioEmp;
-               $serviciosproflab->id_atec_lab =$analisisatencion->id;
+               //$serviciosproflab->id_atec_lab =$analisisatencion->id;
                $serviciosproflab->save();
            }
        }
