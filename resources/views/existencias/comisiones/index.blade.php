@@ -67,7 +67,7 @@
                             <tr data-entry-id="{{ $com->id }}">
                                 <td></td>
                                 <td>{{ $com->nombres.' '.$com->apellidos }}</td>
-                                <td>{{ $com->profnombre.' '.$com->profapellido }}</td>
+                                <td>Jesus Medina</td>
                                 <td>{{ $com->origen}}</td>
                                 <td>{{ $com->costo}}</td>
                                 <td>{{ $com->porcentaje}}</td>
@@ -80,7 +80,7 @@
                                         'method' => 'DELETE',
                                         'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
                                         'route' => ['admin.comisionesporpagar.destroy', $com->id])) !!}
-                                    {!! Form::submit(trans('global.app_pay'), array('class' => 'btn btn-xs btn-danger')) !!}
+                                    {!! Form::submit(trans('global.app_pay'), array('class' => 'btn btn-xs btn-info')) !!}
                                     {!! Form::close() !!}
 
                                 @endif
