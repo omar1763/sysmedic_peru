@@ -27,10 +27,10 @@
   <tbody>
   @foreach($reciboprofesional as $recibo)
   <tr>
-    <td>{{ $recibo->nombres.' '.$recibo->apellidos }}</td>
-    <td>{{ $recibo->fecha}}</td>
-    <td>{{ $recibo->detalle}}</td>
-    <td>{{ $recibo->porcentaje}}</td>
+    <td>{{ $recibo["nombres"].' '.$recibo["apellidos"] }}</td>
+    <td>{{ $recibo["fecha"]}}</td>
+    <td>{{ $recibo["detalle"]}}</td>
+    <td>{{ $recibo["porcentaje"]}}</td>
   </tr>
   @endforeach
  </tbody>

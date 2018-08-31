@@ -46,7 +46,7 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        
+                        <th>id</th>
                         <th>@lang('global.comisionespagadas.fields.paciente')</th>
                         <th>@lang('global.comisionespagadas.fields.profesional')</th>
                         <th>@lang('global.comisionespagadas.fields.origen')</th>
@@ -62,6 +62,7 @@
                         @foreach ($comisionespagadas as $com)
                             <tr data-entry-id="{{ $com->id }}">
                                 <td></td>
+                                <td>{{$com->id_atencion}}</td>
                                 <td>{{ $com->nombres.' '.$com->apellidos }}</td>
                                 <td>{{ $com->profnombre.' '.$com->profapellido }}</td>
                                 <td>{{ $com->origen}}</td>
@@ -70,7 +71,7 @@
                                 <td> 
                                  @if(Auth::user()->rol!="Recepcionista")
 
-                                  <a  target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com->id_profesional}}/{{$com->id}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
+                                  <a  target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com->id_atencion}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
                                  @endif   
                                 </td>
 
