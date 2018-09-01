@@ -85,7 +85,7 @@ class ComisionesPagadasController extends Controller
         */
 
   $comisioneslab = DB::table('atencion_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
+        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido', 'a.recibo')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         //->join('atencion_profesionales_servicios as c','a.id_profesional','c.id_profesional')
         //->join('servicios as d','d.id','c.id_servicio')
@@ -99,7 +99,7 @@ class ComisionesPagadasController extends Controller
         
 
         $comisionespagadas = DB::table('atencion_laboratorios as a')
-       ->select('a.id','a.id_analisis','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido')
+        ->select('a.id','a.id_analisis','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido', 'a.recibo')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         //->join('atencion_profesionales_laboratorios as c','a.id_profesional','c.id_profesional')
        // ->join('analises as d','d.id','c.id_laboratorio')
@@ -114,12 +114,26 @@ class ComisionesPagadasController extends Controller
         ->orderby('fecha','desc')
         ->get();
 
-
-
-
+        $comisionespagadas = json_encode($comisionespagadas);
+        $comisionespagadas = self::unique_multidim_array(json_decode($comisionespagadas, true), "id_atencion");
 
         return view('existencias.comisionespagadas.index', compact('comisionespagadas'));
     }
  
+
+  static function unique_multidim_array($array, $key) {
+    $temp_array = array();
+    $i = 0;
+    $key_array = array();
+   
+    foreach($array as $val) {
+        if (!in_array($val[$key], $key_array)) {
+            $key_array[$i] = $val[$key];
+            $temp_array[$i] = $val;
+        }
+        $i++;
+    }
+    return $temp_array;
+  }     
 
 }

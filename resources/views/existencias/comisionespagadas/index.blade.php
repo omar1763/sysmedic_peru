@@ -60,18 +60,18 @@
                 <tbody>
                     @if (count($comisionespagadas) > 0)
                         @foreach ($comisionespagadas as $com)
-                            <tr data-entry-id="{{ $com->id }}">
+                            <tr data-entry-id="{{ $com['id'] }}">
                                 <td></td>
-                                <td>{{$com->id_atencion}}</td>
-                                <td>{{ $com->nombres.' '.$com->apellidos }}</td>
-                                <td>{{ $com->profnombre.' '.$com->profapellido }}</td>
-                                <td>{{ $com->origen}}</td>
-                                <td>{{ $com->porcentaje}}</td>
-                                <td>{{ $com->fecha}}</td>
+                                <td>{{ $com["id_atencion"] }}</td>
+                                <td>{{ $com["nombres"].' '.$com["apellidos"] }}</td>
+                                <td>{{ $com["profnombre"].' '.$com["profapellido"] }}</td>
+                                <td>{{ $com["origen"]}}</td>
+                                <td>{{ $com["porcentaje"]}}</td>
+                                <td>{{ $com["fecha"]}}</td>
                                 <td> 
                                  @if(Auth::user()->rol!="Recepcionista")
 
-                                  <a  target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com->id_atencion}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
+                                  <a  target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com['id_atencion']}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
                                  @endif   
                                 </td>
 

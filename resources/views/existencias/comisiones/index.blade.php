@@ -6,8 +6,6 @@
    
       {!! Form::open(['method' => 'get', 'route' => ['admin.comisionesporpagar.index']]) !!}
 
-
-
       <div class="row">
          <div class="col-md-4">
             {!! Form::label('fecha', 'Fecha Inicio', ['class' => 'control-label']) !!}
@@ -67,7 +65,7 @@
                             <tr data-entry-id="{{ $com->id }}">
                                 <td></td>
                                 <td>{{ $com->nombres.' '.$com->apellidos }}</td>
-                                <td>Jesus Medina</td>
+                                <td>{{$com->pnombres.' '.$com->papellidos}}</td>
                                 <td>{{ $com->origen}}</td>
                                 <td>{{ $com->costo}}</td>
                                 <td>{{ $com->porcentaje}}</td>

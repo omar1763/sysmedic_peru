@@ -202,6 +202,18 @@
                         </a>
                     </li>
                 </ul>
+
+                  <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'comisionespagadas' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.comisionespagadas.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.comisionespagadas.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>                
                  
             </li>
 
