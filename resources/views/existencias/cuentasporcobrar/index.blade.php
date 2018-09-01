@@ -57,7 +57,6 @@
                                 <td>{{ $cc->pendiente }}</td>
                                 <td>{{ $cc->fecha }}</td>
                                 <td>
-                              @if(Auth::user()->rol!="Recepcionista")
 
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
@@ -66,7 +65,6 @@
                                         'route' => ['admin.cuentasporcobrar.destroy', $cc->id])) !!}
                                     {!! Form::submit(trans('global.app_cob'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
-                            @endif
                                 </td>
 
                             </tr>
