@@ -51,8 +51,7 @@ class IngresosController extends Controller
         ->orderby('a.created_at','desc')
         ->paginate(1000);
 
-
-        $productos = Productos::with('nombre');
+        $productos = Productos::with('name');
 
         return view('movimientos.ingresos.index', compact('productos','ingresos'));
     }
@@ -67,7 +66,7 @@ class IngresosController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-       $producto = Productos::get()->pluck('name', 'id');
+       $producto = Productos::get()->pluck('name','name');
 
 
         return view('movimientos.ingresos.create', compact('producto'));
@@ -98,9 +97,7 @@ class IngresosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-       dd($request->producto);
-       die();
-
+      
        $ingresos = new Ingresos;
        $ingresos->producto =$request->producto;
        $ingresos->cantidad     =$request->cantidad;
@@ -110,12 +107,22 @@ class IngresosController extends Controller
        $ingresos->save();
 
         $product =Productos::all();
-        foreach ($product as $prod) {
+
+         $searchproduct = DB::table('productos')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('name','=', $request->producto)
+                    ->get();
+
+        foreach ($searchproduct as $prod) {
+                    $idproduc = $prod->id;
                     $nombreprod = $prod->name;
                     $cantidadprod = $prod->cantidad;
                 }
+
+    
       
-       $productos=Productos::where('name', '=' , $nombreprod)->get()->first();
+       $productos=Productos::where('id', '=' , $idproduc)->get()->first();
        $productos->cantidad=$cantidadprod + $ingresos->cantidad;
        $productos->update();
 

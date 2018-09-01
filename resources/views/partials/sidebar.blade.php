@@ -179,7 +179,6 @@
                     </li>
                 </ul>
 
-               
                  <ul class="treeview-menu">
 
                     <li class="{{ $request->segment(2) == 'cuentasporcobrar' ? 'active active-sub' : '' }}">
@@ -202,7 +201,6 @@
                         </a>
                     </li>
                 </ul>
-
                   <ul class="treeview-menu">
 
                     <li class="{{ $request->segment(2) == 'comisionespagadas' ? 'active active-sub' : '' }}">
@@ -214,7 +212,6 @@
                         </a>
                     </li>
                 </ul>                
-                 
             </li>
 
               <li class="treeview">
