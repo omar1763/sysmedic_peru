@@ -495,18 +495,19 @@ public function cardainput3($id, Request $request){
        $atencion->id_sucursal     =$usuarioSuc;
        $atencion->save();
 
+  
          if(! is_null($request->servicios)){
-                $serviciosatencion = new AtencionServicios;
-                $serviciosatencion->id_atencion =$atencion->id;
-                $serviciosatencion->id_servicio    =0;
-                $serviciosatencion->origen    ='Servicios';
-                $serviciosatencion->id_profesional =$request->profesional;
-                $serviciosatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
-                $serviciosatencion->montoser = $request->precioserv;
-                $serviciosatencion->id_sucursal =$usuarioSuc;
-                $serviciosatencion->id_empresa =$usuarioEmp;
-                $serviciosatencion->save();
 
+         $serviciosatencion = new AtencionServicios;
+         $serviciosatencion->id_atencion =$atencion->id;
+         $serviciosatencion->id_servicio    =0;
+         $serviciosatencion->origen    ='Servicios';
+         $serviciosatencion->id_profesional =$request->profesional;
+         $serviciosatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
+         $serviciosatencion->montoser = $request->precioserv;
+         $serviciosatencion->id_sucursal =$usuarioSuc;
+         $serviciosatencion->id_empresa =$usuarioEmp;
+         $serviciosatencion->save();
          foreach ($request->servicios as $key => $value) {
                 $serviciosprofatencion = new AtencionProfesionalesServicio;
                 $serviciosprofatencion->id_atencion =$atencion->id;
@@ -518,9 +519,7 @@ public function cardainput3($id, Request $request){
                 $serviciosprofatencion->id_empresa =$usuarioEmp;
                 //$serviciosprofatencion->id_atec_servicio =$serviciosatencion->id;
                 $serviciosprofatencion->save();
-
             }
-
         }
 
        $atenciondetalle = new AtencionDetalle;
@@ -529,7 +528,6 @@ public function cardainput3($id, Request $request){
        $atenciondetalle->costo           =$request->preciototal;
        $atenciondetalle->origen           =$request->origen_paciente;
        $atenciondetalle->acuenta         =$request->acuenta;
-     //  $atenciondetalle->id_atec_servicio         =$serviciosatencion->id;
        $atenciondetalle->costoa          =$request->costoa;
        $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
        $atenciondetalle->tarjeta         =$request->tarjeta;
@@ -548,11 +546,9 @@ public function cardainput3($id, Request $request){
 
 
        if(! is_null($request->analises)){
-
-
            $analisisatencion = new AtencionLaboratorio;
            $analisisatencion->id_atencion =$atencion->id;
-           $analisisatencion->id_analisis    =$value;
+           $analisisatencion->id_analisis    =0;
            $analisisatencion->origen    ='Laboratorios';
            $analisisatencion->id_profesional =$request->profesional;
            $analisisatencion->porcentaje =($request->porcentajelab*$request->preciopublico)/100;
