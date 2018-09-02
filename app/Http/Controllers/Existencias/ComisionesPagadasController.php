@@ -120,7 +120,6 @@ class ComisionesPagadasController extends Controller
         return view('existencias.comisionespagadas.index', compact('comisionespagadas'));
     }
  
-
   static function unique_multidim_array($array, $key) {
     $temp_array = array();
     $i = 0;
