@@ -168,6 +168,10 @@ class GastosController extends Controller
         }
         $gastos = Gastos::findOrFail($id);
         $gastos->update($request->all());
+
+        $debitos=Debitos::where("id_gasto","=",$id)
+                          ->update(['monto' => $request->monto,'descripcion' => $gastos->concepto]);
+
        
         return redirect()->route('admin.gastos.index');
     }
@@ -185,6 +189,9 @@ class GastosController extends Controller
         }
         $gastos = Gastos::findOrFail($id);
         $gastos->delete();
+
+        $debitos = Debitos::where('id_gasto',$id )->delete();
+
 
         return redirect()->route('admin.gastos.index');
     }
