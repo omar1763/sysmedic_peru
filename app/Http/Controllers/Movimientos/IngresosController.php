@@ -63,11 +63,25 @@ class IngresosController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
-       $producto = Productos::get()->pluck('name','name');
+         $id_usuario = Auth::id();
 
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       //$producto = Productos::get()->pluck('name','name');
+        $producto = DB::table('productos')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','name');
 
         return view('movimientos.ingresos.create', compact('producto'));
     }
@@ -146,7 +160,11 @@ class IngresosController extends Controller
      
 
         $ingresos = Ingresos::findOrFail($id);
-        $producto = Productos::get()->pluck('nombre', 'nombre');
+         $producto = DB::table('productos')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','name');
 
         return view('movimientos.ingresos.edit', compact('producto', 'ingresos'));
     }
