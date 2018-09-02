@@ -702,6 +702,8 @@ class PdfController extends Controller
 
        public function listado_atenciondiaria_ver(Request $request) 
     {
+       $f1 = date('d-m-YYYY');
+       $f1 = $request->fecha;
        
        $creditosSUMATOTALINGRESOS =PdfController::atenciondiariaSUMATOTAL($request);
        $creditosSERVICIOS =PdfController::atenciondiariaSERVICIOS($request);
@@ -716,7 +718,7 @@ class PdfController extends Controller
        $creditosTJ =PdfController::ingresosTJ($request);
        $empresaSucursal =PdfController::empresaSucursal();
 
-       $view = \View::make('reportes.listado_atenciondiaria_ver')->with('creditos', $creditosSUMATOTALINGRESOS)->with('servicios', $creditosSERVICIOS)->with('serviciosmonto', $creditosSERVICIOSMONTO)->with('otrosingresos', $creditosOTROSINGRESOS)->with('otrosingresosmonto', $creditosOTROSINGRESOMONTO)->with('debitostotal', $debitosSUMATOTAL)->with('debitosdetalle', $debitosDETALLE)->with('ingresosef', $creditosEF)->with('ingresostj', $creditosTJ)->with('empresasucursal', $empresaSucursal)->with('ingresoscxc', $creditosCXC)->with('ingresoscxcmonto', $creditosCXCMONTO);
+       $view = \View::make('reportes.listado_atenciondiaria_ver')->with('creditos', $creditosSUMATOTALINGRESOS)->with('servicios', $creditosSERVICIOS)->with('serviciosmonto', $creditosSERVICIOSMONTO)->with('otrosingresos', $creditosOTROSINGRESOS)->with('otrosingresosmonto', $creditosOTROSINGRESOMONTO)->with('debitostotal', $debitosSUMATOTAL)->with('debitosdetalle', $debitosDETALLE)->with('ingresosef', $creditosEF)->with('ingresostj', $creditosTJ)->with('empresasucursal', $empresaSucursal)->with('ingresoscxc', $creditosCXC)->with('ingresoscxcmonto', $creditosCXCMONTO)->with('fecha',$f1);
        $pdf = \App::make('dompdf.wrapper');
        $pdf->loadHTML($view);
        
