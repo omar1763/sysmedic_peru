@@ -84,34 +84,32 @@ class ComisionesPagadasController extends Controller
         ->paginate(5000);
         */
 
-  $comisioneslab = DB::table('atencion_servicios as a')
-        ->select('a.id','a.id_servicio','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido', 'a.recibo')
-        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        //->join('atencion_profesionales_servicios as c','a.id_profesional','c.id_profesional')
-        //->join('servicios as d','d.id','c.id_servicio')
-        ->join('pacientes as e','e.id','b.id_paciente')
+    $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
+        ->select('a.id','a.recibo', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
+        'a.recibo', 'a.created_at as fecha', 'a.montolab as costo', 'f.name as nombres',
+        'f.apellidos as apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos')
         ->join('profesionales as f','f.id','a.id_profesional')
-        //->groupBy('a.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
+        ->groupBy('a.recibo')
         ->where('a.pagado','=',1)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2]);
-        
 
-        $comisionespagadas = DB::table('atencion_laboratorios as a')
-        ->select('a.id','a.id_analisis','a.id_profesional','a.id_atencion','a.origen','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje','b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido', 'a.recibo')
-        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        //->join('atencion_profesionales_laboratorios as c','a.id_profesional','c.id_profesional')
-       // ->join('analises as d','d.id','c.id_laboratorio')
-        ->join('pacientes as e','e.id','b.id_paciente')
+        $comisionespagadas = DB::table('atencion_profesionales_servicios as a')
+        ->select('a.id','a.recibo', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha', 'a.montoser as costo', 'f.name as nombres', 'f.apellidos as apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos')
         ->join('profesionales as f','f.id','a.id_profesional')
-        ->where('a.pagado','=',1)
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('atencion_servicios as s', 'a.id_atencion', 's.id_atencion')
+        ->groupBy('a.recibo')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.pagado', '=', 1)
         ->whereBetween('a.created_at', [$f1, $f2])
-        ->union($comisioneslab)
-       // ->where('a.created_at','=', $f1)
-        ->orderby('fecha','desc')
+        ->union($comisiones_lab)
         ->get();
 
         $comisionespagadas = json_encode($comisionespagadas);

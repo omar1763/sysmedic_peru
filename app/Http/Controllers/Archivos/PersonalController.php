@@ -25,9 +25,7 @@ class PersonalController extends Controller
      */
     public function index()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+       
 
          $id_usuario = Auth::id();
 
@@ -57,10 +55,7 @@ class PersonalController extends Controller
     }
 
 
-    public function getNameAndApellidosAttribute()
-    {
-        return $this->name . ' ' . $this->apellidos;
-    }
+ 
 
 
      public static function perbyemp(){
@@ -102,9 +97,7 @@ class PersonalController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
 
         return view('archivos.personal.create');
     }
@@ -117,9 +110,7 @@ class PersonalController extends Controller
      */
     public function store(StorePersonalRequest $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
 
        $id_usuario = Auth::id();
 
@@ -157,9 +148,7 @@ class PersonalController extends Controller
      */
     public function edit($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
 
         $personal = Personal::findOrFail($id);
 
@@ -175,9 +164,7 @@ class PersonalController extends Controller
      */
     public function update(UpdatePersonalRequest $request, $id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
         $personal = Personal::findOrFail($id);
         $personal->update($request->all());
        
@@ -192,9 +179,7 @@ class PersonalController extends Controller
      */
     public function destroy($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
         $personal = Personal::findOrFail($id);
         $personal->delete();
 
@@ -208,9 +193,7 @@ class PersonalController extends Controller
      */
     public function massDestroy(Request $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
         if ($request->input('ids')) {
             $entries = Personal::whereIn('id', $request->input('ids'))->get();
 

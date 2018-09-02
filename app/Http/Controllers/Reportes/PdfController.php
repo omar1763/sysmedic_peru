@@ -792,13 +792,13 @@ class PdfController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
-         $recibo = DB::table('atencion_profesionales_servicios')->select('recibo')->where('id_atencion', '=', $id)->get(['recibo'])->first()->recibo;  
+         $recibo = DB::table('atencion_profesionales_servicios')->select('recibo')->where('recibo', '=', $id)->get(['recibo'])->first()->recibo;  
 
          $reciboprofesional = DB::table('atencion_profesionales_servicios as a')
         ->select('a.id','a.id_servicio','a.id_profesional', 'a.recibo', 'a.id_atencion','a.created_at as fecha','a.pagado','a.id_sucursal','a.id_empresa','a.porcentaje',/*'b.id_atec_servicio',*/'b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro','d.detalle')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        ->join('atencion_profesionales_servicios as c','a.id_atencion','c.id_atencion')
-        ->join('servicios as d','d.id','c.id_servicio')
+       // ->join('atencion_profesionales_servicios as c','a.id_atencion','c.id_atencion')
+        ->join('servicios as d','d.id','a.id_servicio')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->where('a.recibo','=', $recibo)
@@ -807,7 +807,7 @@ class PdfController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->get();
 
-     
+
   
         if($reciboprofesional){
             return $reciboprofesional;
@@ -842,7 +842,8 @@ class PdfController extends Controller
        $view = \View::make('reportes.recibo_profesionales_ver', ['reciboprofesional' => $reciboprofesional, 'profnombre' => $reciboprofesional[0]["profnombre"], 'profapellido' => $reciboprofesional[0]["profapellido"], "centro" => $reciboprofesional[0]["centro"], "recibo" => $reciboprofesional[0]["recibo"]]);
        $pdf = \App::make('dompdf.wrapper');
        $pdf->loadHTML($view);
-       
+
+
        return $pdf->stream('recibo_profesionales_ver');
      }else{
       return response()->json([false]);
