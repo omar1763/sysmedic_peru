@@ -41,7 +41,12 @@
    <p style="text-align: left;"><strong>MOTIVO DE CONSULTA:______________________________________________________________________</strong></p> 
    <p style="text-align: left;"><strong>TIPO DE ENFERMEDAD ACTUAL:____________________</strong></p> 
    <p style="text-align: right;margin-top: -30px;margin-right: 130px"><strong>EVOL. ENF ACTUAL:</strong>____________________</p>
-  <p style="text-align: left;"><strong>ENFERMEDAD ACTUAL:_________________________________________________________________________</strong></p> 
+  <p style="text-align: left;"><strong>ENFERMEDAD ACTUAL:</strong>_______________________________________________________________________________<br>
+  _______________________________________________________________________________________________________<br>
+  _______________________________________________________________________________________________________<br>
+  _______________________________________________________________________________________________________<br>
+  _______________________________________________________________________________________________________<br>
+  _______________________________________________________________________________________________________</p> 
   <p style="text-align: left;"><strong>FUNCIONES BIOLÒGICAS:</strong></p> 
   <p style="text-align: left;"><strong>APETITO:</strong></p>
   <p style="text-align: right; margin-top: -30px; margin-right: 600px;"><strong>SED:</strong></p> 
