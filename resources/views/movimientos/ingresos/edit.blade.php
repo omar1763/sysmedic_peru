@@ -39,7 +39,7 @@
                 <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('fechaingreso', 'Fecha de Ingreso', ['class' => 'control-label']) !!}
-                    {!! Form::number('fechaingreso', old('fechaingreso'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::date('fechaingreso', old('fechaingreso'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('fechaingreso'))
                         <p class="help-block">
@@ -47,7 +47,7 @@
                         </p>
                     @endif
                 </div>
-            </div>iv class="panel-body">
+            </div>
           
             
             

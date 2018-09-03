@@ -56,11 +56,7 @@ class IngresosController extends Controller
         return view('movimientos.ingresos.index', compact('productos','ingresos'));
     }
 
-    /**
-     * Show the form for creating new User.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function create()
     {
          $id_usuario = Auth::id();
@@ -154,9 +150,18 @@ class IngresosController extends Controller
      */
     public function edit($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+       $id_usuario = Auth::id();
+
+        $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
      
 
         $ingresos = Ingresos::findOrFail($id);

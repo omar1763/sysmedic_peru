@@ -99,12 +99,34 @@ class PaquetesController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
-       $servicio = Servicios::get()->pluck('detalle', 'id');
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+        $servicio = DB::table('servicios')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('detalle','id');
+
+      // $servicio = Servicios::get()->pluck('detalle', 'id');
      //  dd($servicio);
-       $analisis = Analisis::get()->pluck('name','id');
+         $analisis = DB::table('analises')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','id');
+
+    //   $analisis = Analisis::get()->pluck('name','id');
     
         return view('archivos.paquetes.create', compact('servicio','analisis'));
     }
@@ -183,15 +205,12 @@ class PaquetesController extends Controller
      */
     public function edit($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+       
      
 
       $paquetes = Paquetes::find($id);
        $select=json_decode($paquetes->servicio);
 
-      // $paquetes = PaquetesServ::findOrFail($id);
     
      
        $servicioIds = [];

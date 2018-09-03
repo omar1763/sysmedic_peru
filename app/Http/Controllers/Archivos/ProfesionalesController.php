@@ -97,10 +97,29 @@ class ProfesionalesController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
-       $centro = Centros::get()->pluck('name', 'name');
+        
+      $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       //$producto = Productos::get()->pluck('name','name');
+        $centro = DB::table('centros')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','name');
+
+
+
        $especialidad = Especialidad::get()->pluck('nombre', 'nombre');
 
 
@@ -162,13 +181,29 @@ class ProfesionalesController extends Controller
      */
     public function edit($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       //$producto = Productos::get()->pluck('name','name');
+        $centro = DB::table('centros')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','name');
      
 
         $profesionales = Profesionales::findOrFail($id);
-        $centro = Centros::get()->pluck('name', 'name');
+      
         $especialidad = Especialidad::get()->pluck('nombre', 'nombre');
 
         return view('archivos.profesionales.edit', compact('profesionales', 'roles','centro','especialidad'));

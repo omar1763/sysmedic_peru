@@ -64,11 +64,29 @@ class AnalisisController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
+
+        $id_usuario = Auth::id();
+
+        $searchUsuarioID = DB::table('users')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id','=', $id_usuario)
+        ->get();
+
+        foreach ($searchUsuarioID as $usuario) {
+            $usuarioEmp = $usuario->id_empresa;
+            $usuarioSuc = $usuario->id_sucursal;
         }
+
+
   
-       $laboratorio = Laboratorios::get()->pluck('name', 'name');
+      // $laboratorio = Laboratorios::get()->pluck('name', 'name');
+
+       $laboratorio = DB::table('laboratorios')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','name');
 
         return view('archivos.analisis.create', compact('laboratorio'));
     }
@@ -123,15 +141,30 @@ class AnalisisController extends Controller
      */
     public function edit($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
+      
+             $id_usuario = Auth::id();
+
+        $searchUsuarioID = DB::table('users')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id','=', $id_usuario)
+        ->get();
+
+        foreach ($searchUsuarioID as $usuario) {
+            $usuarioEmp = $usuario->id_empresa;
+            $usuarioSuc = $usuario->id_sucursal;
         }
-     
+
+
+       $laboratorio = DB::table('laboratorios')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','name');
+
 
         $analisis = Analisis::findOrFail($id);
-        $laboratorio = Laboratorios::get()->pluck('name', 'name');
-      
-
+    
         return view('archivos.analisis.edit', compact('analisis', 'laboratorio'));
     }
 
