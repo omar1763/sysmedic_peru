@@ -44,8 +44,9 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        <th>@lang('global.comisionesporpagar.fields.paciente')</th>
                         <th>@lang('global.comisionesporpagar.fields.profesional')</th>
+                        <th>@lang('global.comisionesporpagar.fields.paciente')</th>
+
                        
                        <th>@lang('global.comisionesporpagar.fields.origen')</th>
 
