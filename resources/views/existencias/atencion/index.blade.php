@@ -62,7 +62,7 @@
 
                                 <td>{{ $atec->origen }}</td>
 
-                           <td> 
+                              <td> 
                                   @if($servicios->selectAllServicios($atec->id_atencion))
                                   {{$servicios->selectAllServicios($atec->id_atencion)}}
                                   @else

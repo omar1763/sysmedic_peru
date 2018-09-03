@@ -63,31 +63,35 @@ class ComisionesPorPagarController extends Controller
         
         */
 
-        $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
+       $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
         ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
         'a.recibo', 'a.created_at as fecha', 'a.montolab as costo', 'f.name as nombres',
-        'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos')
+        'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('pacientes as p','p.id','b.id_paciente')
         ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
+        ->join('analises as c','c.id','a.id_laboratorio')
         ->where('a.pagado','=',0)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2]);
 
         $comisiones = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha', 'a.montoser as costo', 'f.name as nombres', 'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos')
+        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha', 'a.montoser as costo', 'f.name as nombres', 'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('pacientes as p','p.id','b.id_paciente')
         ->join('atencion_servicios as s', 'a.id_atencion', 's.id_atencion')
+        ->join('servicios as c','c.id','a.id_servicio')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-        ->where('a.pagado', '=', '0')
+        ->where('a.pagado', '=', 0)
         ->whereBetween('a.created_at', [$f1, $f2])
         ->union($comisiones_lab)
         ->get();
+
+      
 
         $servicios = new Servicios();
         $analisis = new Analisis();
