@@ -11,6 +11,8 @@ use App\Empresas;
 use App\Locales;
 use App\Servicios;
 use App\Personal;
+use App\Paquetes;
+use App\PaquetesServ;
 use App\Pacientes;
 use App\Profesionales;
 use App\Analisis;
@@ -1029,6 +1031,66 @@ class PdfController extends Controller
      
        
         return $pdf->stream('resultados_lab_ver');
+
+    }
+
+     public function ticketAtencion($id){
+       
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+        
+                $atencion = DB::table('atencions as a')
+                ->select('a.id','a.created_at','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.pendiente','d.observaciones','d.id_paciente','d.origen')
+
+                ->join('atencion_detalles as d','a.id','d.id_atencion')
+
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->where('a.id','=', $id)
+                ->orderby('a.created_at','desc')
+                ->get();
+
+
+        if(!is_null($atencion)){
+            return $atencion;
+         }else{
+            return false;
+         }  
+
+     }
+
+
+
+       public function ticket_atencion_ver($id) 
+    {
+       
+     $atencion =PdfController::ticketAtencion($id);
+
+     $servicios = new Servicios();
+     $analisis = new Analisis();
+     $paquete = new Paquetes();
+     $paquetes = new PaquetesServ();
+     $atenciondetalle = new AtencionDetalle();
+
+     $view = \View::make('reportes.ticket_atencion_ver')->with('atencion', $atencion)->with('servicios', $servicios)->with('analisis', $analisis)->with('paquete', $paquete)->with('paquetes', $paquetes)->with('atenciondetalle', $atenciondetalle);
+     $pdf = \App::make('dompdf.wrapper');
+     $pdf->loadHTML($view);
+     
+       
+        return $pdf->stream('ticket_atencion_ver');
 
     }
 

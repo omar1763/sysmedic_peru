@@ -33,6 +33,50 @@ header {
   border-bottom: 1px solid #AAAAAA;
 }
 
+.paciente {
+
+margin-left: 250px;
+margin-top: 50px;
+
+}
+.fecha {
+
+margin-left: 250px;
+margin-top:-20px;
+
+}
+.servicios {
+
+margin-left: 200px;
+margin-top:40px;
+
+}
+.analisis {
+
+margin-left: 200px;
+margin-top:-30px;
+
+}
+
+.acuenta {
+
+margin-left: 80px;
+margin-top:20px;
+
+}
+
+.pendiente {
+
+margin-left: 190px;
+margin-top:-50px;
+
+}
+.total {
+
+margin-left: 590px;
+margin-top:100px;
+
+
 #logo {
   float: left;
   margin-top: 8px;

@@ -21,6 +21,7 @@
     <th scope="col">PACIENTE</th>
     <th scope="col">FECHA</th>
     <th scope="col">DETALLE</th>
+    <th scope="col">MONTO</th>
   </tr>
   </thead>
 
@@ -30,19 +31,12 @@
     <td>{{ $recibo["nombres"].' '.$recibo["apellidos"] }}</td>
     <td>{{ $recibo["fecha"]}}</td>
     <td>{{ $recibo["detalle"]}}</td>
+    <td>{{ $recibo["porcentaje"]}}</td>
+
   </tr>
   @endforeach
  </tbody>
- <tr>
-    <th scope="row">TOTAL SERVICIOS:</th>
-    
-    <td><strong>{{ $porcentaje}}</strong></td>
-  </tr>
-   <tr>
-    <th scope="row">TOTAL LABORATORIOS:</th>
-    
-    <td><strong>{{ $recibo["porcentaje"]}}</strong></td>
-  </tr>
+
 </table>
 
 

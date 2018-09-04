@@ -127,6 +127,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
   Route::get('/recibo_profesionales_ver/{id}','Reportes\PdfController@recibo_profesionales_ver');
   Route::get('/resultados_ver/{id}','Reportes\PdfController@resultados_ver')->name('resultados');
   Route::get('/resultados_lab_ver/{id}','Reportes\PdfController@resultados_lab_ver')->name('resultados_lab');
+  Route::get('/ticket_atencion_ver/{id}','Reportes\PdfController@ticket_atencion_ver');
 
 
 
