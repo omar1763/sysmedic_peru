@@ -36,32 +36,33 @@ header {
 .paciente {
 
 margin-left: 100px;
-margin-top: -30px;
+margin-top: -10px;
+margin-bottom: -10px;
 
 }
 .fecha {
 
 margin-left: 100px;
-margin-top:-20px;
+margin-top:-30px;
 
 
 }
 .servicios {
 
-margin-left: 100px;
+margin-left: 50px;
 margin-top:40px;
 
 }
 .analisis {
 
-margin-left: 100px;
+margin-left: 50px;
 margin-top:-30px;
 
 }
 
 .acuenta {
 
-margin-left: 60px;
+margin-left: 50px;
 margin-top:40px;
 
 }
@@ -74,8 +75,8 @@ margin-top:-50px;
 }
 .total {
 
-margin-left: 360px;
-margin-top:10px;
+margin-left: 500px;
+margin-top:5px;
 }
 
 
