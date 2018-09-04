@@ -110,7 +110,7 @@ class ComisionesPagadasController extends Controller
         ->where('a.pagado', '=', 1)
         ->whereBetween('a.created_at', [$f1, $f2])
         ->union($comisiones_lab)
-        ->get();
+        ->distinct()->get();
 
         $comisionespagadas = json_encode($comisionespagadas);
         $comisionespagadas = self::unique_multidim_array(json_decode($comisionespagadas, true), "id_atencion");
