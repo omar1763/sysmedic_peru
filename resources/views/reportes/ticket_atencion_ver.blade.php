@@ -21,6 +21,7 @@
 			@if($servicios->selectAllServicios($atec->id_atencion))
 			{{$servicios->selectAllServicios($atec->id_atencion)}}
 			@else
+			Sin Servicios
 			@endif
 		</strong></p>
 	</div>
@@ -30,6 +31,7 @@
 			@if($analisis->selectAllAnalisis($atec->id_atencion))
 			{{$analisis->selectAllAnalisis($atec->id_atencion)}}
 			@else
+			Sin Laboratorios
 			@endif
 		</strong></p>
 	</div>
