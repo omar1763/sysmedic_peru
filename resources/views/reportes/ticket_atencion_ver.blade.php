@@ -24,6 +24,7 @@
 			@endif
 		</strong></p>
 	</div>
+	
 	<div class="analisis">
 		<p><strong> 
 			@if($analisis->selectAllAnalisis($atec->id_atencion))
@@ -40,6 +41,7 @@
 	<div class="pendiente">
 		<p><strong>Deuda: {{ $atec->pendiente}}</strong></p>
 	</div>
+
 	<div class="total">
 		<p><strong>{{ $atec->costo}}</strong></p>
 	</div>
