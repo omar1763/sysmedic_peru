@@ -24,6 +24,8 @@ class UpdateAnalisisRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'tiempo' => 'required',
+            'material' => 'required',
             'laboratorio' => 'required',
             'preciopublico' => 'required',
             'costlab' => 'required',

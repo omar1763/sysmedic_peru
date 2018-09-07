@@ -15,13 +15,16 @@ use Hash;
  * @property string $preciopublico
  * @property string $porcentaje
  * @property string $costlab
+ * @property string $material
+ * @property string $tiempo
+
 */
 class Analisis extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
 
-    protected $fillable = ['name','laboratorio','preciopublico','porcentaje','costlab'];
+    protected $fillable = ['name','laboratorio','preciopublico','porcentaje','costlab','material','tiempo'];
    
         public function selectAllAnalisis($id)
     {
