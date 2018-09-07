@@ -38,15 +38,15 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                        <th>@lang('global.atencion.fields.nombres_apellidos')</th>
-                        <th>@lang('global.atencion.fields.origen')</th>
-                        <th>@lang('global.atencion.fields.servicio')</th>
-                        <th>@lang('global.atencion.fields.paquete')</th>
-                        
-                        <th>@lang('global.atencion.fields.laboratorio')</th>
-                        
-                       
-                        <th>@lang('global.atencion.fields.costoa')</th>
+                        <th>ID</th>
+                        <th>Paciente</th>
+                        <th>Origen</th>
+                        <th>Detalle</th>
+                        <th>Total</th>
+                        <th>P.Unit</th>
+                        <th>Porcentaje</th>
+                        <th>Monto Abonar</th>
+
                         <th>&nbsp;</th>
 
                     </tr>
@@ -57,44 +57,19 @@
                         @foreach ($atencion as $atec)
                             <tr data-entry-id="{{ $atec->id }}">
                                 <td></td>
+                                <td>{{ $atec->id_atencion }}</td>
                                 <td>{{ $atenciondetalle->selectPaciente($atec->id_paciente) }}</td>
-
-
-                                <td>{{ $atec->origen }}</td>
-
-                              <td> 
-                                  @if($servicios->selectAllServicios($atec->id_atencion))
-                                  {{$servicios->selectAllServicios($atec->id_atencion)}}
-                                  @else
-                                  <small class="label pull-right bg-red">Sin Servicio</small>
-                                  @endif
-                              </td>
-
-
-                                
-                                <td> 
-                                  @if($paquete->selectAllPaquetes($atec->id_atencion))
-                                  {{$paquete->selectAllPaquetes($atec->id_atencion)}}
-                                  @else
-                                  <small class="label pull-right bg-red">Sin Paquetes</small>
-                                  @endif
-                              </td>
-                                <td>
-                                 @if($analisis->selectAllAnalisis($atec->id_atencion))
-                                 {{$analisis->selectAllAnalisis($atec->id_atencion)}}
-                                 @else
-                                  <small class="label pull-right bg-red">Sin Analisis</small>
-                                @endif
-                                </td>
-                             
-                              
-                               
-                                
+                                <td>{{ $atenciondetalle->selectProfesional($atec->id_profesional) }}</td>
+                                <td>{{ $atec->detalle }}</td>
+                                <td>{{ $atec->costo }}</td>
+                                <td>{{ $atec->precio }}</td>
+                                <td>{{ $atec->porcentaje }}</td>
                                 <td>{{ $atec->costoa }}</td>
-                               
-                               
+
+                             
+
                                 <td>
-                                  <a  target="_blank" href="{{asset('ticket_atencion_ver')}}/{{$atec->id}}" class="btn btn-xs btn-success">@lang('global.app_imprimirt')</a>
+                                  <a  target="_blank" href="{{asset('ticket_atencion_ver')}}/{{$atec->id_atencion}}" class="btn btn-xs btn-success">@lang('global.app_imprimirt')</a>
 
                                   @if(Auth::user()->rol!="Recepcionista")
 

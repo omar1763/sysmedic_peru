@@ -42,6 +42,24 @@ class AtencionDetalle extends Authenticatable
     return $descripcion;
               //  return $id;
 }
+
+  public function selectProfesional($id)
+    {
+
+        
+        $data = \DB::table('profesionales')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id', $id)->first();
+        
+        $descripcion=$data->name.' '.$data->apellidos;
+        
+         
+      
+
+    return $descripcion;
+              //  return $id;
+}
    
     
 }

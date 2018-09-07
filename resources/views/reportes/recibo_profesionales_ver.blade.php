@@ -31,7 +31,7 @@
     <td>{{ $recibo["nombres"].' '.$recibo["apellidos"] }}</td>
     <td>{{ $recibo["fecha"]}}</td>
     <td>{{ $recibo["detalle"]}}</td>
-    <td>{{ $recibo["porcentaje"]}}</td>
+    <td>{{ $recibo["pagar"]}}</td>
 
   </tr>
   @endforeach

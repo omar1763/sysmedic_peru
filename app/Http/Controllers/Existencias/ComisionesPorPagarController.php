@@ -65,8 +65,8 @@ class ComisionesPorPagarController extends Controller
 
        $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
         ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
-        'a.recibo', 'a.created_at as fecha', 'a.montolab as costo', 'f.name as nombres',
-        'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle')
+        'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo', 'f.name as nombres',
+        'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.preciopublico as precio')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('pacientes as p','p.id','b.id_paciente')
@@ -78,7 +78,7 @@ class ComisionesPorPagarController extends Controller
         ->whereBetween('a.created_at', [$f1, $f2]);
 
         $comisiones = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha', 'a.montoser as costo', 'f.name as nombres', 'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle')
+        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo', 'f.name as nombres', 'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('pacientes as p','p.id','b.id_paciente')

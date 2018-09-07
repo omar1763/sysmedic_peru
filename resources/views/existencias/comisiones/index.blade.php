@@ -51,9 +51,11 @@
                        
                        <th>Detalle</th>
 
-                        <th>@lang('global.comisionesporpagar.fields.montototal')</th>
+                        <th>P.Unit</th>
                         
-                        <th>@lang('global.comisionesporpagar.fields.comision')</th>
+                        <th>Porcentaje</th>
+
+                        <th>Monto a Pagar</th>
                         
                         <th>@lang('global.comisionesporpagar.fields.fecha')</th>
                         <th>&nbsp;</th>
@@ -65,15 +67,19 @@
                     @if (count($comisiones) > 0)
                         @foreach ($comisiones as $com)
                             <tr data-entry-id="{{ $com->id }}">
+
                                 <td></td>
                                 <td>{{ $com->id_atencion}}</td>
                                 <td>{{ $com->nombres.' '.$com->apellidos }}</td>
                                 <td>{{$com->pnombres.' '.$com->papellidos}}</td>
                                 <td>{{ $com->detalle}}</td>
-                                <td>{{ $com->costo}}</td>
+                                <td>{{ $com->precio}}</td>
                                 <td>{{ $com->porcentaje}}</td>
+                                <td>{{ $com->pagar}}</td>
                                 <td>{{ $com->fecha}}</td>
+
                                 <td> 
+                                   
                                 @if(Auth::user()->rol!="Recepcionista")
 
                                     {!! Form::open(array(

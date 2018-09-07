@@ -40,9 +40,7 @@ class AtencionController extends Controller
      */
     public function index(Request $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+       
 
          $id_usuario = Auth::id();
 
@@ -66,7 +64,36 @@ class AtencionController extends Controller
     if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
 
-          $atencion = DB::table('atencions as a')
+          $atec_lab = DB::table('atencion_profesionales_laboratorios as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
+        'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+        'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.preciopublico as precio')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
+        ->join('analises as c','c.id','a.id_laboratorio')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.id_atencion','desc')
+        ->where('a.created_at','=', $f1);
+
+        $atencion = DB::table('atencion_profesionales_servicios as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres', 'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('atencion_servicios as s', 'a.id_atencion', 's.id_atencion')
+        ->join('servicios as c','c.id','a.id_servicio')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->where('a.created_at','=', $f1)
+        ->orderby('a.id_atencion','desc')
+        ->union($atec_lab)
+        ->get();
+
+
+       /*   $atencion = DB::table('atencions as a')
          ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.origen','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
@@ -80,12 +107,39 @@ class AtencionController extends Controller
         ->where('a.created_at','=', $f1)
         //->orwhereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-         ->paginate(1000);
+         ->paginate(1000);*/
  //      ->toSql();
 //dd($atencion);
        // dd(DB::getQueryLog());
     } else {
 
+          $atec_lab = DB::table('atencion_profesionales_laboratorios as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
+        'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+        'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.preciopublico as precio')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
+        ->join('analises as c','c.id','a.id_laboratorio')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+       ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
+
+        $atencion = DB::table('atencion_profesionales_servicios as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres', 'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('atencion_servicios as s', 'a.id_atencion', 's.id_atencion')
+        ->join('servicios as c','c.id','a.id_servicio')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+        ->union($atec_lab)
+        ->get();
+
+        /*
           $atencion = DB::table('atencions as a')
         ->select('a.id','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','d.id_paciente','d.origen')
        
@@ -99,7 +153,7 @@ class AtencionController extends Controller
 //               ->toSql();
 //        dd($atencion); 
 
-      //  dd(DB::getQueryLog());
+      //  dd(DB::getQueryLog());*/
     }
 
 
@@ -108,62 +162,15 @@ class AtencionController extends Controller
         $paquete = new Paquetes();
         $paquetes = new PaquetesServ();
         $atenciondetalle = new AtencionDetalle();
-        
-        
 
-        return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','paquetes','atenciondetalle'));
+
+ 
+
+       return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','paquetes','atenciondetalle'));
     }
-
-      public function indexFecha(Request $request)
-        {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
-
-         $id_usuario = Auth::id();
-
-         $searchUsuarioID = DB::table('users')
-                    ->select('*')
-                   // ->where('estatus','=','1')
-                    ->where('id','=', $id_usuario)
-                    ->get();
-
-            foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-        
-        //   $f1 = date('d-m-YYYY');
-      $f1 = date('Y-m-d');
-
-    if(! is_null($request->fecha)) {
-        $f1 = $request->fecha;
     
-    }
 
-        $atencion = DB::table('atencions as a')
-        ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
-        ->join('empresas as b','a.id_empresa','b.id')
-        ->join('locales as c','a.id_sucursal','c.id')
-        ->join('atencion_detalles as d','a.id','d.id_atencion')
-        ->join('pacientes as e','d.id_paciente','e.id')
-        ->join('servicios as f','d.id_servicio','f.id')
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
-        ->where('a.created_at','=', $f1)
-        //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-        ->orderby('a.created_at','desc')
-        ->paginate(500);
-
-
-        $servicios = Servicios::with('nombre');
-        $personal = Personal::with('dni');
-        $pacientes = Pacientes::with('dni');
-        $profesionales = Profesionales::with('nombre');
-
-        return view('existencias.atencion.index', compact('atencion','servicios','personal','pacientes','profesionales'));
-    }
-
+      
     public function pagoadelantado(){
 
         return view('existencias.atencion.pagoadelantado');
@@ -503,18 +510,34 @@ public function cardainput3($id, Request $request){
          $serviciosatencion->id_servicio    =0;
          $serviciosatencion->origen    ='Servicios';
          $serviciosatencion->id_profesional =$request->profesional;
-         $serviciosatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
+         $serviciosatencion->porcentaje =$request->porcentajeserv;
          $serviciosatencion->montoser = $request->precioserv;
          $serviciosatencion->id_sucursal =$usuarioSuc;
          $serviciosatencion->id_empresa =$usuarioEmp;
          $serviciosatencion->save();
          foreach ($request->servicios as $key => $value) {
+
+            $searchServ = DB::table('servicios')
+           ->select('*')
+                   // ->where('estatus','=','1')
+           ->where('id','=', $value)
+           ->get();
+
+           foreach ($searchServ as $servicios) {
+            $precio = $servicios->precio;
+           
+        }
+
+
+
+
                 $serviciosprofatencion = new AtencionProfesionalesServicio;
                 $serviciosprofatencion->id_atencion =$atencion->id;
                 $serviciosprofatencion->id_servicio    =$value;
                 $serviciosprofatencion->id_profesional =$request->profesional;
-                $serviciosprofatencion->porcentaje =($request->porcentajeserv*$request->precioserv)/100;
+                $serviciosprofatencion->porcentaje =$request->porcentajeserv;
                 $serviciosprofatencion->montoser = $request->precioserv;
+                $serviciosprofatencion->pagar = ($precio*$request->porcentajeserv)/100;
                 $serviciosprofatencion->id_sucursal =$usuarioSuc;
                 $serviciosprofatencion->id_empresa =$usuarioEmp;
                 //$serviciosprofatencion->id_atec_servicio =$serviciosatencion->id;
@@ -527,11 +550,12 @@ public function cardainput3($id, Request $request){
        $atenciondetalle->id_paciente     =$request->pacientes;
        $atenciondetalle->costo           =$request->preciototal;
        $atenciondetalle->origen           =$request->origen_paciente;
+       $atenciondetalle->id_profesional =$request->profesional;
        $atenciondetalle->acuenta         =$request->acuenta;
        $atenciondetalle->costoa          =$request->costoa;
        $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
        $atenciondetalle->tarjeta         =$request->tarjeta;
-       $atenciondetalle->porcentaje      =($request->porcentaje*$request->preciototal)/100;
+       $atenciondetalle->porcentaje      =$request->porcentaje;
        $atenciondetalle->observaciones   =$request->observaciones;
        $atenciondetalle->save();
 
@@ -551,18 +575,33 @@ public function cardainput3($id, Request $request){
            $analisisatencion->id_analisis    =0;
            $analisisatencion->origen    ='Laboratorios';
            $analisisatencion->id_profesional =$request->profesional;
-           $analisisatencion->porcentaje =($request->porcentajelab*$request->preciopublico)/100;
+           $analisisatencion->porcentaje =$request->porcentajelab;
            $analisisatencion->montolab = $request->preciopublico;
            $analisisatencion->id_sucursal =$usuarioSuc;
            $analisisatencion->id_empresa =$usuarioEmp;
            $analisisatencion->save();
            foreach ($request->analises as $key => $value) {
+
+
+            $searchLab = DB::table('analises')
+           ->select('*')
+                   // ->where('estatus','=','1')
+           ->where('id','=', $value)
+           ->get();
+
+           foreach ($searchLab as $lab) {
+            $precio = $lab->preciopublico;
+           
+        }
+
+
                $serviciosproflab = new AtencionProfesionalesLaboratorio;
                $serviciosproflab->id_atencion =$atencion->id;
                $serviciosproflab->id_laboratorio    =$value;
                $serviciosproflab->id_profesional =$request->profesional;
-               $serviciosproflab->porcentaje =($request->porcentajelab*$request->preciopublico)/100;
+               $serviciosproflab->porcentaje =$request->porcentajelab;
                $serviciosproflab->montolab = $request->preciopublico;
+               $serviciosproflab->pagar = ($precio*$request->porcentajelab)/100;
                $serviciosproflab->id_sucursal =$usuarioSuc;
                $serviciosproflab->id_empresa =$usuarioEmp;
                //$serviciosproflab->id_atec_lab =$analisisatencion->id;
