@@ -34,6 +34,30 @@
                     @endif
                 </div>
             </div>
+             <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('tiempo', 'Tiempo de Entrega*', ['class' => 'control-label']) !!}
+                    {!! Form::text('tiempo', old('tiempo'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('tiempo'))
+                        <p class="help-block">
+                            {{ $errors->first('tiempo') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+             <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('material', 'Material*', ['class' => 'control-label']) !!}
+                    {!! Form::text('material', old('material'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('material'))
+                        <p class="help-block">
+                            {{ $errors->first('material') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
         
              <div class="row">
                 <div class="col-xs-12 form-group">

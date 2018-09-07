@@ -20,6 +20,8 @@
 
                         <th>@lang('global.analisis.fields.name')</th>
                         <th>@lang('global.analisis.fields.laboratorio')</th>
+                        <th>Tiempo de Entrega</th>
+                        <th>Material</th>
                         <th>@lang('global.analisis.fields.preciopublico')</th>
                         <th>@lang('global.analisis.fields.costlab')</th>
                         <th>&nbsp;</th>
@@ -35,6 +37,8 @@
 
                                 <td>{{ $ana->name }}</td>
                                 <td>{{ $ana->laboratorio }}</td>
+                                <td>{{ $ana->tiempo }}</td>
+                                <td>{{ $ana->material }}</td>
                                 <td>{{ $ana->preciopublico }}</td>
                                 <td>{{ $ana->costlab }}</td>
                                 <td>

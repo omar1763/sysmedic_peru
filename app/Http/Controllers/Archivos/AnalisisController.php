@@ -43,7 +43,7 @@ class AnalisisController extends Controller
 
 
          $analisis = DB::table('analises as a')
-        ->select('a.id','a.name','a.laboratorio','a.preciopublico','a.costlab','a.porcentaje','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->select('a.id','a.name','a.laboratorio','a.preciopublico','a.tiempo','a.material','a.costlab','a.porcentaje','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         //->join('laboratorios as d','a.laboratorio','d.name')
@@ -119,6 +119,8 @@ class AnalisisController extends Controller
        $analisis = new Analisis;
        $analisis->name =$request->name;
        $analisis->laboratorio     =$request->laboratorio;
+       $analisis->tiempo     =$request->tiempo;
+       $analisis->material     =$request->material;
        $analisis->preciopublico     =$request->preciopublico;
        $analisis->costlab     =$request->costlab;
        $analisis->id_empresa= $usuarioEmp;

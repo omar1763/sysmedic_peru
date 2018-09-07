@@ -218,6 +218,19 @@ class PacientesController extends Controller
         return view('archivos.pacientes.edit', compact('pacientes', 'provincia','distrito','edocivil','gradoinstruccion'));
     }
 
+       public function ver($id)
+    {
+       
+
+       $pacientes = Pacientes::findOrFail($id);
+       $provincia = Provincia::get()->pluck('nombre', 'nombre');
+       $distrito = Distrito::get()->pluck('nombre', 'nombre');
+       $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
+       $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
+
+        return view('archivos.pacientes.ver', compact('pacientes', 'provincia','distrito','edocivil','gradoinstruccion'));
+    }
+
     /**
      * Update User in storage.
      *

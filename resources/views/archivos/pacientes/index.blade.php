@@ -40,6 +40,7 @@
                                 <td>{{ $pac->historia }}</td>
                             
                                 <td>
+                                    <a href="{{asset('/pacientes/ver')}}/{{$pac->id}}" class="btn btn-xs btn-success">@lang('global.app_view')</a>
                                     <a href="{{asset('/pacientes/edit')}}/{{$pac->id}}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     <a  target="_blank" href="{{asset('historia_pacientes_ver')}}/{{$pac->id}}" class="btn btn-xs btn-success">@lang('global.app_imprimirh')</a>
                                     {!! Form::open(array(
