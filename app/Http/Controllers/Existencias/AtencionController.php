@@ -75,7 +75,7 @@ class AtencionController extends Controller
         ->join('analises as c','c.id','a.id_laboratorio')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-        ->orderby('a.id_atencion','desc')
+        ->orderby('a.id_atencion','asc')
         ->where('a.created_at','=', $f1);
 
         $atencion = DB::table('atencion_profesionales_servicios as a')
@@ -88,7 +88,7 @@ class AtencionController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.created_at','=', $f1)
-        ->orderby('a.id_atencion','desc')
+        ->orderby('a.id_atencion','asc')
         ->union($atec_lab)
         ->get();
 
@@ -824,11 +824,9 @@ public function cardainput3($id, Request $request){
      */
     public function destroy($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+      
 
-        $atencion=Atencion::find($id)->delete();
+       // $atencion=Atencion::find($id)->delete();
         $atenciondetalle = AtencionDetalle::where('id_atencion',$id )->delete();
         $atencionlab = AtencionLaboratorio::where('id_atencion',$id )->delete();
         $atencionser = AtencionServicios::where('id_atencion',$id )->delete();
