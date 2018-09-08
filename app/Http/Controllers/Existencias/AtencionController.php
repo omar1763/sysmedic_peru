@@ -495,55 +495,180 @@ public function cardainput3($id, Request $request){
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-    
+   
 
        $atencion = new Atencion;
        $atencion->id_empresa     =$usuarioEmp;
        $atencion->id_sucursal     =$usuarioSuc;
        $atencion->save();
 
+     if ($request->origen_paciente=='Profesional'){
   
-         if(! is_null($request->servicios)){
+       if(! is_null($request->servicios)){
 
-         $serviciosatencion = new AtencionServicios;
-         $serviciosatencion->id_atencion =$atencion->id;
-         $serviciosatencion->id_servicio    =0;
-         $serviciosatencion->origen    ='Servicios';
-         $serviciosatencion->id_profesional =$request->profesional;
-         $serviciosatencion->porcentaje =$request->porcentajeserv;
-         $serviciosatencion->montoser = $request->precioserv;
-         $serviciosatencion->id_sucursal =$usuarioSuc;
-         $serviciosatencion->id_empresa =$usuarioEmp;
-         $serviciosatencion->save();
-         foreach ($request->servicios as $key => $value) {
+           $serviciosatencion = new AtencionServicios;
+           $serviciosatencion->id_atencion =$atencion->id;
+           $serviciosatencion->id_servicio    =0;
+           $serviciosatencion->origen    ='Servicios';
+           $serviciosatencion->id_profesional =$request->profesional;
+           $serviciosatencion->porcentaje =$request->porcentajeserv;
+           $serviciosatencion->montoser = $request->precioserv;
+           $serviciosatencion->id_sucursal =$usuarioSuc;
+           $serviciosatencion->id_empresa =$usuarioEmp;
+           $serviciosatencion->save();
+           foreach ($request->servicios as $key => $value) {
 
             $searchServ = DB::table('servicios')
-           ->select('*')
+            ->select('*')
                    // ->where('estatus','=','1')
-           ->where('id','=', $value)
-           ->get();
+            ->where('id','=', $value)
+            ->get();
 
-           foreach ($searchServ as $servicios) {
-            $precio = $servicios->precio;
-           
-        }
+            foreach ($searchServ as $servicios) {
+                $precio = $servicios->precio;
 
-
-
-
-                $serviciosprofatencion = new AtencionProfesionalesServicio;
-                $serviciosprofatencion->id_atencion =$atencion->id;
-                $serviciosprofatencion->id_servicio    =$value;
-                $serviciosprofatencion->id_profesional =$request->profesional;
-                $serviciosprofatencion->porcentaje =$request->porcentajeserv;
-                $serviciosprofatencion->montoser = $request->precioserv;
-                $serviciosprofatencion->pagar = ($precio*$request->porcentajeserv)/100;
-                $serviciosprofatencion->id_sucursal =$usuarioSuc;
-                $serviciosprofatencion->id_empresa =$usuarioEmp;
-                //$serviciosprofatencion->id_atec_servicio =$serviciosatencion->id;
-                $serviciosprofatencion->save();
             }
+
+
+            $serviciosprofatencion = new AtencionProfesionalesServicio;
+            $serviciosprofatencion->id_atencion =$atencion->id;
+            $serviciosprofatencion->id_servicio    =$value;
+            $serviciosprofatencion->id_profesional =$request->profesional;
+            $serviciosprofatencion->porcentaje =$request->porcentajeserv;
+            $serviciosprofatencion->montoser = $request->precioserv;
+            $serviciosprofatencion->pagar = ($precio*$request->porcentajeserv)/100;
+            $serviciosprofatencion->id_sucursal =$usuarioSuc;
+            $serviciosprofatencion->id_empresa =$usuarioEmp;
+                //$serviciosprofatencion->id_atec_servicio =$serviciosatencion->id;
+            $serviciosprofatencion->save();
         }
+    }
+
+
+    if(! is_null($request->analises)){
+     $analisisatencion = new AtencionLaboratorio;
+     $analisisatencion->id_atencion =$atencion->id;
+     $analisisatencion->id_analisis    =0;
+     $analisisatencion->origen    ='Laboratorios';
+     $analisisatencion->id_profesional =$request->profesional;
+     $analisisatencion->porcentaje =$request->porcentajelab;
+     $analisisatencion->montolab = $request->preciopublico;
+     $analisisatencion->id_sucursal =$usuarioSuc;
+     $analisisatencion->id_empresa =$usuarioEmp;
+     $analisisatencion->save();
+     foreach ($request->analises as $key => $value) {
+
+
+        $searchLab = DB::table('analises')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id','=', $value)
+        ->get();
+
+        foreach ($searchLab as $lab) {
+            $precio = $lab->preciopublico;
+
+        }
+
+
+        $serviciosproflab = new AtencionProfesionalesLaboratorio;
+        $serviciosproflab->id_atencion =$atencion->id;
+        $serviciosproflab->id_laboratorio    =$value;
+        $serviciosproflab->id_profesional =$request->profesional;
+        $serviciosproflab->porcentaje =$request->porcentajelab;
+        $serviciosproflab->montolab = $request->preciopublico;
+        $serviciosproflab->pagar = ($precio*$request->porcentajelab)/100;
+        $serviciosproflab->id_sucursal =$usuarioSuc;
+        $serviciosproflab->id_empresa =$usuarioEmp;
+               //$serviciosproflab->id_atec_lab =$analisisatencion->id;
+        $serviciosproflab->save();
+    }
+}
+} else {
+
+     if(! is_null($request->servicios)){
+
+           $serviciosatencion = new AtencionServicios;
+           $serviciosatencion->id_atencion =$atencion->id;
+           $serviciosatencion->id_servicio    =0;
+           $serviciosatencion->origen    ='Servicios';
+           $serviciosatencion->id_profesional =999;
+           $serviciosatencion->porcentaje =$request->porcentajeserv;
+           $serviciosatencion->montoser = $request->precioserv;
+           $serviciosatencion->id_sucursal =$usuarioSuc;
+           $serviciosatencion->id_empresa =$usuarioEmp;
+           $serviciosatencion->save();
+           foreach ($request->servicios as $key => $value) {
+
+            $searchServ = DB::table('servicios')
+            ->select('*')
+                   // ->where('estatus','=','1')
+            ->where('id','=', $value)
+            ->get();
+
+            foreach ($searchServ as $servicios) {
+                $precio = $servicios->precio;
+
+            }
+
+
+            $serviciosprofatencion = new AtencionProfesionalesServicio;
+            $serviciosprofatencion->id_atencion =$atencion->id;
+            $serviciosprofatencion->id_servicio    =$value;
+            $serviciosprofatencion->id_profesional =999;
+            $serviciosprofatencion->porcentaje =$request->porcentajeserv;
+            $serviciosprofatencion->montoser = $request->precioserv;
+            $serviciosprofatencion->pagar = ($precio*$request->porcentajeserv)/100;
+            $serviciosprofatencion->id_sucursal =$usuarioSuc;
+            $serviciosprofatencion->id_empresa =$usuarioEmp;
+                //$serviciosprofatencion->id_atec_servicio =$serviciosatencion->id;
+            $serviciosprofatencion->save();
+        }
+    }
+
+
+    if(! is_null($request->analises)){
+     $analisisatencion = new AtencionLaboratorio;
+     $analisisatencion->id_atencion =$atencion->id;
+     $analisisatencion->id_analisis    =0;
+     $analisisatencion->origen    ='Laboratorios';
+     $analisisatencion->id_profesional =999;
+     $analisisatencion->porcentaje =$request->porcentajelab;
+     $analisisatencion->montolab = $request->preciopublico;
+     $analisisatencion->id_sucursal =$usuarioSuc;
+     $analisisatencion->id_empresa =$usuarioEmp;
+     $analisisatencion->save();
+     foreach ($request->analises as $key => $value) {
+
+
+        $searchLab = DB::table('analises')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id','=', $value)
+        ->get();
+
+        foreach ($searchLab as $lab) {
+            $precio = $lab->preciopublico;
+
+        }
+
+
+        $serviciosproflab = new AtencionProfesionalesLaboratorio;
+        $serviciosproflab->id_atencion =$atencion->id;
+        $serviciosproflab->id_laboratorio    =$value;
+        $serviciosproflab->id_profesional =999;
+        $serviciosproflab->porcentaje =$request->porcentajelab;
+        $serviciosproflab->montolab = $request->preciopublico;
+        $serviciosproflab->pagar = ($precio*$request->porcentajelab)/100;
+        $serviciosproflab->id_sucursal =$usuarioSuc;
+        $serviciosproflab->id_empresa =$usuarioEmp;
+               //$serviciosproflab->id_atec_lab =$analisisatencion->id;
+        $serviciosproflab->save();
+    }
+}
+
+}
+
 
        $atenciondetalle = new AtencionDetalle;
        $atenciondetalle->id_atencion     =$atencion->id;
@@ -569,48 +694,6 @@ public function cardainput3($id, Request $request){
        $creditos->save();
 
 
-       if(! is_null($request->analises)){
-           $analisisatencion = new AtencionLaboratorio;
-           $analisisatencion->id_atencion =$atencion->id;
-           $analisisatencion->id_analisis    =0;
-           $analisisatencion->origen    ='Laboratorios';
-           $analisisatencion->id_profesional =$request->profesional;
-           $analisisatencion->porcentaje =$request->porcentajelab;
-           $analisisatencion->montolab = $request->preciopublico;
-           $analisisatencion->id_sucursal =$usuarioSuc;
-           $analisisatencion->id_empresa =$usuarioEmp;
-           $analisisatencion->save();
-           foreach ($request->analises as $key => $value) {
-
-
-            $searchLab = DB::table('analises')
-           ->select('*')
-                   // ->where('estatus','=','1')
-           ->where('id','=', $value)
-           ->get();
-
-           foreach ($searchLab as $lab) {
-            $precio = $lab->preciopublico;
-           
-        }
-
-
-               $serviciosproflab = new AtencionProfesionalesLaboratorio;
-               $serviciosproflab->id_atencion =$atencion->id;
-               $serviciosproflab->id_laboratorio    =$value;
-               $serviciosproflab->id_profesional =$request->profesional;
-               $serviciosproflab->porcentaje =$request->porcentajelab;
-               $serviciosproflab->montolab = $request->preciopublico;
-               $serviciosproflab->pagar = ($precio*$request->porcentajelab)/100;
-               $serviciosproflab->id_sucursal =$usuarioSuc;
-               $serviciosproflab->id_empresa =$usuarioEmp;
-               //$serviciosproflab->id_atec_lab =$analisisatencion->id;
-               $serviciosproflab->save();
-           }
-       }
-
-
-       
        
        if(isset($request->paquetes)){
            foreach ($request->paquetes as $key => $value) {
