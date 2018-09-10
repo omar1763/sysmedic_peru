@@ -51,7 +51,7 @@
  ;?>
 
 
- <p><strong>TOTAL:  </strong>{!!$lab->total_lab!!}.00</p>
+ <p><strong>TOTAL:  </strong>{!!$total!!}.00</p>
  
  @endforeach
  @endforeach
