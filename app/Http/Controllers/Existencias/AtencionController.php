@@ -54,11 +54,8 @@ class AtencionController extends Controller
                     $usuarioEmp = $searchUsuarioID->id_empresa;
                     $usuarioSuc = $searchUsuarioID->id_sucursal;
                     
- /*           foreach ($searchUsuarioID as $usuario) {
-                    $usuarioEmp = $usuario->id_empresa;
-                    $usuarioSuc = $usuario->id_sucursal;
-                }
-        */
+
+ 
     $fechaHoy = date('YYYY-m-d');
 
     if(! is_null($request->fecha)) {
