@@ -841,12 +841,11 @@ class PdfController extends Controller
          $recibo = DB::table('atencion_profesionales_servicios')->select('recibo')->where('recibo', '=', $id)->get(['recibo'])->first()->recibo;  
 
 
-
          $reciboprofesionallab = DB::table('atencion_profesionales_laboratorios as a')
         ->select('a.id','a.id_laboratorio','a.id_profesional', 'a.recibo', 'a.id_atencion','a.created_at as fecha','a.pagado','a.pagar','a.id_sucursal','a.id_empresa','a.porcentaje as porlab',/*'b.id_atec_servicio',*/'b.costo','b.id_atencion','b.id_paciente','e.nombres','e.apellidos','f.name as profnombre','f.apellidos as profapellido','f.centro','d.name as detalle')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
        // ->join('atencion_profesionales_servicios as c','a.id_atencion','c.id_atencion')
-        ->join('analises as d','d.id','a.id_laboratorio')
+        ->leftjoin('analises as d','a.id_laboratorio','d.id')
         ->join('pacientes as e','e.id','b.id_paciente')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->where('a.recibo','=', $recibo)
@@ -878,6 +877,74 @@ class PdfController extends Controller
 
      }
 
+     public function total_serv($id){
+
+      $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+         $recibo = DB::table('atencion_profesionales_servicios')->select('recibo')->where('recibo', '=', $id)->get(['recibo'])->first()->recibo;  
+     
+      $comisiones_serv_pag = DB::table('atencion_profesionales_servicios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_serv','id_empresa','a.pagado','a.id_sucursal','a.recibo','a.id','a.created_at as fecha'))
+     ->where('a.recibo','=', $recibo)
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',1)
+     //->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
+
+     if($comisiones_serv_pag){
+            return $comisiones_serv_pag;
+         }else{
+            return false;
+         }  
+
+
+     }
+
+     public function total_lab($id){
+
+       $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+         $recibo = DB::table('atencion_profesionales_servicios')->select('recibo')->where('recibo', '=', $id)->get(['recibo'])->first()->recibo;  
+     
+      $comisiones_lab_pag = DB::table('atencion_profesionales_laboratorios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_lab','id_empresa','a.pagado','a.id_sucursal','a.recibo','a.id','a.created_at as fecha'))
+     ->where('a.recibo','=', $recibo)
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',1)
+     //->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
+
+      if($comisiones_lab_pag){
+            return $comisiones_lab_pag;
+         }else{
+            return false;
+         } 
+
+
+     }
+
      
 
   static function unique_multidim_array($array, $key) {
@@ -897,12 +964,16 @@ class PdfController extends Controller
 
        public function recibo_profesionales_ver($id) 
     {
+
+
        
        $reciboprofesional = PdfController::verReciboProfesional($id);
+       $comisiones_lab_pag = PdfController::total_lab($id);
+       $comisiones_serv_pag = PdfController::total_serv($id);
        $reciboprofesional = json_encode($reciboprofesional);
        $reciboprofesional = self::unique_multidim_array(json_decode($reciboprofesional, true), "detalle");
        if(sizeof($reciboprofesional) > 0){
-       $view = \View::make('reportes.recibo_profesionales_ver', ['reciboprofesional' => $reciboprofesional, 'profnombre' => $reciboprofesional[0]["profnombre"], 'profapellido' => $reciboprofesional[0]["profapellido"], "centro" => $reciboprofesional[0]["centro"], "recibo" => $reciboprofesional[0]["recibo"], "porcentaje" => $reciboprofesional[0]["porcentaje"]])->render();
+       $view = \View::make('reportes.recibo_profesionales_ver', ['total_serv' => $comisiones_serv_pag,'total_lab' => $comisiones_lab_pag,'reciboprofesional' => $reciboprofesional, 'profnombre' => $reciboprofesional[0]["profnombre"], 'profapellido' => $reciboprofesional[0]["profapellido"], "centro" => $reciboprofesional[0]["centro"], "recibo" => $reciboprofesional[0]["recibo"], "porcentaje" => $reciboprofesional[0]["porcentaje"]])->render();
        $pdf = \App::make('dompdf.wrapper');
        $pdf->loadHTML($view);
 

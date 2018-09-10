@@ -38,7 +38,24 @@
      
     <div class="panel panel-default">
         <div class="panel-heading">
-            @lang('global.app_list')
+        @foreach ($comisiones_lab_pag as $lab_pag)
+         @foreach ($comisiones_serv_pag as $serv_pag)
+
+
+         <?php 
+
+         $serv_pag = $serv_pag->total_serv;
+         $lab_pag = $lab_pag->total_lab;
+         $total = $serv_pag+$lab_pag;
+
+         ;?>
+
+
+         <p><strong>Total Pagado: {!!$total!!}.00</strong></p>
+
+         @endforeach
+         @endforeach
+
         </div>
 
         <div class="panel-body table-responsive">

@@ -83,6 +83,21 @@ class ComisionesPagadasController extends Controller
         ->orderby('a.created_at','desc')
         ->paginate(5000);
         */
+       $comisiones_lab_pag = DB::table('atencion_profesionales_laboratorios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_lab','id_empresa','a.pagado','a.id_sucursal','a.id','a.created_at as fecha'))
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',1)
+     //->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
+
+      $comisiones_serv_pag = DB::table('atencion_profesionales_servicios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_serv','id_empresa','a.pagado','a.id_sucursal','a.id','a.created_at as fecha'))
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',1)
+     //->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
 
     $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
         ->select('a.id','a.recibo', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
@@ -115,7 +130,7 @@ class ComisionesPagadasController extends Controller
         $comisionespagadas = json_encode($comisionespagadas);
         $comisionespagadas = self::unique_multidim_array(json_decode($comisionespagadas, true), "id_atencion");
 
-        return view('existencias.comisionespagadas.index', compact('comisionespagadas'));
+        return view('existencias.comisionespagadas.index', compact('comisionespagadas','comisiones_lab_pag','comisiones_serv_pag'));
     }
  
   static function unique_multidim_array($array, $key) {

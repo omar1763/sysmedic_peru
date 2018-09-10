@@ -63,6 +63,22 @@ class ComisionesPorPagarController extends Controller
         
         */
 
+     $comisiones_lab_pag = DB::table('atencion_profesionales_laboratorios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_lab','id_empresa','a.pagado','a.id_sucursal','a.id','a.created_at as fecha'))
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',0)
+     //->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
+
+      $comisiones_serv_pag = DB::table('atencion_profesionales_servicios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_serv','id_empresa','a.pagado','a.id_sucursal','a.id','a.created_at as fecha'))
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',0)
+     //->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
+
        $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
         ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
         'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo', 'f.name as nombres',
@@ -101,7 +117,45 @@ class ComisionesPorPagarController extends Controller
 
   
 
-        return view('existencias.comisiones.index', compact('comisiones','analisis','servicios'));
+        return view('existencias.comisiones.index', compact('comisiones','analisis','servicios','comisiones_lab_pag','comisiones_serv_pag'));
+    }
+
+    public function pendientePagarLab(){
+
+     $usuario = Auth::user();
+     $usuarioEmp = $usuario->id_empresa;
+     $usuarioSuc = $usuario->id_sucursal;
+
+
+     $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_lab','id_empresa','a.pagado','a.id_sucursal','a.id','a.created_at as fecha'))
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',0)
+     ->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
+
+     return view('existencias.comisiones.index', compact('comisiones_lab'));
+
+    }
+
+     public function pendientePagarServ(){
+
+     $usuario = Auth::user();
+     $usuarioEmp = $usuario->id_empresa;
+     $usuarioSuc = $usuario->id_sucursal;
+
+
+     $comisiones_serv = DB::table('atencion_profesionales_servicios as a')
+     ->select(DB::raw('SUM(a.pagar) as total_serv','id_empresa','a.pagado','a.id_sucursal','a.id','a.created_at as fecha'))
+     ->where('a.id_empresa','=', $usuarioEmp)
+     ->where('a.id_sucursal','=', $usuarioSuc)
+     ->where('a.pagado','=',0)
+     ->havingRaw('SUM(a.pagar) > ?', [0])
+     ->get();
+
+     return view('existencias.comisiones.index', compact('comisiones_serv'));
+
     }
 
 

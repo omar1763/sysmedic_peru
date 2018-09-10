@@ -43,8 +43,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::resource('ingresos', 'Movimientos\IngresosController');
     Route::post('ingresos_mass_destroy', ['uses' => 'Movimientos\IngresosController@massDestroy', 'as' => 'ingresos.mass_destroy']);
 
-
+    Route::resource('pacientes', 'Archivos\PacientesController');
     Route::post('pacientes_mass_destroy', ['uses' => 'Archivos\PacientesController@massDestroy', 'as' => 'pacientes.mass_destroy']);
+
+
     Route::resource('paquetes', 'Archivos\PaquetesController');
     Route::post('paquetes_mass_destroy', ['uses' => 'Archivos\PaquetesController@massDestroy', 'as' => 'paquetes.mass_destroy']);
     Route::resource('atencion', 'Existencias\AtencionController');
