@@ -141,7 +141,17 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
   
     Route::group(['prefix' => 'reportes'], function () {
         Route::post('reportegeneral', 'ReportesController@reportegeneral');
-        Route::get('filtro-general', 'ReportesController@filtrogeneral');
+        Route::get('filtro-general', 'ReportesController@filtrogeneral')->name('filtros');
+
+
         
     });
+
+
+
+     Route::get('pacientesreport', 'ReportesController@pacientes');
+     Route::get('serviciosreport', 'ReportesController@servicios');
+     Route::get('analisisreport', 'ReportesController@analisis');
+     Route::get('reportes', 'ReportesController@index')->name('reportes');
+
 
