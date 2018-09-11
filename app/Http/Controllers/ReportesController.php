@@ -257,7 +257,7 @@ class ReportesController extends Controller
         ->join('pacientes as p','p.id','b.id_paciente')
         ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
         ->join('servicios as c','c.id','a.id_servicio')
-        ->where('a.id_profesional','<>',999)
+        ->where('a.id_profesional','=',9999999999999999)
         //->where('a.id_laboratorio','=',$request->analisis)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
