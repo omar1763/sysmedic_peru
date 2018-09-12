@@ -209,7 +209,7 @@ class ReportesController extends Controller
 
 
         $reporte = DB::table('creditos as a')
-        ->select('a.id','a.created_at as fecha','a.monto as costo','a.causa','a.descripcion as detalle','a.id_paciente','a.monto as precio','a.tipo_ingreso')
+        ->select('a.id','a.created_at as fecha','a.monto as costo','a.causa','a.descripcion as detalle','a.monto as precio','a.tipo_ingreso')
         ->where('a.causa','=','V')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
