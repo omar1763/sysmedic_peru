@@ -209,7 +209,9 @@ class ReportesController extends Controller
 
 
         $reporte = DB::table('creditos as a')
-        ->select('a.id','a.created_at as fecha','a.monto as costo','a.causa','a.descripcion as detalle','a.monto as precio','a.tipo_ingreso')
+        ->select('a.id','a.created_at as fecha','a.monto as costo','a.causa','a.descripcion as detalle','a.monto as precio','a.tipo_ingreso','b.cantidad','b.id_producto','c.name as producto')
+        ->join('creditos_productos as b','b.id_credito','a.id')
+        ->join('productos as c','c.id','b.id_producto')
         ->where('a.causa','=','V')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)

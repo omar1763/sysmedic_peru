@@ -83,6 +83,8 @@
                         @elseif($filtro =='1')
                         <th>Fecha</th>
                         <th>Detalle de la Venta</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
                         <th>Tipo de Ingreso</th>
                         <th>Monto</th>
                         @elseif($filtro =='2')
@@ -116,6 +118,8 @@
                           <td>{{ $rep->pagar }}</td>
                           @elseif($filtro =='1')
                           <td>{{ $rep->detalle }}</td>
+                          <td>{{ $rep->producto }}</td>
+                          <td>{{ $rep->cantidad }}</td>
                           <td>{{ $rep->tipo_ingreso }}</td>
                           <td>{{ $rep->precio }}</td>
                           <td></td>
