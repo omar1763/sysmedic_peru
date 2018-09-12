@@ -29,21 +29,19 @@
         </div>
          <div class="col-md-2">
             <div id="filtro" class="form-group error-status">
-              {!! Form::label("filtro","* Filtro",["class"=>""]) !!}
+              {!! Form::label("filtro","* Otros",["class"=>""]) !!}
               <div class="input-icon">
                 <div class="input-icon">
                   <i class="icon-eye  font-red"></i>
                   
-                  {!! Form::select('filtro', ['0' => 'Seleccionar el Filtro','1' => 'Pacientes', '2' => 'Servicios', '3' => 'Laboratorios'], null, ['id'=>'filtrog', 'class'=>'form-control select2']) !!}
+                  {!! Form::select('filtro', ['0' => 'Seleccionar el Filtro','1' => 'Ventas', '2' => 'Gastos'], null, ['id'=>'filtrog', 'class'=>'form-control select2']) !!}
                 </div>
 
               </div>
             </div> 
         </div>
 
-        <div class="col-md-3" id="filt">
-
-         </div>
+        
     
         <div class="col-md-2">
             {!! Form::submit(trans('global.app_search'), array('class' => 'btn btn-info')) !!}
@@ -72,15 +70,28 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
+                      @if($filtro =='0')
                         <th>Fecha</th>
                         <th>Origen</th>
                         <th>Paciente</th>
                         <th>Detalle</th>
-                        <th>P.Unit</th>
+                        <th>Precio</th>
                         <th>Porcentaje</th>
                         <th>A Cuenta</th>
                         <th>Monto a Pagar</th>
                         <th>&nbsp;</th>
+                        @elseif($filtro =='1')
+                        <th>Fecha</th>
+                        <th>Detalle de la Venta</th>
+                        <th>Tipo de Ingreso</th>
+                        <th>Monto</th>
+                        @elseif($filtro =='2')
+                        <th>Fecha</th>
+                        <th>Nombre</th>
+                        <th>Detalle del Gasto</th>
+                        <th>Monto</th>
+                        @else
+                         @endif
 
                     </tr>
                 </thead>
@@ -88,18 +99,36 @@
                 <tbody>
                      @if (count($reporte) > 0)
                         @foreach ($reporte as $rep)
-                            <tr data-entry-id="{{ $rep->id }}">
-                                <td></td>
-                                <td>{{ $rep->fecha }}</td>
-                                <td>{{ $atenciondetalles->selectProfesional($rep->id_profesional) }}</td>                                
-                                <td>{{ $atenciondetalles->selectPaciente($rep->id_paciente) }}</td>
-                                <td>{{ $rep->detalle }}</td>
-                                <td>{{ $rep->precio }}</td>
-                                <td>{{ $rep->porcentaje }}</td>
-                                <td>{{ $rep->costoa }}</td>
-                                <td>{{ $rep->pagar }}</td>
-                                <td></td>
-                            </tr>
+                        <tr data-entry-id="{{ $rep->id }}">
+
+
+
+                          <td></td>
+
+                          <td>{{ $rep->fecha }}</td>
+                          @if($filtro =='0')
+                          <td>{{ $atenciondetalles->selectProfesional($rep->id_profesional) }}</td>                                
+                          <td>{{ $atenciondetalles->selectPaciente($rep->id_paciente) }}</td>
+                          <td>{{ $rep->detalle }}</td>
+                          <td>{{ $rep->precio }}</td>
+                          <td>{{ $rep->porcentaje }}</td>
+                          <td>{{ $rep->costoa }}</td>
+                          <td>{{ $rep->pagar }}</td>
+                          @elseif($filtro =='1')
+                          <td>{{ $rep->detalle }}</td>
+                          <td>{{ $rep->tipo_ingreso }}</td>
+                          <td>{{ $rep->precio }}</td>
+                          <td></td>
+                          @elseif($filtro =='2')
+                          <td>{{ $rep->name }}</td>
+                          <td>{{ $rep->concepto }}</td>
+                          <td>{{ $rep->monto }}</td>
+                          @else
+                          @endif
+                         
+                          <td></td>
+                        </tr>
+                  
                         @endforeach
                     @else
                         <tr>

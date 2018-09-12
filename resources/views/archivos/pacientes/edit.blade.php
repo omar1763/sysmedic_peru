@@ -60,7 +60,7 @@
             <div class="row">
                 <div class="col-xs-6 form-group">
                     {!! Form::label('telefono', 'Telefono', ['class' => 'control-label']) !!}
-                    {!! Form::text('telefono', old('telefono'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('telefono', old('telefono'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('telefono'))
                         <p class="help-block">
@@ -71,7 +71,7 @@
            
                 <div class="col-xs-6 form-group">
                     {!! Form::label('provincia', 'Provincia*', ['class' => 'control-label']) !!}
-                    {!! Form::select('provincia', $provincia, old('provincia'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    {!! Form::select('provincia', $provincia, old('provincia'), ['class' => 'form-control select2']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('provincia'))
                         <p class="help-block">
@@ -84,7 +84,7 @@
              <div class="row">
                 <div class="col-xs-6 form-group">
                     {!! Form::label('distrito', 'Distrito*', ['class' => 'control-label']) !!}
-                    {!! Form::select('distrito', $distrito, old('distrito'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    {!! Form::select('distrito', $distrito, old('distrito'), ['class' => 'form-control select2']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('distrito'))
                         <p class="help-block">
@@ -95,7 +95,7 @@
             
                 <div class="col-xs-6 form-group">
                     {!! Form::label('edocivil', 'Estado Civil*', ['class' => 'control-label']) !!}
-                    {!! Form::select('edocivil', $edocivil, old('edocivil'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    {!! Form::select('edocivil', $edocivil, old('edocivil'), ['class' => 'form-control select2']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('edocivil'))
                         <p class="help-block">
@@ -107,7 +107,7 @@
             <div class="row">
                 <div class="col-xs-6 form-group">
                     {!! Form::label('gradoinstruccion', 'Grado de Instrucciòn*', ['class' => 'control-label']) !!}
-                    {!! Form::select('gradoinstruccion', $gradoinstruccion, old('gradoinstruccion'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    {!! Form::select('gradoinstruccion', $gradoinstruccion, old('gradoinstruccion'), ['class' => 'form-control select2']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('gradoinstruccion'))
                         <p class="help-block">
@@ -118,7 +118,7 @@
             
                 <div class="col-xs-6 form-group">
                     {!! Form::label('ocupacion', 'Ocupaciòn', ['class' => 'control-label']) !!}
-                    {!! Form::text('ocupacion', old('ocupacion'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('ocupacion', old('ocupacion'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('ocupacion'))
                         <p class="help-block">
@@ -130,7 +130,7 @@
                 <div class="row">
                 <div class="col-xs-6 form-group">
                     {!! Form::label('fechanac', 'Fecha de Nacimiento', ['class' => 'control-label']) !!}
-                    {!! Form::date('fechanac', old('fechanac'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::date('fechanac', old('fechanac'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('fechanac'))
                         <p class="help-block">

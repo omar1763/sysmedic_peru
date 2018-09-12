@@ -26,16 +26,7 @@ class StorePacientesRequest extends FormRequest
             'dni' => 'required',
             'nombres' => 'required',
             'apellidos' => 'required',
-            'direccion' => 'required',
-            'provincia' => 'required',
-            'distrito' => 'required',
-            'telefono' => 'required',
-            'fechanac' => 'required',
-            'gradoinstruccion' => 'required',
-            'ocupacion' => 'required',
-            'edocivil' => 'required',
-         
-         
+            'direccion' => 'required', 
         ];
     }
 }

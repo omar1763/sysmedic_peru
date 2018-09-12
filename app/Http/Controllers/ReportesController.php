@@ -172,49 +172,9 @@ class ReportesController extends Controller
 
         $f1 = $request->fecha;
         $f2 = $request->fecha2;
-        $servicios = $request->servicios;
-        $analisis = $request->analisis;
-        $pacientes = $request->pacientes;
-
-     if(! is_null($request->analisis))  {
-       $reporte = DB::table('atencion_profesionales_laboratorios as a')
-        ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
-        'a.recibo', 'a.created_at as fecha','a.id_profesional','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
-        'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.preciopublico as precio')
-        ->join('profesionales as f','f.id','a.id_profesional')
-        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        ->join('pacientes as p','p.id','b.id_paciente')
-        ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
-        ->join('analises as c','c.id','a.id_laboratorio')
-        ->where('a.id_profesional','<>',999)
-        ->where('a.id_laboratorio','=',$request->analisis)
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
-        ->whereBetween('a.created_at', [$f1, $f2])
-        ->orderby('a.id_atencion','asc')
-        ->get();
-
-      } else if (! is_null($request->servicios))  {
-        $reporte = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id', 'a.id_atencion', 'a.id_servicio as id_servicio', 'a.pagado', 'a.porcentaje',
-        'a.recibo', 'a.created_at as fecha','a.id_profesional','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
-        'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio')
-        ->join('profesionales as f','f.id','a.id_profesional')
-        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
-        ->join('pacientes as p','p.id','b.id_paciente')
-        ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
-        ->join('servicios as c','c.id','a.id_servicio')
-        ->where('a.id_profesional','<>',999)
-        ->where('a.id_servicio','=',$request->servicios)
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
-        ->whereBetween('a.created_at', [$f1, $f2])
-        ->orderby('a.id_atencion','asc')
-        ->get();
 
 
-      } else if (! is_null($request->pacientes)){
-
+     if(! is_null($request->fecha) & ($request->filtro==0))  {
        $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
         ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
         'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
@@ -225,7 +185,6 @@ class ReportesController extends Controller
         ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
         ->join('analises as c','c.id','a.id_laboratorio')
         ->where('a.id_profesional','<>',999)
-        ->where('b.id_paciente','=',$request->pacientes)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2]);
@@ -238,14 +197,34 @@ class ReportesController extends Controller
         ->join('atencion_servicios as s', 'a.id_atencion', 's.id_atencion')
         ->join('servicios as c','c.id','a.id_servicio')
         ->where('a.id_profesional','<>',999)
-        ->where('b.id_paciente','=',$request->pacientes)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
         ->union($comisiones_lab)
         ->get();
 
+       
+        } else if (! is_null($request->fecha) & ($request->filtro==1)){
 
+
+
+        $reporte = DB::table('creditos as a')
+        ->select('a.id','a.created_at as fecha','a.monto as costo','a.causa','a.descripcion as detalle','a.id_paciente','a.monto as precio','a.tipo_ingreso')
+        ->where('a.causa','=','V')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereBetween('a.created_at', [$f1, $f2])
+        ->get();
+
+
+        } else if (! is_null($request->fecha) & ($request->filtro==2)){
+
+        $reporte = DB::table('gastos as a')
+        ->select('a.id','a.created_at as fecha','a.name','a.concepto','a.monto')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereBetween('a.created_at', [$f1, $f2])
+        ->get();
 
       } else {
           $reporte = DB::table('atencion_profesionales_servicios as a')
@@ -293,8 +272,9 @@ class ReportesController extends Controller
         ->where('id_sucursal','=', $usuarioSuc)
         ->get()->pluck('nombres','nombres');
 
+     $filtro = $request->filtro;
 
-        return view('reportes.filtroreport1', compact('reporte','servicios','analisis','pacientes','servicioss','analisiss','paquetes','paquetess','atenciondetalles'));
+        return view('reportes.filtroreport1', compact('reporte','servicios','analisis','pacientes','servicioss','analisiss','paquetes','paquetess','atenciondetalles','filtro'));
     }
 
     public function pacientes(){
@@ -320,6 +300,7 @@ class ReportesController extends Controller
                              ->where('id_sucursal',$usuarioSuc)
                              ->get()->pluck('nombres','id');
 
+
       return view('reportes.pacientes', compact('pacientes'));
 
 
@@ -341,7 +322,7 @@ class ReportesController extends Controller
         }
 
       $servicios = DB::table('servicios')
-      ->select('*')
+      ->select('detalle','id')
       ->where('id_empresa','=', $usuarioEmp)
       ->where('id_sucursal','=', $usuarioSuc)
       ->get()->pluck('detalle','id');

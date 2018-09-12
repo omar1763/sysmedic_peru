@@ -55,7 +55,7 @@ class PacientesController extends Controller
         ->orderby('a.created_at','desc')
         ->paginate(5000);
 
-        $provincia= Provincia::with('nombre');
+        $provincia= Provincia::with('nombre','id');
         $distrito = Distrito::with('nombre');
         $edocivil = EdoCivil::with('nombre');
         $gradoinstruccion = GradoInstruccion::with('nombre');
