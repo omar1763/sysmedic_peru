@@ -184,7 +184,7 @@ class ReportesController extends Controller
         ->join('pacientes as p','p.id','b.id_paciente')
         ->join('atencion_laboratorios as s', 'a.id_atencion', 's.id_atencion')
         ->join('analises as c','c.id','a.id_laboratorio')
-        ->where('a.id_profesional','<>',999)
+     //   ->where('a.id_profesional','<>',999)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2]);
@@ -196,13 +196,15 @@ class ReportesController extends Controller
         ->join('pacientes as p','p.id','b.id_paciente')
         ->join('atencion_servicios as s', 'a.id_atencion', 's.id_atencion')
         ->join('servicios as c','c.id','a.id_servicio')
-        ->where('a.id_profesional','<>',999)
+       // ->where('a.id_profesional','<>',999)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
         ->union($comisiones_lab)
         ->get();
+        
 
+       
        
         } else if (! is_null($request->fecha) & ($request->filtro==1)){
 
