@@ -45,7 +45,7 @@
            
                 <div class="col-xs-6 form-group">
                     {!! Form::label('direccion', 'Direcciòn', ['class' => 'control-label']) !!}
-                    {!! Form::text('direccion', old('direccion'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
+                    {!! Form::text('direccion', old('direccion'), ['class' => 'form-control', 'placeholder' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('direccion'))
                         <p class="help-block">

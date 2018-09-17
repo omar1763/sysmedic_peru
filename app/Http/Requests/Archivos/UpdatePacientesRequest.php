@@ -26,7 +26,7 @@ class UpdatePacientesRequest extends FormRequest
             'dni' => 'required',
             'nombres' => 'required',
             'apellidos' => 'required',
-            'direccion' => 'required',
+         
          
         ];
     }
