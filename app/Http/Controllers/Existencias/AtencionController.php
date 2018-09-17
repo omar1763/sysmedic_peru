@@ -19,6 +19,7 @@ use App\AtencionServicios;
 use App\AtencionPaquetes;
 use App\AtencionProfesionalesServicio;
 use App\AtencionProfesionalesLaboratorio;
+use App\AtencionProfesionalesPaquete;
 use App\Creditos;
 use App\Ingresos;
 use Carbon\Carbon;
@@ -72,7 +73,20 @@ class AtencionController extends Controller
         ->join('analises as c','c.id','a.id_laboratorio')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-        ->orderby('a.id_atencion','asc')
+        ->orderby('a.id','DESC')
+        ->where('a.created_at','=', $f1);
+
+         $atec_paq = DB::table('atencion_profesionales_paquetes as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_paquete as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+        'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+        'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('paquetes as c','c.id','a.id_paquete')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.id_atencion','DESC')
         ->where('a.created_at','=', $f1);
 
         $atencion = DB::table('atencion_profesionales_servicios as a')
@@ -85,8 +99,8 @@ class AtencionController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.created_at','=', $f1)
-        ->orderby('a.id_atencion','asc')
-        ->union($atec_lab)
+        ->orderby('a.id_atencion','DESC')
+        ->union($atec_lab,$atec_paq)
         ->get();
 
 
@@ -121,7 +135,22 @@ class AtencionController extends Controller
         ->join('analises as c','c.id','a.id_laboratorio')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-       ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
+        ->orderby('a.id_atencion','DESC')
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
+
+         $atec_paq = DB::table('atencion_profesionales_paquetes as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_paquete as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+        'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+        'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('paquetes as c','c.id','a.id_paquete')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.id_atencion','DESC')
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
+
 
         $atencion = DB::table('atencion_profesionales_servicios as a')
         ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres', 'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio')
@@ -132,25 +161,13 @@ class AtencionController extends Controller
         ->join('servicios as c','c.id','a.id_servicio')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.id_atencion','DESC')
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->union($atec_lab)
+        ->union($atec_paq)
         ->get();
 
-        /*
-          $atencion = DB::table('atencions as a')
-        ->select('a.id','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.observaciones','d.id_paciente','d.origen')
-       
-        ->join('atencion_detalles as d','a.id','d.id_atencion')
-
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
-        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-      ->orderby('a.created_at','desc')
-      ->paginate(1000);
-//               ->toSql();
-//        dd($atencion); 
-
-      //  dd(DB::getQueryLog());*/
+     
     }
 
 
@@ -161,7 +178,6 @@ class AtencionController extends Controller
         $atenciondetalle = new AtencionDetalle();
 
 
- 
 
        return view('existencias.atencion.index', compact('atencion','servicios','analisis','paquete','paquetes','atenciondetalle'));
     }
@@ -540,6 +556,23 @@ public function cardainput3($id, Request $request){
             $serviciosprofatencion->save();
         }
     }
+
+     if(! is_null($request->paquetes)){
+           foreach ($request->paquetes as $key => $value) {
+
+           $paquetesatencion = new AtencionProfesionalesPaquete;
+           $paquetesatencion->id_atencion =$atencion->id;
+           $paquetesatencion->id_paquete    =$value;
+           $paquetesatencion->id_profesional =$request->profesional;
+           $paquetesatencion->porcentajepaq =$request->porcentajepaq;
+           $paquetesatencion->costo = $request->costo;
+           $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
+           $paquetesatencion->id_sucursal =$usuarioSuc;
+           $paquetesatencion->id_empresa =$usuarioEmp;
+           $paquetesatencion->save();
+        }
+    }
+
 
 
     if(! is_null($request->analises)){
