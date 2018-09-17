@@ -697,6 +697,22 @@ public function cardainput3($id, Request $request){
     }
 }
 
+        if(! is_null($request->paquetes)){
+           foreach ($request->paquetes as $key => $value) {
+
+           $paquetesatencion = new AtencionProfesionalesPaquete;
+           $paquetesatencion->id_atencion =$atencion->id;
+           $paquetesatencion->id_paquete    =$value;
+           $paquetesatencion->id_profesional =999;
+           $paquetesatencion->porcentajepaq =$request->porcentajepaq;
+           $paquetesatencion->costo = $request->costo;
+           $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
+           $paquetesatencion->id_sucursal =$usuarioSuc;
+           $paquetesatencion->id_empresa =$usuarioEmp;
+           $paquetesatencion->save();
+        }
+    }
+
 }
 
 
