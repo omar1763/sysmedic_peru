@@ -704,9 +704,9 @@ public function cardainput3($id, Request $request){
            $paquetesatencion->id_atencion =$atencion->id;
            $paquetesatencion->id_paquete    =$value;
            $paquetesatencion->id_profesional =999;
-           $paquetesatencion->porcentajepaq =$request->porcentajepaq;
+           $paquetesatencion->porcentajepaq =0;
            $paquetesatencion->costo = $request->costo;
-           $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
+           $paquetesatencion->pagar = 0;
            $paquetesatencion->id_sucursal =$usuarioSuc;
            $paquetesatencion->id_empresa =$usuarioEmp;
            $paquetesatencion->save();
