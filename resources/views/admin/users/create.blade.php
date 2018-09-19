@@ -58,6 +58,37 @@
                     @endif
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('empresas', 'Empresa', ['class' => 'control-label']) !!}
+                    {!! Form::select('empresas', $empresas, old('empresas'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('empresas'))
+                        <p class="help-block">
+                            {{ $errors->first('empresas') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+           
+
+            <div class="row"> 
+               <div class="col-xs-12 form-group"  id="locbyemp">
+
+               </div>
+
+           </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    <label class="col-md-12 control-label">
+                        Recepcionista
+                    </label>
+                    <div class="col-md-12">
+                        {{Form::select('rol', ['NULL' => 'Seleccione','Recepcionista' => 'Recepcionista'], NULL, ["required", "class"=>"form-control"])}}
+                    </div>
+                </div>
+            </div>
             
         </div>
     </div>
@@ -65,4 +96,24 @@
     {!! Form::submit(trans('global.app_save'), ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
 @stop
+@section('javascript') 
+
+
+<script type="text/javascript">
+    $('#empresas').on('change',function(){
+      var id= $('#empresas').val();
+      var link= '{{asset("users/locbyemp/id")}}';
+      link= link.replace('id',id);
+      $.ajax({
+       type: "get",
+       url: link ,
+       success: function(a) {
+        $('#locbyemp').html(a);
+    }
+});
+
+  });
+</script>
+@endsection
+
 

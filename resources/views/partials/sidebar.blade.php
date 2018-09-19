@@ -388,11 +388,19 @@
                             </span>
                         </a>
                     </li>
-                     <li class="{{ $request->segment(2) == 'sedesafilia' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.sedesafilia.index') }}">
+                    <li class="{{ $request->segment(2) == 'empresas' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.empresas.index') }}">
                             <i class="fa fa-user"></i>
                             <span class="title">
-                                @lang('global.sedesafilia.title')
+                                @lang('global.empresas.title')
+                            </span>
+                        </a>
+                    </li>
+                    <li class="{{ $request->segment(2) == 'locales' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.locales.index') }}">
+                            <i class="fa fa-user"></i>
+                            <span class="title">
+                                @lang('global.locales.title')
                             </span>
                         </a>
                     </li>

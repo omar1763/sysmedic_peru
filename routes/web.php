@@ -26,8 +26,16 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('users_mass_destroy', ['uses' => 'Admin\UsersController@massDestroy', 'as' => 'users.mass_destroy']);
     Route::resource('personal', 'Archivos\PersonalController');
     Route::post('personal_mass_destroy', ['uses' => 'Archivos\PersonalController@massDestroy', 'as' => 'personal.mass_destroy']);
+
     Route::resource('centros', 'Archivos\CentrosController');
     Route::post('centros_mass_destroy', ['uses' => 'Archivos\CentrosController@massDestroy', 'as' => 'centros.mass_destroy']);
+
+    Route::resource('empresas', 'Admin\EmpresasController');
+    Route::post('empresas_mass_destroy', ['uses' => 'Archivos\EmpresasController@massDestroy', 'as' => 'empresas.mass_destroy']);
+
+     Route::resource('locales', 'Admin\LocalesController');
+    Route::post('localess_mass_destroy', ['uses' => 'Archivos\LocalesController@massDestroy', 'as' => 'localess.mass_destroy']);
+
     Route::resource('profesionales', 'Archivos\ProfesionalesController');
     Route::post('profesionales_mass_destroy', ['uses' => 'Archivos\ProfesionalesController@massDestroy', 'as' => 'profesionales.mass_destroy']);
     Route::resource('laboratorios', 'Archivos\LaboratoriosController');
@@ -38,8 +46,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('sedesafilia_mass_destroy', ['uses' => 'Archivos\SedesAfiliaController@massDestroy', 'as' => 'sedesafilia.mass_destroy']);
     Route::resource('servicios', 'Archivos\ServiciosController');
     Route::post('servicios_mass_destroy', ['uses' => 'Archivos\ServiciosController@massDestroy', 'as' => 'servicios.mass_destroy']);
+
     Route::resource('productos', 'Movimientos\ProductosController');
     Route::post('productos_mass_destroy', ['uses' => 'Movimientos\ProductosController@massDestroy', 'as' => 'productos.mass_destroy']);
+
     Route::resource('ingresos', 'Movimientos\IngresosController');
     Route::post('ingresos_mass_destroy', ['uses' => 'Movimientos\IngresosController@massDestroy', 'as' => 'ingresos.mass_destroy']);
 
@@ -49,8 +59,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
     Route::resource('paquetes', 'Archivos\PaquetesController');
     Route::post('paquetes_mass_destroy', ['uses' => 'Archivos\PaquetesController@massDestroy', 'as' => 'paquetes.mass_destroy']);
+
     Route::resource('atencion', 'Existencias\AtencionController');
     Route::post('atencion_mass_destroy', ['uses' => 'Existencias\AtencionController@massDestroy', 'as' => 'atencion.mass_destroy']);
+
     Route::resource('gastos', 'Existencias\GastosController');
     Route::post('gastos_mass_destroy', ['uses' => 'Existencias\GastosController@massDestroy', 'as' => 'gastos.mass_destroy']);
     Route::resource('labporpagar', 'Existencias\LabPorPagarController');
@@ -103,6 +115,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/existencias/atencion/dataPacientes/{id}','Existencias\AtencionController@verDataPacientes');
     Route::get('/existencias/atencion/dataServicios/{id}','Existencias\AtencionController@verDataServicios');
 
+    Route::get('/users/locbyemp/{id}','Admin\UsersController@locbyemp');
 
 
 /////// RUTAS DE PACIENTES  ////
@@ -118,6 +131,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/pacientes/ver/{id}',['uses' => 'Archivos\PacientesController@ver', 'as' => 'pacientes.ver']);
     Route::put('/pacientes/update/{id}',['uses' => 'Archivos\PacientesController@update', 'as' => 'pacientes.update']);
     Route::put('/pacientes/destroy/{id}',['uses' => 'Archivos\PacientesController@destroy', 'as' => 'pacientes.destroy']);
+  //  Route::get('/atencion/editar/{id}',['uses' => 'Archivos\PacientesController@edit', 'as' => 'pacientes.edit']);
 
 
  Route::put('/comisionesporpagar/destroylab/{id}',['uses' => 'Existencias\ComisionesPorPagarController@destroylab', 'as' => 'comisionesporpagar.destroylab']);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
-use App\Empresa;
+use App\Empresas;
 use App\Locales;
 use DB;
 use Silber\Bouncer\Database\Role;
@@ -39,6 +39,12 @@ class UsersController extends Controller
         return view('admin.users.index', compact('users','roles'));
     }
 
+     public function locbyemp($id)
+    {
+      $locales = Locales::locbyemp($id);
+        return view('admin.users.locbyemp', compact('locales'));
+    }
+
     /**
      * Show the form for creating new User.
      *
@@ -50,8 +56,9 @@ class UsersController extends Controller
             return abort(401);
         }
         $roles = Role::get()->pluck('name', 'name');
+        $empresas = Empresas::get()->pluck('nombre', 'id');
 
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create', compact('roles','empresas'));
     }
 
     public function dataUser() {
@@ -75,12 +82,18 @@ class UsersController extends Controller
      * @param  \App\Http\Requests\StoreUsersRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUsersRequest $request)
+    public function store(Request $request)
     {
-        if (! Gate::allows('users_managefull')) {
-            return abort(401);
-        }
-        $user = User::create($request->all());
+       
+       $user = new User;
+       $user->name =$request->name;
+       $user->email     =$request->email;
+       $user->password     =$request->password;
+       $user->id_empresa     =$request->empresas;
+       $user->id_sucursal     =$request->locales;
+       $user->rol     =$request->rol;
+       $user->save();
+
 
         foreach ($request->input('roles') as $role) {
             $user->assign($role);
