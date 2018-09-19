@@ -266,6 +266,52 @@
                         </a>
                     </li>
                 </ul>
+
+                 <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadospaq' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadospaq.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.resultadospaq.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadosguardadospaq' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadosguardadospaq.index') }}">
+                            <i class="fa fa-search"></i>
+                            <span class="title">
+                                @lang('global.resultadosguardadospaq.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadospaqserv' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadospaqserv.index') }}">
+                            <i class="fa fa-clipboard"></i>
+                            <span class="title">
+                                @lang('global.resultadospaqserv.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="treeview-menu">
+
+                    <li class="{{ $request->segment(2) == 'resultadosguardadospaqserv' ? 'active active-sub' : '' }}">
+                        <a href="{{ route('admin.resultadosguardadospaqserv.index') }}">
+                            <i class="fa fa-search"></i>
+                            <span class="title">
+                                @lang('global.resultadosguardadospaqserv.title')
+                            </span>
+                        </a>
+                    </li>
+                </ul>
                     
              
                  

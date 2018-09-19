@@ -8,7 +8,6 @@ use App\Servicios;
 use App\Empresas;
 use App\Analisis;
 use App\PaquetesAnalisis;
-
 use App\Locales;
 use DB;
 use Silber\Bouncer\Database\Role;

@@ -13,6 +13,7 @@ use App\Profesionales;
 use App\Analisis;
 use App\Paquetes;
 use App\PaquetesServ;
+use App\PaquetesAnalisis;
 use App\Laboratorios;
 use App\AtencionLaboratorio;
 use App\AtencionServicios;
@@ -20,6 +21,7 @@ use App\AtencionPaquetes;
 use App\AtencionProfesionalesServicio;
 use App\AtencionProfesionalesLaboratorio;
 use App\AtencionProfesionalesPaquete;
+use App\AtencionProfesionalesPaqueteLab;
 use App\Creditos;
 use App\Ingresos;
 use Carbon\Carbon;
@@ -149,6 +151,7 @@ class AtencionController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->orderby('a.id_atencion','DESC')
+        ->groupBy('a.id_atencion')
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
 
 
@@ -489,12 +492,7 @@ public function cardainput3($id, Request $request){
      */
     public function store(StoreAtencionRequest $request)
     {
-       // dd();
-
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
-//dd($request->profesional);
+     
         $id_usuario = Auth::id();
 
         $searchUsuarioID = DB::table('users')
@@ -557,22 +555,63 @@ public function cardainput3($id, Request $request){
         }
     }
 
-     if(! is_null($request->paquetes)){
-           foreach ($request->paquetes as $key => $value) {
+    if(! is_null($request->paquetes)){
+     foreach ($request->paquetes as $key => $value) {
 
-           $paquetesatencion = new AtencionProfesionalesPaquete;
-           $paquetesatencion->id_atencion =$atencion->id;
-           $paquetesatencion->id_paquete    =$value;
-           $paquetesatencion->id_profesional =$request->profesional;
-           $paquetesatencion->porcentajepaq =$request->porcentajepaq;
-           $paquetesatencion->costo = $request->costo;
-           $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
-           $paquetesatencion->id_sucursal =$usuarioSuc;
-           $paquetesatencion->id_empresa =$usuarioEmp;
-           $paquetesatencion->save();
+        $searchServPaq = DB::table('paquetes_servs')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id_paquete','=', $value)
+        ->get();
+
+        foreach ($searchServPaq as $serv) {
+            $id_servicio = $serv->id_servicio;
+
+
+            if(! is_null($id_servicio)){
+
+             $paquetesatencion = new AtencionProfesionalesPaquete;
+             $paquetesatencion->id_atencion =$atencion->id;
+             $paquetesatencion->id_paquete    =$value;
+             $paquetesatencion->id_servicio    =$id_servicio;
+             $paquetesatencion->id_profesional =$request->profesional;
+             $paquetesatencion->porcentajepaq =$request->porcentajepaq;
+             $paquetesatencion->costo = $request->costo;
+             $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
+             $paquetesatencion->id_sucursal =$usuarioSuc;
+             $paquetesatencion->id_empresa =$usuarioEmp;
+             $paquetesatencion->save();
+         }
         }
-    }
 
+        $searchLabPaq = DB::table('paquetes_analises')
+        ->select('*')
+        ->where('id_paquete','=', $value)
+        ->get();
+
+         foreach ($searchLabPaq as $lab) {
+            $id_laboratorio = $lab->id_analisis;
+
+
+            if(! is_null($id_laboratorio)){
+
+               $paquetesatencion = new AtencionProfesionalesPaqueteLab;
+               $paquetesatencion->id_atencion =$atencion->id;
+               $paquetesatencion->id_paquete    =$value;
+               $paquetesatencion->id_laboratorio    =$id_laboratorio;
+               $paquetesatencion->id_profesional =$request->profesional;
+               $paquetesatencion->porcentajepaq =$request->porcentajepaq;
+               $paquetesatencion->costo = $request->costo;
+               $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
+               $paquetesatencion->id_sucursal =$usuarioSuc;
+               $paquetesatencion->id_empresa =$usuarioEmp;
+               $paquetesatencion->save();
+         }
+        }
+
+
+}
+}
 
 
     if(! is_null($request->analises)){
@@ -700,9 +739,32 @@ public function cardainput3($id, Request $request){
         if(! is_null($request->paquetes)){
            foreach ($request->paquetes as $key => $value) {
 
+            $searchServPaq = DB::table('paquetes_servs')
+            ->select('*')
+                   // ->where('estatus','=','1')
+            ->where('id','=', $value)
+            ->get();
+
+            foreach ($searchServPaq as $serv) {
+                $id_servicio = $serv->id_servicio;
+
+            }
+
+             $searchLabPaq = DB::table('paquetes_analises')
+            ->select('*')
+                   // ->where('estatus','=','1')
+            ->where('id','=', $value)
+            ->get();
+
+            foreach ($searchLabPaq as $lab) {
+                $id_laboratorio = $lab->id_analisis;
+
+            }
+
            $paquetesatencion = new AtencionProfesionalesPaquete;
            $paquetesatencion->id_atencion =$atencion->id;
            $paquetesatencion->id_paquete    =$value;
+           $paquetesatencion->id_servicio    =$id_servicio;
            $paquetesatencion->id_profesional =999;
            $paquetesatencion->porcentajepaq =0;
            $paquetesatencion->costo = $request->costo;
@@ -710,6 +772,19 @@ public function cardainput3($id, Request $request){
            $paquetesatencion->id_sucursal =$usuarioSuc;
            $paquetesatencion->id_empresa =$usuarioEmp;
            $paquetesatencion->save();
+
+           $paquetesatencion = new AtencionProfesionalesPaqueteLab;
+           $paquetesatencion->id_atencion =$atencion->id;
+           $paquetesatencion->id_paquete    =$value;
+           $paquetesatencion->id_laboratorio    =$id_laboratorio;
+           $paquetesatencion->id_profesional =999;
+           $paquetesatencion->porcentajepaq =0;
+           $paquetesatencion->costo = $request->costo;
+           $paquetesatencion->pagar = 0;
+           $paquetesatencion->id_sucursal =$usuarioSuc;
+           $paquetesatencion->id_empresa =$usuarioEmp;
+           $paquetesatencion->save();
+
         }
     }
 
@@ -755,15 +830,10 @@ public function cardainput3($id, Request $request){
       
 
         return redirect()->route('admin.atencion.index');
-    }
+
+  }
 
 
-    /**
-     * Show the form for editing User.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         if (! Gate::allows('users_manage')) {

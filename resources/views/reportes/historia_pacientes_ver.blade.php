@@ -9,6 +9,8 @@
  @foreach($pacientes as $pac)
 
   	<p style="text-align: left;"><center><STRONG>HISTORÌA MÈDICA</STRONG></center></p>
+    <p style="text-align: left;"><center><h1>{{Auth::user()->empresa}}</h1></center></p>
+
     <br><br>
     <p style="text-align: left;"><strong>Nº DE H.C:</strong>{{ $pac->historia}}</p><p style="text-align: right; margin-right: 190px; margin-top: -30px;"><strong>FECHA Y HORA DE ATENCIÒN:</strong></p>
 

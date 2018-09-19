@@ -7,7 +7,7 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 
 
-class RedactarResultadosLab extends Authenticatable
+class RedactarResultadosPaqServ extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;

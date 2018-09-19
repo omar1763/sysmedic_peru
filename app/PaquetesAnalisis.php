@@ -6,14 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Hash;
 
-/**
- * Class PaquetesAnalises
- *
- * @package App
- * @property string $id_paquete
- * @property string $id_servicio
 
-*/
 class PaquetesAnalisis extends Authenticatable
 {
     use Notifiable;

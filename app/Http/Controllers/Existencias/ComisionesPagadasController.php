@@ -127,6 +127,7 @@ class ComisionesPagadasController extends Controller
         ->union($comisiones_lab)
         ->distinct()->get();
 
+      
         $comisionespagadas = json_encode($comisionespagadas);
         $comisionespagadas = self::unique_multidim_array(json_decode($comisionespagadas, true), "id_atencion");
 

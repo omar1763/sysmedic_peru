@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Movimientos\StoreResultadosRequest;
 use App\Http\Requests\Movimientos\UpdateResultadosRequest;
 
-class ResultadosGuardadosLabController extends Controller
+class ResultadosGuardadosPaqServController extends Controller
 {
     /**
      * Display a listing of User.
@@ -45,27 +45,27 @@ class ResultadosGuardadosLabController extends Controller
     	$f2 = date('YYYY-m-d');
 
     	$f1 = $request->fecha;
-    	$f2 = $request->fecha2;
 
     
-    	  $laboratorios = DB::table('atencion_profesionales_laboratorios as a')
-                ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.name as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
-                ->join('empresas as b','a.id_empresa','b.id')
-                ->join('locales as c','a.id_sucursal','c.id')
-                ->join('analises as d','a.id_laboratorio','d.id')
-                ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
-                ->join('pacientes as f','f.id','e.id_paciente')
+          $paquetes = DB::table('atencion_profesionales_paquetes as a')
+                ->select('a.id', 'a.id_atencion', 'a.id_paquete','a.id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+                    'a.recibo', 'a.created_at as fecha','a.status_redactar_resultados','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+                    'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio','i.detalle as detalle1')
+                ->join('profesionales as f','f.id','a.id_profesional')
+                ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+                ->join('pacientes as p','p.id','b.id_paciente')
+                ->join('paquetes as c','c.id','a.id_paquete')
+                ->join('servicios as i','i.id','a.id_servicio')
                 ->where('a.status_redactar_resultados','=',1)
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
-                ->whereBetween('a.created_at', [$f1, $f2])
-                ->orderby('a.created_at','desc');
+                ->orderby('a.id_atencion','DESC')
+                ->where('a.created_at','=', $f1)
                 ->get();
 
-        
 
 
-    	return view('existencias.resultadosguardadoslab.index', compact('laboratorios'));
+    	return view('existencias.resultadosguardadospaqserv.index', compact('paquetes'));
     }
 
  

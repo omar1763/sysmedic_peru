@@ -1105,6 +1105,124 @@ class PdfController extends Controller
 
     }
 
+     public function verResultadoPaqLab($id){
+       
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+    
+
+                 $paquetes = DB::table('atencion_profesionales_paquete_labs as a')
+                ->select('a.id', 'a.id_atencion', 'a.id_paquete','a.id_laboratorio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+                    'a.recibo', 'a.created_at as fecha','a.status_redactar_resultados','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+                    'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio','i.name as detalle1','h.descripcion as resultado')
+                ->join('profesionales as f','f.id','a.id_profesional')
+                ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+                ->join('pacientes as p','p.id','b.id_paciente')
+                ->join('paquetes as c','c.id','a.id_paquete')
+                ->join('analises as i','i.id','a.id_laboratorio')
+                ->join('redactar_resultados_paq_labs as h','a.id','h.id_atencion_lab')
+                ->where('a.status_redactar_resultados','=',1)
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->where('a.id','=', $id)
+                ->get();
+             
+
+        if(!is_null($paquetes)){
+            return $paquetes;
+         }else{
+            return false;
+         }  
+
+     }
+
+
+        public function resultados_lab_paq_ver($id) 
+    {
+       
+     $paqueteslab =PdfController::verResultadoPaqLab($id);
+
+     $view = \View::make('reportes.resultados_lab_paq_ver')->with('paqueteslab', $paqueteslab);
+     $pdf = \App::make('dompdf.wrapper');
+     $pdf->loadHTML($view);
+     
+       
+        return $pdf->stream('resultados_lab_paq_ver');
+
+    }
+
+    public function verResultadoPaqServ($id){
+       
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+    
+
+                 $paquetes = DB::table('atencion_profesionales_paquetes as a')
+                ->select('a.id', 'a.id_atencion', 'a.id_paquete','a.id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+                    'a.recibo', 'a.created_at as fecha','a.status_redactar_resultados','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+                    'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio','i.detalle as detalle1','h.descripcion as resultado')
+                ->join('profesionales as f','f.id','a.id_profesional')
+                ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+                ->join('pacientes as p','p.id','b.id_paciente')
+                ->join('paquetes as c','c.id','a.id_paquete')
+                ->join('servicios as i','i.id','a.id_servicio')
+                ->join('redactar_resultados_paq_servs as h','a.id','h.id_atencion_ser')
+                ->where('a.status_redactar_resultados','=',1)
+                ->where('a.id_empresa','=', $usuarioEmp)
+                ->where('a.id_sucursal','=', $usuarioSuc)
+                ->where('a.id','=', $id)
+                ->get();
+             
+
+        if(!is_null($paquetes)){
+            return $paquetes;
+         }else{
+            return false;
+         }  
+
+     }
+
+
+        public function resultados_lab_paq_serv($id) 
+    {
+       
+     $paquetesserv =PdfController::verResultadoPaqServ($id);
+
+     $view = \View::make('reportes.resultados_lab_paq_serv_ver')->with('paquetesserv', $paquetesserv);
+     $pdf = \App::make('dompdf.wrapper');
+     $pdf->loadHTML($view);
+     
+       
+        return $pdf->stream('resultados_lab_paq_ver');
+
+    }
+
      public function ticketAtencion($id){
        
 
