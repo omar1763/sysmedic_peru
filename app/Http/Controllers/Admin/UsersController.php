@@ -33,7 +33,7 @@ class UsersController extends Controller
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->orderby('a.created_at','desc')
-        ->paginate(10);
+        ->paginate(100000);
         //$users = User::with('roles')->get();
 
         return view('admin.users.index', compact('users','roles'));
