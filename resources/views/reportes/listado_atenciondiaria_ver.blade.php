@@ -110,13 +110,23 @@
     <td>{{ $efectivo->total_monto_ef}}</td>
     <td>{{ $tarjeta->total_monto_tj}}</td>
   </tr>
+
+   <?php 
+
+$efectivo = $efectivo->total_monto_ef;
+$tarjeta = $tarjeta->total_monto_tj;
+$totali = $efectivo+$tarjeta;
+
+print_r($totali);
+
+  ;?>
  
  
   <tr>
     <th scope="row">TOTAL</th>
     <td></td>
     <td></td>
-    <td><strong>{{ $ingresos->total_monto}}</strong></td>
+    <td><strong>{!!$totali!!}</strong></td>
   </tr>
   @endforeach
   @endforeach  
