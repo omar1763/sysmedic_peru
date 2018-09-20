@@ -122,7 +122,7 @@ class ReportesController extends Controller
        $comisiones_lab = DB::table('atencion_profesionales_laboratorios as a')
         ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentaje',
         'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
-        'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.preciopublico as precio','a.id_profesional')
+        'f.apellidos', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.preciopublico as precio','a.id_profesional')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('pacientes as p','p.id','b.id_paciente')
@@ -133,8 +133,36 @@ class ReportesController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2]);
 
+          $paquetes_serv = DB::table('atencion_profesionales_paquetes as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+        'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+        'f.apellidos', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio','a.id_profesional')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('servicios as c','c.id','a.id_servicio')
+     //   ->where('a.id_profesional','<>',999)
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereBetween('a.created_at', [$f1, $f2]);
+
+
+
+        $paquetes_lab = DB::table('atencion_profesionales_paquete_labs as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+        'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+        'f.apellidos','p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.preciopublico as precio','a.id_profesional')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('analises as c','c.id','a.id_laboratorio')
+     //   ->where('a.id_profesional','<>',999)
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->whereBetween('a.created_at', [$f1, $f2]);
+
         $reporte = DB::table('atencion_profesionales_servicios as a')
-        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres', 'f.apellidos', 's.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio','a.id_profesional')
+        ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres', 'f.apellidos','p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio','a.id_profesional')
         ->join('profesionales as f','f.id','a.id_profesional')
         ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
         ->join('pacientes as p','p.id','b.id_paciente')
@@ -145,10 +173,12 @@ class ReportesController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
         ->union($comisiones_lab)
+        ->union($paquetes_serv)
+        ->union($paquetes_lab)
         ->get();
         
 
-       
+     
        
         } else if (! is_null($request->fecha) & ($request->filtro==1)){
 

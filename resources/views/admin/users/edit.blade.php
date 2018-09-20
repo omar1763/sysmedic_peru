@@ -11,7 +11,7 @@
         </div>
 
         <div class="panel-body">
-            <div class="row">
+           <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('name', 'Name*', ['class' => 'control-label']) !!}
                     {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
@@ -37,8 +37,8 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
-                    {!! Form::password('password', ['class' => 'form-control', 'placeholder' => '']) !!}
+                    {!! Form::label('password', 'Password*', ['class' => 'control-label']) !!}
+                    {!! Form::password('password', ['class' => 'form-control', 'placeholder' => '', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('password'))
                         <p class="help-block">
@@ -50,13 +50,44 @@
             <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('roles', 'Roles*', ['class' => 'control-label']) !!}
-                    {!! Form::select('roles[]', $roles, old('roles') ? old('role') : $user->roles()->pluck('name', 'name'), ['class' => 'form-control select2', 'multiple' => 'multiple', 'required' => '']) !!}
+                    {!! Form::select('roles[]', $roles, old('roles'), ['class' => 'form-control select2', 'multiple' => 'multiple', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('roles'))
                         <p class="help-block">
                             {{ $errors->first('roles') }}
                         </p>
                     @endif
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('empresas', 'Empresa', ['class' => 'control-label']) !!}
+                    {!! Form::select('empresas', $empresas, old('empresas'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('empresas'))
+                        <p class="help-block">
+                            {{ $errors->first('empresas') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+           
+
+            <div class="row"> 
+               <div class="col-xs-12 form-group"  id="locbyemp">
+
+               </div>
+
+           </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    <label class="col-md-12 control-label">
+                        Recepcionista
+                    </label>
+                    <div class="col-md-12">
+                        {{Form::select('rol', ['NULL' => 'Seleccione','Recepcionista' => 'Recepcionista'], NULL, ["required", "class"=>"form-control"])}}
+                    </div>
                 </div>
             </div>
             
@@ -67,3 +98,22 @@
     {!! Form::close() !!}
 @stop
 
+@section('javascript') 
+
+
+<script type="text/javascript">
+    $('#empresas').on('change',function(){
+      var id= $('#empresas').val();
+      var link= '{{asset("users/locbyemp/id")}}';
+      link= link.replace('id',id);
+      $.ajax({
+       type: "get",
+       url: link ,
+       success: function(a) {
+        $('#locbyemp').html(a);
+    }
+});
+
+  });
+</script>
+@endsection

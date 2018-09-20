@@ -84,7 +84,17 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-       
+        $empresas = DB::table('empresas as a')
+        ->select('*')
+        ->where('a.id','=',$request->empresas)
+        ->get()->pluck('nombre'); 
+
+        $locales = DB::table('locales as a')
+        ->select('*')
+        ->where('a.id','=',$request->locales)
+        ->get()->pluck('nombres'); 
+
+
        $user = new User;
        $user->name =$request->name;
        $user->email     =$request->email;
@@ -92,6 +102,8 @@ class UsersController extends Controller
        $user->id_empresa     =$request->empresas;
        $user->id_sucursal     =$request->locales;
        $user->rol     =$request->rol;
+       $user->empresa     =$empresas;
+       $user->sucursal     =$locales;
        $user->save();
 
 
@@ -118,7 +130,9 @@ class UsersController extends Controller
 
         $user = User::findOrFail($id);
 
-        return view('admin.users.edit', compact('user', 'roles'));
+        $empresas = Empresas::get()->pluck('nombre', 'id');
+
+        return view('admin.users.edit', compact('user', 'roles','empresas'));
     }
 
     /**
@@ -133,8 +147,29 @@ class UsersController extends Controller
         if (! Gate::allows('users_managefull')) {
             return abort(401);
         }
-        $user = User::findOrFail($id);
-        $user->update($request->all());
+        
+
+        $empresas = DB::table('empresas as a')
+        ->select('*')
+        ->where('a.id','=',$request->empresas)
+        ->get()->pluck('nombre'); 
+
+        $locales = DB::table('locales as a')
+        ->select('*')
+        ->where('a.id','=',$request->locales)
+        ->get()->pluck('nombres'); 
+
+       $user = User::findOrFail($id);
+       $user->name =$request->name;
+       $user->email     =$request->email;
+       $user->password     =$request->password;
+       $user->id_empresa     =$request->empresas;
+       $user->id_sucursal     =$request->locales;
+       $user->rol     =$request->rol;
+       $user->empresa     =$empresas;
+       $user->sucursal     =$locales;
+       $user->update();
+
         foreach ($user->roles as $role) {
             $user->retract($role);
         }
