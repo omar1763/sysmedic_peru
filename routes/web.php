@@ -116,6 +116,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('/existencias/atencion/dataServicios/{id}','Existencias\AtencionController@verDataServicios');
 
     Route::get('/users/locbyemp/{id}','Admin\UsersController@locbyemp');
+    Route::get('/pacientes/distbypro/{id}','Archivos\PacientesController@distbypro');
+
 
 
 /////// RUTAS DE PACIENTES  ////

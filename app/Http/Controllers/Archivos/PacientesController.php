@@ -64,23 +64,28 @@ class PacientesController extends Controller
         return view('archivos.pacientes.index', compact('pacientes','provincia','distrito','edocivil','gradoinstruccion'));
     }
 
-    /**
-     * Show the form for creating new User.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+     public function distbypro($id)
+    {
+     
+      $distritos = Distrito::distbypro($id);
+     
+      return view('archivos.pacientes.distbypro', compact('distritos'));
+    }
+
+
+
     public function create()
     {
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
-       $provincia = Provincia::get()->pluck('nombre', 'nombre');
-       $distrito = Distrito::get()->pluck('nombre', 'nombre');
+        $provincia = Provincia::get()->pluck('nombre', 'nombre');
        $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
        $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
 
 
-        return view('archivos.pacientes.create', compact('provincia','distrito','edocivil','gradoinstruccion'));
+        return view('archivos.pacientes.create', compact('provincia','edocivil','gradoinstruccion'));
     }
 
    public function createmodal()
@@ -89,12 +94,12 @@ class PacientesController extends Controller
             return abort(401);
         }
        $provincia = Provincia::get()->pluck('nombre', 'nombre');
-       $distrito = Distrito::get()->pluck('nombre', 'nombre');
+     //  $distrito = Distrito::get()->pluck('nombre', 'nombre');
        $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
        $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
 
 
-        return view('archivos.pacientes.createmodal', compact('provincia','distrito','edocivil','gradoinstruccion'));
+        return view('archivos.pacientes.createmodal', compact('provincia','edocivil','gradoinstruccion'));
     }
 
     
@@ -126,7 +131,7 @@ class PacientesController extends Controller
        $pacientes->apellidos     =$request->apellidos;
        $pacientes->direccion     =$request->direccion;
        $pacientes->provincia     =$request->provincia;
-       $pacientes->distrito     =$request->distrito;
+       $pacientes->distrito     =$request->distritos;
        $pacientes->telefono     =$request->telefono;
        $pacientes->fechanac     =$request->fechanac;
        $pacientes->gradoinstruccion     =$request->gradoinstruccion;
@@ -173,7 +178,7 @@ class PacientesController extends Controller
        $pacientes->apellidos     =$request->apellidos;
        $pacientes->direccion     =$request->direccion;
        $pacientes->provincia     =$request->provincia;
-       $pacientes->distrito     =$request->distrito;
+       $pacientes->distrito     =$request->distritos;
        $pacientes->telefono     =$request->telefono;
        $pacientes->fechanac     =$request->fechanac;
        $pacientes->gradoinstruccion     =$request->gradoinstruccion;

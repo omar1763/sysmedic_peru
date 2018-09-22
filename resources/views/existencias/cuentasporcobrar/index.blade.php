@@ -2,6 +2,30 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="modal fade" id="createPacienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title disabled" id="modalTitle">Cobrar</h4>
+                
+               <!-- <small class="badge badge-danger">* Campos obligatorios</small>-->
+            </div>
+            <div id="id_container_modal_render" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+               
+               <!-- <button type="button" id="save-btn" class="btn green">Guardar</button>-->
+               <button type="button" class="btn red btn-outline" data-dismiss="modal">Cerrar</button>
+              
+            </div>
+        </div>
+    </div>
+</div>
     <h3 class="page-title">@lang('global.cuentasporcobrar.title')</h3>
      {!! Form::open(['method' => 'get', 'route' => ['admin.cuentasporcobrar.index']]) !!}
 
@@ -38,7 +62,7 @@
                         <th>@lang('global.cuentasporcobrar.fields.costo')</th>
                         <th>@lang('global.cuentasporcobrar.fields.costoa')</th>
                         <th>@lang('global.cuentasporcobrar.fields.pendiente')</th>
-                        <th>@lang('global.cuentasporcobrar.fields.fecha')</th>
+                        <th>Fecha</th>
                         <th>&nbsp;</th>
 
                     </tr>
@@ -66,6 +90,19 @@
                                     {!! Form::submit(trans('global.app_cob'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
                                 </td>
+                                <td>
+
+
+                                   <div class="col-md-2">
+                                      <div class="form-group">
+                                        <a id="btn_add" onclick="addCiente()" style="margin-top:25px;" class="btn btn-danger">
+                                          <i class="glyphicon glyphicon-plus"></i>
+                                      </a>
+                                  </div>
+                              </div>
+
+
+                                </td>
 
                             </tr>
                         @endforeach
@@ -84,4 +121,12 @@
     <script>
         window.route_mass_crud_entries_destroy = '{{ route('admin.cuentasporcobrar.mass_destroy') }}';
     </script>
+
+<script>                                  
+ function addCiente(){        
+       javascript:ajaxLoad("{{ route('pacientes.createmodal') }}","id_container_modal_render");
+         $('#createPacienteModal').modal('show');
+       }
+</script>
+
 @endsection

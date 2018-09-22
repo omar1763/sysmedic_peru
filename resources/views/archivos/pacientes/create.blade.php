@@ -82,14 +82,9 @@
 
              <div class="row">
                 <div class="col-xs-6 form-group">
-                    {!! Form::label('distrito', 'Distrito*', ['class' => 'control-label']) !!}
-                    {!! Form::select('distrito', $distrito, old('distrito'), ['class' => 'form-control select2']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('distrito'))
-                        <p class="help-block">
-                            {{ $errors->first('distrito') }}
-                        </p>
-                    @endif
+                    <div id="distbypro">
+                        
+                    </div>
                 </div>
             
                 <div class="col-xs-6 form-group">
@@ -145,4 +140,25 @@
     {!! Form::submit(trans('global.app_save'), ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
 @stop
+
+@section('javascript') 
+
+
+<script type="text/javascript">
+    $('#provincia').on('change',function(){
+      var id= $('#provincia').val();
+      var link= '{{asset("pacientes/distbypro/id")}}';
+      link= link.replace('id',id);
+      $.ajax({
+       type: "get",
+       url: link ,
+       success: function(a) {
+        $('#distbypro').html(a);
+    }
+});
+
+  });
+</script>
+@endsection
+
 
