@@ -87,6 +87,7 @@ class ComisionesPagadasController extends Controller
      ->select(DB::raw('SUM(a.pagar) as total_lab','id_empresa','a.pagado','a.id_sucursal','a.id','a.created_at as fecha'))
      ->where('a.id_empresa','=', $usuarioEmp)
      ->where('a.id_sucursal','=', $usuarioSuc)
+     ->whereBetween('a.created_at', [$f1, $f2])
      ->where('a.pagado','=',1)
      //->havingRaw('SUM(a.pagar) > ?', [0])
      ->get();
@@ -96,6 +97,7 @@ class ComisionesPagadasController extends Controller
      ->where('a.id_empresa','=', $usuarioEmp)
      ->where('a.id_sucursal','=', $usuarioSuc)
      ->where('a.pagado','=',1)
+     ->whereBetween('a.created_at', [$f1, $f2])
      //->havingRaw('SUM(a.pagar) > ?', [0])
      ->get();
 

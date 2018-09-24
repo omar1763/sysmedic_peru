@@ -65,8 +65,6 @@
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         <th>Recibo</th>
                         <th>@lang('global.comisionespagadas.fields.profesional')</th>
-                        <th>@lang('global.comisionespagadas.fields.origen')</th>
-                        <th>@lang('global.comisionespagadas.fields.comision')</th>
                         <th>@lang('global.comisionespagadas.fields.fecha')</th>
                         <th>&nbsp;</th>
 
@@ -80,8 +78,6 @@
                                 <td></td>
                                 <td>{{ $com["recibo"] }}</td>
                                 <td>{{ $com["nombres"].' '.$com["apellidos"] }}</td>
-                                <td>{{ $com["origen"]}}</td>
-                                <td>{{ $com["porcentaje"]}}</td>
                                 <td>{{ $com["fecha"]}}</td>
                                 <td> 
                                  @if(Auth::user()->rol!="Recepcionista")

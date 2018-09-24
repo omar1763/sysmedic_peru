@@ -68,6 +68,7 @@ class ComisionesPorPagarController extends Controller
      ->where('a.id_empresa','=', $usuarioEmp)
      ->where('a.id_sucursal','=', $usuarioSuc)
      ->where('a.pagado','=',0)
+     ->whereBetween('a.created_at', [$f1, $f2])
      //->havingRaw('SUM(a.pagar) > ?', [0])
      ->get();
 
@@ -76,6 +77,7 @@ class ComisionesPorPagarController extends Controller
      ->where('a.id_empresa','=', $usuarioEmp)
      ->where('a.id_sucursal','=', $usuarioSuc)
      ->where('a.pagado','=',0)
+     ->whereBetween('a.created_at', [$f1, $f2])
      //->havingRaw('SUM(a.pagar) > ?', [0])
      ->get();
 
