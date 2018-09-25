@@ -1,12 +1,9 @@
 
+
     <h3 class="page-title">@lang('global.pacientes.title')</h3>
-    {!! Form::open(['method' => 'POST', 'route' => ['pacientes.store2']]) !!}
+    {!! Form::open(['method' => 'POST', 'route' => ['pacientes.store']]) !!}
 
     <div class="panel panel-default">
-        <div class="panel-heading">
-            @lang('global.app_create')
-        </div>
-        
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-6 form-group">
@@ -77,14 +74,18 @@
                     @endif
                 </div>
             </div>
-
-             <div class="row">
+            <div class="row">
                 <div class="col-xs-6 form-group">
-                    <div id="distbypro">
-                        
-                    </div>
+                    {!! Form::label('distritos', 'Distritos*', ['class' => 'control-label']) !!}
+                    {!! Form::select('distritos', $distritos, old('distritos'), ['class' => 'form-control select2']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('distritos'))
+                        <p class="help-block">
+                            {{ $errors->first('distritos') }}
+                        </p>
+                    @endif
                 </div>
-            
+
                 <div class="col-xs-6 form-group">
                     {!! Form::label('edocivil', 'Estado Civil*', ['class' => 'control-label']) !!}
                     {!! Form::select('edocivil', $edocivil, old('edocivil'), ['class' => 'form-control select2']) !!}
@@ -138,7 +139,7 @@
     {!! Form::submit(trans('global.app_save'), ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
 
-    @section('javascript') 
+@section('javascript') 
 
 
 <script type="text/javascript">
@@ -157,6 +158,7 @@
   });
 </script>
 @endsection
+
 
 
 

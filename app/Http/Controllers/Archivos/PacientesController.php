@@ -13,6 +13,7 @@ use App\Empresas;
 use App\Locales;
 use DB;
 use Response;
+use Validator;
 use Silber\Bouncer\Database\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Archivos\StorePacientesRequest;
 use App\Http\Requests\Archivos\UpdatePacientesRequest;
+
 
 class PacientesController extends Controller
 {
@@ -77,9 +79,8 @@ class PacientesController extends Controller
 
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
+
         $provincia = Provincia::get()->pluck('nombre', 'nombre');
        $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
        $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
@@ -88,18 +89,17 @@ class PacientesController extends Controller
         return view('archivos.pacientes.create', compact('provincia','edocivil','gradoinstruccion'));
     }
 
+
    public function createmodal()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+
        $provincia = Provincia::get()->pluck('nombre', 'nombre');
-     //  $distrito = Distrito::get()->pluck('nombre', 'nombre');
        $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
+       $distritos = Distrito::get()->pluck('nombre', 'nombre');
        $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
 
 
-        return view('archivos.pacientes.createmodal', compact('provincia','edocivil','gradoinstruccion'));
+        return view('archivos.pacientes.createmodal', compact('provincia','distritos','edocivil','gradoinstruccion'));
     }
 
     
@@ -108,9 +108,7 @@ class PacientesController extends Controller
 
     public function store (StorePacientesRequest $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
 
            $id_usuario = Auth::id();
 
@@ -124,6 +122,10 @@ class PacientesController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
+
+                Validator::make($request->all(), [
+                  'dni' => 'required|unique:pacientes',
+                ])->validate();
 
        $pacientes = new Pacientes;
        $pacientes->dni =$request->dni;
@@ -171,6 +173,10 @@ class PacientesController extends Controller
                     $usuarioEmp = $usuario->id_empresa;
                     $usuarioSuc = $usuario->id_sucursal;
                 }
+
+                 Validator::make($request->all(), [
+                  'dni' => 'required|unique:pacientes',
+                ])->validate();
 
        $pacientes = new Pacientes;
        $pacientes->dni =$request->dni;
