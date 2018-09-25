@@ -43,7 +43,7 @@ class ProductosController extends Controller
 
 
          $productos = DB::table('productos as a')
-        ->select('a.id','a.name','a.medida','a.cantidad','a.updated_at','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->select('a.id','a.name','a.medida','a.cantidad','a.precio','a.updated_at','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->where('a.id_empresa','=', $usuarioEmp)
@@ -54,6 +54,40 @@ class ProductosController extends Controller
         $medida = Medidas::with('nombre');
 
         return view('movimientos.productos.index', compact('productos','medida'));
+    }
+
+     public function index2()
+    {
+        if (! Gate::allows('users_manage')) {
+            return abort(401);
+        }
+
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+         $productos = DB::table('productos as a')
+        ->select('a.id','a.name','a.medida','a.cantidad','a.precio','a.updated_at','b.nombre','c.nombres','a.id_empresa','a.id_sucursal')
+        ->join('empresas as b','a.id_empresa','b.id')
+        ->join('locales as c','a.id_sucursal','c.id')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.created_at','desc')
+        ->paginate(10000);
+
+        $medida = Medidas::with('nombre');
+
+        return view('movimientos.productos.index2', compact('productos','medida'));
     }
 
     /**
@@ -101,12 +135,13 @@ class ProductosController extends Controller
        $productos->name =$request->name;
        $productos->medida     =$request->medida;
        $productos->cantidad     =$request->cantidad;
+       $productos->precio     =$request->precio;
        $productos->id_empresa     =$usuarioEmp;
        $productos->id_sucursal     =$usuarioSuc;
        $productos->save();
 
     
-        return redirect()->route('admin.productos.create');
+        return redirect()->route('admin.productos.index2');
     }
 
 
@@ -138,13 +173,29 @@ class ProductosController extends Controller
      */
     public function update(UpdateProductosRequest $request, $id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
-        $productos = Productos::findOrFail($id);
-        $productos->update($request->all());
+          $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+       $productos = Productos::findOrFail($id);
+       $productos->name =$request->name;
+       $productos->medida     =$request->medida;
+       $productos->cantidad     =$request->cantidad;
+       $productos->precio     =$request->precio;
+       $productos->id_empresa     =$usuarioEmp;
+       $productos->id_sucursal     =$usuarioSuc;
+       $productos->update();
       
-        return redirect()->route('admin.productos.index');
+        return redirect()->route('admin.productos.index2');
     }
 
     /**
@@ -161,7 +212,7 @@ class ProductosController extends Controller
         $productos = Productos::findOrFail($id);
         $productos->delete();
 
-        return redirect()->route('admin.productos.index');
+        return redirect()->route('admin.productos.index2');
     }
 
     /**

@@ -100,7 +100,7 @@
                 <ul class="treeview-menu">
 
                     <li class="{{ $request->segment(2) == 'productos' ? 'active active-sub' : '' }}">
-                        <a href="{{ route('admin.productos.create') }}">
+                        <a href="{{ route('admin.productos.index2') }}">
                             <i class="fa fa-plus-square"></i>
                             <span class="title">
                                 @lang('global.productos.title')

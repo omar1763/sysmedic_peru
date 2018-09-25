@@ -144,6 +144,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
    Route::get('/existencias/atencion/cardainput2/{id}','Existencias\AtencionController@cardainput2');
    Route::get('/existencias/atencion/cardainput3/{id}','Existencias\AtencionController@cardainput3');
 
+   Route::get('/movimientos/productos/index2','Movimientos\ProductosController@index2')->name('admin.productos.index2');
 
 
    Route::get('/indexFecha/{fecha}','Existencias\AtencionController@indexFecha');
