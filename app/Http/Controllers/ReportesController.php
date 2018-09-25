@@ -147,7 +147,6 @@ class ReportesController extends Controller
         ->whereBetween('a.created_at', [$f1, $f2]);
 
 
-
         $paquetes_lab = DB::table('atencion_profesionales_paquete_labs as a')
         ->select('a.id', 'a.id_atencion', 'a.id_laboratorio as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
         'a.recibo', 'a.created_at as fecha','a.pagar', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
@@ -180,9 +179,8 @@ class ReportesController extends Controller
 
      
        
-        } else if (! is_null($request->fecha) & ($request->filtro==1)){
-
-
+        } elseif ($request->filtro==1){
+        
 
         $reporte = DB::table('creditos as a')
         ->select('a.id','a.created_at as fecha','a.monto as costo','a.causa','a.descripcion as detalle','a.monto as precio','a.tipo_ingreso','b.cantidad','b.id_producto','c.name as producto')
@@ -192,7 +190,7 @@ class ReportesController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
-        ->get();
+        ->paginate(1000);
 
 
         } else if (! is_null($request->fecha) & ($request->filtro==2)){
@@ -202,7 +200,7 @@ class ReportesController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
-        ->get();
+        ->paginate(1000);
 
       } else {
           $reporte = DB::table('atencion_profesionales_servicios as a')
@@ -220,8 +218,7 @@ class ReportesController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         //->whereBetween('a.created_at', [$f1, $f2])
         ->orderby('a.id_atencion','asc')
-        ->get();
-
+        ->paginate(1000);
 
       }
 

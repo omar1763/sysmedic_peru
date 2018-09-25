@@ -56,12 +56,6 @@
  
         <div class="panel-heading">
       
-
-
-         <p><strong>Numero de Atenciones:</strong></p>
-
-    
-
      </div>
 
 
@@ -70,7 +64,7 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-                      @if($filtro =='0')
+                        @if($filtro =='0')
                         <th>Fecha</th>
                         <th>Origen</th>
                         <th>Paciente</th>
@@ -87,13 +81,15 @@
                         <th>Cantidad</th>
                         <th>Tipo de Ingreso</th>
                         <th>Monto</th>
+                        <th>&nbsp;</th>
                         @elseif($filtro =='2')
                         <th>Fecha</th>
                         <th>Nombre</th>
                         <th>Detalle del Gasto</th>
                         <th>Monto</th>
+                        <th>&nbsp;</th>
                         @else
-                         @endif
+                        @endif
 
                     </tr>
                 </thead>
@@ -102,8 +98,6 @@
                      @if (count($reporte) > 0)
                         @foreach ($reporte as $rep)
                         <tr data-entry-id="{{ $rep->id }}">
-
-
 
                           <td></td>
 
@@ -122,22 +116,20 @@
                           <td>{{ $rep->cantidad }}</td>
                           <td>{{ $rep->tipo_ingreso }}</td>
                           <td>{{ $rep->precio }}</td>
-                          <td></td>
                           @elseif($filtro =='2')
                           <td>{{ $rep->name }}</td>
                           <td>{{ $rep->concepto }}</td>
                           <td>{{ $rep->monto }}</td>
                           @else
+                          <td>NULL</td>
                           @endif
-                         
+                        
                           <td></td>
                         </tr>
                   
                         @endforeach
                     @else
-                        <tr>
-                            <td colspan="9">@lang('global.app_no_entries_in_table')</td>
-                        </tr>
+                       
                     @endif
                    
                 </tbody>
@@ -149,37 +141,4 @@
     </div>
 @stop
 
-@section('javascript') 
-   
- <script type="text/javascript">
-      $(document).ready(function(){
-        $('#filtrog').on('change',function(){
-          var link;
-          if ($(this).val() == 1) {
-            link = '/pacientesreport';
-          } else if ($(this).val() == 2){
-            link = '/serviciosreport';
-          } else {
-            link = '/analisisreport';
-          }
 
-          $.ajax({
-                 type: "get",
-                 url:  link,
-                 success: function(a) {
-                    $('#filt').html(a);
-                 }
-          });
-
-        });
-        
-
-      });
-       
-    </script>
-
-
-
-
-
-@endsection
