@@ -48,8 +48,10 @@ class LabPorPagarController extends Controller
 
     if(! is_null($request->fecha)) {
         $f1 = $request->fecha;
-        $labporpagar1 = DB::table('atencion_profesionales_laboratorios as a')
-        ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
+
+
+          $labporpagar1 = DB::table('atencion_profesionales_laboratorios as a')
+       ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
         ->join('analises as d','a.id_laboratorio','d.id')
@@ -62,7 +64,7 @@ class LabPorPagarController extends Controller
         ->orderby('a.created_at','desc');
       
 
-        $labporpagar = DB::table('atencion_profesionales_paquete_labs as a')
+          $labporpagar = DB::table('atencion_profesionales_paquete_labs as a')
         ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
         ->join('locales as c','a.id_sucursal','c.id')
@@ -74,7 +76,7 @@ class LabPorPagarController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.created_at','=', $f1)
         ->union($labporpagar1)
-        ->paginate(5000);
+        ->get();
 
     } else {
 
@@ -92,8 +94,6 @@ class LabPorPagarController extends Controller
         ->orderby('a.created_at','desc');
        
 
-
-
         $labporpagar = DB::table('atencion_profesionales_paquete_labs as a')
         ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','d.costlab','a.id_empresa','a.id_sucursal','d.name','e.id_paciente','e.id_atencion','f.nombres as nombres','f.apellidos as apellidos')
         ->join('empresas as b','a.id_empresa','b.id')
@@ -107,6 +107,7 @@ class LabPorPagarController extends Controller
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->union($labporpagar1)
         ->get();
+
 }
 
 
