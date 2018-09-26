@@ -33,7 +33,6 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
-
                         <th>@lang('global.cuentasporcobrar.fields.id_atencion')</th>
                         <th>@lang('global.cuentasporcobrar.fields.paciente')</th>
                         <th>@lang('global.cuentasporcobrar.fields.costo')</th>
@@ -50,7 +49,6 @@
                         @foreach ($cuentasporcobrar as $cc)
                             <tr data-entry-id="{{ $cc->id }}">
                                 <td></td>
-
                                 <td>{{ $cc->id_atencion }}</td>
                                 <td>{{ $cc->nombres }},{{ $cc->apellidos }}</td>
                                 <td>{{ $cc->costo }}</td>
@@ -67,11 +65,7 @@
                                     {!! Form::submit(trans('global.app_cob'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
                                 </td>
-                                <td>
-
-
-                                </td>
-
+                               
                             </tr>
                         @endforeach
                     @else
