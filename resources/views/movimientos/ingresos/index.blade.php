@@ -37,7 +37,9 @@
                                 <td>{{ $ing->cantidad }}</td>
                                 <td>{{ $ing->fechaingreso }}</td>
                             
-                                <td>
+                                <td>       
+                                   @if(Auth::user()->rol!="Recepcionista")
+
                                     <a href="{{ route('admin.ingresos.edit',[$ing->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
@@ -46,6 +48,7 @@
                                         'route' => ['admin.ingresos.destroy', $ing->id])) !!}
                                     {!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
+                                    @endif
                                 </td>
 
                             </tr>

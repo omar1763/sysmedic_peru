@@ -46,7 +46,6 @@
                         <th>P.Unit</th>
                         <th>Porcentaje</th>
                         <th>Monto Abonar</th>
-
                         <th>&nbsp;</th>
 
                     </tr>

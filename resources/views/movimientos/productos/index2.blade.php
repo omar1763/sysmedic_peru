@@ -44,6 +44,8 @@
 
                               
                                 <td>
+                                	 @if(Auth::user()->rol!="Recepcionista")
+
                                     <a href="{{ route('admin.productos.edit',[$prod->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
@@ -52,6 +54,7 @@
                                         'route' => ['admin.productos.destroy', $prod->id])) !!}
                                     {!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
+                                    @endif
                                 </td>
 
                             </tr>
