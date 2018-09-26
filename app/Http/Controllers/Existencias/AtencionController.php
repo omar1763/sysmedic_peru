@@ -736,57 +736,65 @@ public function cardainput3($id, Request $request){
     }
 }
 
-        if(! is_null($request->paquetes)){
-           foreach ($request->paquetes as $key => $value) {
+ if(! is_null($request->paquetes)){
+     foreach ($request->paquetes as $key => $value) {
 
-            $searchServPaq = DB::table('paquetes_servs')
-            ->select('*')
+        $searchServPaq = DB::table('paquetes_servs')
+        ->select('*')
                    // ->where('estatus','=','1')
-            ->where('id','=', $value)
-            ->get();
+        ->where('id_paquete','=', $value)
+        ->get();
 
-            foreach ($searchServPaq as $serv) {
-                $id_servicio = $serv->id_servicio;
+        foreach ($searchServPaq as $serv) {
+            $id_servicio = $serv->id_servicio;
 
-            }
 
-             $searchLabPaq = DB::table('paquetes_analises')
-            ->select('*')
-                   // ->where('estatus','=','1')
-            ->where('id','=', $value)
-            ->get();
+            if(! is_null($id_servicio)){
 
-            foreach ($searchLabPaq as $lab) {
-                $id_laboratorio = $lab->id_analisis;
-
-            }
-
-           $paquetesatencion = new AtencionProfesionalesPaquete;
-           $paquetesatencion->id_atencion =$atencion->id;
-           $paquetesatencion->id_paquete    =$value;
-           $paquetesatencion->id_servicio    =$id_servicio;
-           $paquetesatencion->id_profesional =999;
-           $paquetesatencion->porcentajepaq =0;
-           $paquetesatencion->costo = $request->costo;
-           $paquetesatencion->pagar = 0;
-           $paquetesatencion->id_sucursal =$usuarioSuc;
-           $paquetesatencion->id_empresa =$usuarioEmp;
-           $paquetesatencion->save();
-
-           $paquetesatencion = new AtencionProfesionalesPaqueteLab;
-           $paquetesatencion->id_atencion =$atencion->id;
-           $paquetesatencion->id_paquete    =$value;
-           $paquetesatencion->id_laboratorio    =$id_laboratorio;
-           $paquetesatencion->id_profesional =999;
-           $paquetesatencion->porcentajepaq =0;
-           $paquetesatencion->costo = $request->costo;
-           $paquetesatencion->pagar = 0;
-           $paquetesatencion->id_sucursal =$usuarioSuc;
-           $paquetesatencion->id_empresa =$usuarioEmp;
-           $paquetesatencion->save();
-
+             $paquetesatencion = new AtencionProfesionalesPaquete;
+             $paquetesatencion->id_atencion =$atencion->id;
+             $paquetesatencion->id_paquete    =$value;
+             $paquetesatencion->id_servicio    =$id_servicio;
+             $paquetesatencion->id_profesional =999;
+             $paquetesatencion->porcentajepaq =$request->porcentajepaq;
+             $paquetesatencion->costo = $request->costo;
+             $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
+             $paquetesatencion->id_sucursal =$usuarioSuc;
+             $paquetesatencion->id_empresa =$usuarioEmp;
+             $paquetesatencion->save();
+         }
         }
-    }
+
+        $searchLabPaq = DB::table('paquetes_analises')
+        ->select('*')
+        ->where('id_paquete','=', $value)
+        ->get();
+
+         foreach ($searchLabPaq as $lab) {
+            $id_laboratorio = $lab->id_analisis;
+
+
+            if(! is_null($id_laboratorio)){
+
+               $paquetesatencion = new AtencionProfesionalesPaqueteLab;
+               $paquetesatencion->id_atencion =$atencion->id;
+               $paquetesatencion->id_paquete    =$value;
+               $paquetesatencion->id_laboratorio    =$id_laboratorio;
+               $paquetesatencion->id_profesional =999;
+               $paquetesatencion->porcentajepaq =$request->porcentajepaq;
+               $paquetesatencion->costo = $request->costo;
+               $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
+               $paquetesatencion->id_sucursal =$usuarioSuc;
+               $paquetesatencion->id_empresa =$usuarioEmp;
+               $paquetesatencion->save();
+         }
+        }
+
+
+}
+}
+
+      
 
 }
 
