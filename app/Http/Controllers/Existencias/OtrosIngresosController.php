@@ -49,7 +49,7 @@ class OtrosIngresosController extends Controller
             if(! is_null($request->fecha)) {
                 $f1 = $request->fecha;
                     $otrosingresos = DB::table('creditos as a')
-                    ->select('a.id','a.id_atencion','a.descripcion','a.monto','a.origen','a.id_empresa','a.id_sucursal','a.created_at')
+                    ->select('a.id','a.id_atencion','a.descripcion','a.monto','a.origen','a.id_empresa','a.id_sucursal','a.created_at','a.tipo_ingreso','a.causa')
                     ->join('empresas as b','a.id_empresa','b.id')
                     ->join('locales as c','a.id_sucursal','c.id')
                     ->where('a.id_empresa','=', $usuarioEmp)
@@ -57,7 +57,7 @@ class OtrosIngresosController extends Controller
                     ->where('a.origen','=','OTROS INGRESOS')
                     ->where('a.created_at','=', $f1)
                     ->orderby('a.created_at','desc')
-                    ->paginate(10);
+                    ->paginate(10000);
 
             } else {
 
@@ -70,7 +70,7 @@ class OtrosIngresosController extends Controller
         ->where('a.origen','=','OTROS INGRESOS')
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->orderby('a.created_at','desc')
-        ->paginate(10);
+        ->paginate(100000);
 }
 $creditosproductos = new CreditosProductos();
         return view('existencias.otrosingresos.index', compact('otrosingresos','creditosproductos'));
@@ -209,20 +209,48 @@ $creditosproductos = new CreditosProductos();
         return redirect()->route('admin.otrosingresos.index');
     }
 
-    /**
-     * Remove User from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+   
     public function destroy($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
 
-        $otrosingresos = Creditos::findOrFail($id);
-        $otrosingresos->delete();
+        $creditos = Creditos::findOrFail($id);
+        $creditos->delete();
+
+        
+
+        $searchcreditoID = DB::table('creditos_productos')
+        ->select('*')
+                   // ->where('estatus','=','1')
+        ->where('id_credito','=',$id)
+        ->get();
+
+        foreach ($searchcreditoID as $cred) {
+         $id_credito = $cred->id;
+         $id_producto = $cred->id_producto;
+         $cantidad = $cred->cantidad;
+     }
+
+     $searchproducID = DB::table('productos')
+     ->select('*')
+                   // ->where('estatus','=','1')
+     ->where('id','=', $id_producto)
+     ->get();
+
+     foreach ($searchproducID as $prod) {
+         $id_producto = $prod->id;
+         $nombreprod = $prod->name;
+         $cantidadprod = $prod->cantidad;
+     }
+     
+
+     $creditosprod=CreditosProductos::findOrFail($id_credito);
+     $creditosprod->delete();
+
+     $productos=Productos::where('id', '=' , $id_producto)->get()->first();
+     $productos->cantidad=$cantidadprod + $cantidad;
+     $productos->update();
+
 
         return redirect()->route('admin.otrosingresos.index');
     }

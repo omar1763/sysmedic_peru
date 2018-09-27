@@ -59,9 +59,9 @@
                                 <td>{{ $otr->monto }}</td>
                                 <!--<td>$otr->origen</td>-->
                                 <td>
-                                    @if ($otr->tipo_ingreso == 'V')
+                                    @if ($otr->causa == 'V')
                                     <span> VENTAS</span>
-                                    @elseif ($otr->tipo_ingreso == 'CC')
+                                    @elseif ($otr->causa == 'CC')
                                     <span>CUENTAS POR COBRAR</span>
                                     @else                                    
                                     <span>OTROS</span>
@@ -78,28 +78,6 @@
                                     <span>No Aplica</span>
                                     @endif
 
-
-
-
-
-
-
-
-
-
-
-
-                                
-
-
-
-
-
-
-                              
-
-
-
                                </td>
                                 <td>{{ $otr->created_at }}</td>
                      
@@ -110,8 +88,8 @@
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
-                                        'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
-                                        'route' => ['admin.ingresos.destroy', $otr->id])) !!}
+                                        'onsubmit' => "return confirm('".trans("Esta seguro de Eliminar?")."');",
+                                        'route' => ['admin.otrosingresos.destroy', $otr->id])) !!}
                                     {!! Form::submit(trans('global.app_delete'), array('class' => 'btn btn-xs btn-danger')) !!}
                                     {!! Form::close() !!}
                                     @endif
