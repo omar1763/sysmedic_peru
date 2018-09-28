@@ -76,9 +76,10 @@ class ProfesionalesController extends Controller
 
 
              $profesional   = Profesionales::select(
-             DB::raw("CONCAT(name,' ',apellidos) AS descripcion"),'id')                  
+             DB::raw("CONCAT(apellidos,' ',name) AS descripcion"),'id')                  
                              ->where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
+                             ->orderby('apellidos','ASC')
                              ->get()->pluck('descripcion','id');
 
             

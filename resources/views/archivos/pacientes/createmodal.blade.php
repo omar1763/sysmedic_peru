@@ -1,7 +1,7 @@
 
 
     <h3 class="page-title">@lang('global.pacientes.title')</h3>
-    {!! Form::open(['method' => 'POST', 'route' => ['pacientes.store']]) !!}
+    {!! Form::open(['method' => 'POST', 'route' => ['pacientes.store2']]) !!}
 
     <div class="panel panel-default">
         <div class="panel-body">
