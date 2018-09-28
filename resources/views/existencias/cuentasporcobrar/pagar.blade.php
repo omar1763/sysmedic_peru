@@ -11,8 +11,9 @@
 
         <div class="panel-body">
         	<div class="row">
-        		    <td>Monto Pendiente:<strong>{!!$pagar!!}</strong></td>
+        		    <td><strong>Monto Pendiente:</strong>{!!$pagar!!}</td>
         	</div>
+        	<br>
           <div class="row">
                 <div class="col-md-4">
                     {!! Form::label('pagar', 'Monto a Cobrar*', ['class' => 'control-label']) !!}

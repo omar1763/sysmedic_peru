@@ -103,7 +103,7 @@ class CuentasporCobrarController extends Controller
                     ->select('pendiente')
                    // ->where('estatus','=','1')
                     ->where('id_atencion','=', $id)
-                    ->get();
+                    ->pluck('pendiente');
 
         return view('existencias.cuentasporcobrar.pagar',compact('cuentasporcobrar','pagar'));
     }
