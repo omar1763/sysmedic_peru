@@ -167,6 +167,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
   Route::get('/ticket_atencion_ver/{id}','Reportes\PdfController@ticket_atencion_ver');
 
+   Route::get('/existencias/cuentasporcobrar/pagar/{id}', ['uses' => 'Existencias\CuentasporCobrarController@pagar', 'as' => 'admin.cuentasporcobrar.pagar']);
 
 
 

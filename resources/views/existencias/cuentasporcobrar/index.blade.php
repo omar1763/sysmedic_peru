@@ -3,6 +3,30 @@
 
 @section('content')
 
+<div class="modal fade" id="createPacienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                
+               <!-- <small class="badge badge-danger">* Campos obligatorios</small>-->
+            </div>
+            <div id="id_container_modal_render" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+               
+               <!-- <button type="button" id="save-btn" class="btn green">Guardar</button>-->
+               <button type="button" class="btn red btn-outline" data-dismiss="modal">Cerrar</button>
+              
+            </div>
+        </div>
+    </div>
+</div>
+
     <h3 class="page-title">@lang('global.cuentasporcobrar.title')</h3>
      {!! Form::open(['method' => 'get', 'route' => ['admin.cuentasporcobrar.index']]) !!}
 
@@ -55,15 +79,9 @@
                                 <td>{{ $cc->costoa }}</td>
                                 <td>{{ $cc->pendiente }}</td>
                                 <td>{{ $cc->fecha }}</td>
-                                <td>
-
-                                    {!! Form::open(array(
-                                        'style' => 'display: inline-block;',
-                                        'method' => 'DELETE',
-                                        'onsubmit' => "return confirm('".trans("global.app_are_you_sure_pay")."');",
-                                        'route' => ['admin.cuentasporcobrar.destroy', $cc->id])) !!}
-                                    {!! Form::submit(trans('global.app_cob'), array('class' => 'btn btn-xs btn-danger')) !!}
-                                    {!! Form::close() !!}
+                             
+                               <td>
+                                 <a href="{{ route('admin.cuentasporcobrar.pagar',[$cc->id_atencion]) }}" class="btn btn-xs btn-danger">@lang('Pagar')</a>
                                 </td>
                                
                             </tr>
@@ -78,4 +96,6 @@
         </div>
     </div>
 @stop
+
+
 

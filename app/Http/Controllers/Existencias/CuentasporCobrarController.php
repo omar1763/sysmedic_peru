@@ -52,7 +52,7 @@ class CuentasporCobrarController extends Controller
                     ->join('pacientes as c','c.id','a.id_paciente')
                     ->where('b.id_empresa','=', $usuarioEmp)
                     ->where('b.id_sucursal','=', $usuarioSuc)
-                    ->where('a.pagado','=', 0)
+                  //  ->where('a.pagado','=', 0)
                     ->where('a.pendiente','>', 0)
                    // ->where('a.created_at','=', $f1)
                     //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
@@ -63,14 +63,56 @@ class CuentasporCobrarController extends Controller
         return view('existencias.cuentasporcobrar.index', compact('cuentasporcobrar'));
     }
 
+
+    
+   public function pagar($id)
+
+    {
+           $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+
+
+                  /*   $cuentasporcobrar = DB::table('atencion_detalles as a')
+                    ->select('b.id','b.id_empresa','b.created_at as fecha','b.id_sucursal','a.id_atencion','a.id_paciente','a.costo','a.costoa','a.pendiente','a.pagado','a.created_at','c.nombres as nombres','c.apellidos as apellidos')
+                    ->join('atencions as b','b.id','a.id_atencion')
+                    ->join('pacientes as c','c.id','a.id_paciente')
+                    ->where('b.id_empresa','=', $usuarioEmp)
+                    ->where('b.id_sucursal','=', $usuarioSuc)
+                    ->where('a.pagado','=', 0)
+                    ->where('a.pendiente','>', 0)
+                    ->where('a.id_atencion','=',$id)
+                   // ->where('a.created_at','=', $f1)
+                    //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+                    ->orderby('a.created_at','desc')
+                    ->get();*/
+
+                    $cuentasporcobrar = Atencion::findOrFail($id);
+
+                    $pagar = DB::table('atencion_detalles')
+                    ->select('pendiente')
+                   // ->where('estatus','=','1')
+                    ->where('id_atencion','=', $id)
+                    ->get();
+
+        return view('existencias.cuentasporcobrar.pagar',compact('cuentasporcobrar','pagar'));
+    }
   
 
 
-      public function destroy($id)
+      public function destroy(Request $request,$id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
 
          $id_usuario = Auth::id();
 
@@ -97,16 +139,18 @@ class CuentasporCobrarController extends Controller
                     $montoDetalle = $detalles->pendiente;
                     $idDetalle = $detalles->id;
                     $id_atencion = $detalles->id_atencion;
+                    $pendiente= $detalles->pendiente;
                  
                 }
 
         $cuenta = AtencionDetalle::findOrFail($idDetalle);
         $cuenta->pagado = 1;
+        $cuenta->pendiente = $pendiente - $request->pagar;
         $cuenta->update();
 
         $creditos = new Creditos;
         $creditos->descripcion ='CUENTAS POR COBRAR';
-        $creditos->monto     =$montoDetalle;
+        $creditos->monto     =$request->pagar;
         $creditos->id_atencion =$id_atencion;
         $creditos->origen     ='CUENTAS POR COBRAR';
         $creditos->tipo_ingreso ='EF';
@@ -120,3 +164,4 @@ class CuentasporCobrarController extends Controller
     }
 
 }
+
