@@ -81,7 +81,7 @@ class PacientesController extends Controller
     {
         
 
-        $provincia = Provincia::get()->pluck('nombre', 'nombre');
+       $provincia = Provincia::get()->pluck('nombre', 'nombre');
        $edocivil = EdoCivil::get()->pluck('nombre', 'nombre');
        $gradoinstruccion = GradoInstruccion::get()->pluck('nombre', 'nombre');
 
@@ -101,7 +101,40 @@ class PacientesController extends Controller
 
         return view('archivos.pacientes.createmodal', compact('provincia','distritos','edocivil','gradoinstruccion'));
     }
+    
 
+    public function pacDNI(StorePacientesRequest $request){
+
+       $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+        $searchpacienteDNI = DB::table('pacientes')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('dni','=', $request->dni)
+                    ->where('id_empresa','=',$usuarioEmp)
+                    ->where('id_sucursal','=',$usuarioSuc)
+                    ->get();
+
+           if (count($searchpacienteDNI) > 0){
+
+              return true;
+           } else {
+
+              return false;
+           }
+
+    }
     
     
 
@@ -123,9 +156,16 @@ class PacientesController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-                Validator::make($request->all(), [
+              /*  Validator::make($request->all(), [
                   'dni' => 'required|unique:pacientes',
-                ])->validate();
+                ])->validate();*/
+
+
+
+      If (PacientesController::pacDNI($request)){ 
+
+
+      } else {
 
        $pacientes = new Pacientes;
        $pacientes->dni =$request->dni;
@@ -148,7 +188,7 @@ class PacientesController extends Controller
        $historia->id_paciente =$pacientes->id;
        $historia->historia    =HistoriaPacientes::generarHistoria($usuarioEmp,$usuarioSuc);
        $historia->save();
-      
+      }
 
     
         return redirect()->route('pacientes.index');
@@ -174,10 +214,10 @@ class PacientesController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-                 Validator::make($request->all(), [
-                  'dni' => 'required|unique:pacientes',
-                ])->validate();
+      If (PacientesController::pacDNI($request)){ 
 
+
+      } else {
        $pacientes = new Pacientes;
        $pacientes->dni =$request->dni;
        $pacientes->nombres     =$request->nombres;
@@ -194,7 +234,7 @@ class PacientesController extends Controller
        $pacientes->id_sucursal     =$usuarioSuc;
        $pacientes->save();
 
-     
+      }
 
        $historia = new HistoriasClinicas;
        $historia->id_paciente =$pacientes->id;
