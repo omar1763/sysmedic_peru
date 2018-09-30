@@ -83,9 +83,20 @@ $creditosproductos = new CreditosProductos();
      */
     public function create()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
+          $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
           $product = DB::table('productos')
                // ->where('clvregion' , $id)
                 
@@ -94,6 +105,8 @@ $creditosproductos = new CreditosProductos();
                     ['blnborrado', '=', true]
              
                 ])*/
+                ->where('id_empresa','=',$usuarioEmp)
+                ->where('id_sucursal','=',$usuarioSuc)
                 ->get()
                 ->pluck('name', 'id');
  $relations = [            
@@ -217,7 +230,7 @@ $creditosproductos = new CreditosProductos();
         $creditos = Creditos::findOrFail($id);
         $creditos->delete();
 
-        
+
 
         $searchcreditoID = DB::table('creditos_productos')
         ->select('*')
@@ -230,6 +243,7 @@ $creditosproductos = new CreditosProductos();
          $id_producto = $cred->id_producto;
          $cantidad = $cred->cantidad;
      }
+     
 
      $searchproducID = DB::table('productos')
      ->select('*')
@@ -242,7 +256,7 @@ $creditosproductos = new CreditosProductos();
          $nombreprod = $prod->name;
          $cantidadprod = $prod->cantidad;
      }
-     
+
 
      $creditosprod=CreditosProductos::findOrFail($id_credito);
      $creditosprod->delete();
