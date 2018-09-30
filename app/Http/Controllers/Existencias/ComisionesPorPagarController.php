@@ -192,6 +192,7 @@ class ComisionesPorPagarController extends Controller
                     $id_prof_serv = $atecpro->id;
                     $id_atencion = $atecpro->id_atencion;
                     $id_servicio = $atecpro->id_servicio;
+                    $pagar= $atecpro->pagar;
                 }
 
 
@@ -203,10 +204,12 @@ class ComisionesPorPagarController extends Controller
 
                 foreach ($searchSer as $servicios) {
                     $detalle = $servicios->detalle;
-                    $porcentaje = $servicios->porcentaje;
+                    $porcentaje = $servicios->precio;
                 }
 
                 $recibo =rand(1,99999);
+
+           
 
 
                 $atencionproser=AtencionServicios::where("id_atencion","=",$id_atencion)
@@ -216,7 +219,7 @@ class ComisionesPorPagarController extends Controller
                                                       ->update(['pagado' => 1,'recibo' => $recibo]);
                 $debitos = new Debitos;
                 $debitos->descripcion =$detalle;
-                $debitos->monto     =$porcentaje;
+                $debitos->monto     =$pagar;
                 $debitos->origen     ='COMISIONES POR PAGAR';
                 $debitos->id_empresa     =$usuarioEmp;
                 $debitos->id_sucursal     =$usuarioSuc;
