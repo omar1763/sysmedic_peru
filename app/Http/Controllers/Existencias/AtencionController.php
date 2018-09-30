@@ -154,6 +154,20 @@ class AtencionController extends Controller
         ->groupBy('a.id_atencion')
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
 
+         $atec_lab_paq = DB::table('atencion_profesionales_paquete_labs as a')
+        ->select('a.id', 'a.id_atencion', 'a.id_paquete as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+        'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
+        'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio')
+        ->join('profesionales as f','f.id','a.id_profesional')
+        ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
+        ->join('pacientes as p','p.id','b.id_paciente')
+        ->join('paquetes as c','c.id','a.id_paquete')
+        ->where('a.id_empresa','=', $usuarioEmp)
+        ->where('a.id_sucursal','=', $usuarioSuc)
+        ->orderby('a.id_atencion','DESC')
+        ->groupBy('a.id_atencion')
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
+
 
         $atencion = DB::table('atencion_profesionales_servicios as a')
         ->select('a.id', 'a.id_atencion', 'a.id_servicio', 'a.pagado', 'a.porcentaje', 'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres', 'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.detalle as detalle','c.precio')
@@ -168,6 +182,7 @@ class AtencionController extends Controller
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->union($atec_lab)
         ->union($atec_paq)
+        ->union($atec_lab_paq)
         ->get();
 
      
@@ -243,6 +258,7 @@ class AtencionController extends Controller
            
        ->where('id_empresa',$usuarioEmp)
                              ->where('id_sucursal',$usuarioSuc)
+                             ->orderby('name','ASC')
                              ->get()->pluck('descripcion','id');
 
         $request->session()->put('service_price', 0);
@@ -602,6 +618,7 @@ public function cardainput3($id, Request $request){
                $paquetesatencion->id_profesional =$request->profesional;
                $paquetesatencion->porcentajepaq =$request->porcentajepaq;
                $paquetesatencion->costo = $request->costo;
+               $paquetesatencion->pagadolab = 0;
                $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
                $paquetesatencion->id_sucursal =$usuarioSuc;
                $paquetesatencion->id_empresa =$usuarioEmp;
@@ -781,6 +798,7 @@ public function cardainput3($id, Request $request){
                $paquetesatencion->id_paquete    =$value;
                $paquetesatencion->id_laboratorio    =$id_laboratorio;
                $paquetesatencion->id_profesional =999;
+               $paquetesatencion->pagadolab = 0;
                $paquetesatencion->porcentajepaq =$request->porcentajepaq;
                $paquetesatencion->costo = $request->costo;
                $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;

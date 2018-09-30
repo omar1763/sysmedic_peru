@@ -500,13 +500,17 @@ class PdfController extends Controller
         }  
       }  
 
+
+
+
+
+
       public function atenciondiariaDETALLEEGRESOS(Request $request){
 
         $id_usuario = Auth::id();
 
         $searchUsuarioID = DB::table('users')
         ->select('*')
-                   // ->where('estatus','=','1')
         ->where('id','=', $id_usuario)
         ->get();
 

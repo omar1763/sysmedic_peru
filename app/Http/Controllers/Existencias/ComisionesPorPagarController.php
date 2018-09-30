@@ -209,6 +209,9 @@ class ComisionesPorPagarController extends Controller
 
                 $recibo =rand(1,99999);
 
+                dd($pagar);
+                die();
+
            
 
 
