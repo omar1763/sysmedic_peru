@@ -164,6 +164,7 @@ class PacientesController extends Controller
 
       If (PacientesController::pacDNI($request)){ 
 
+      return redirect()->back()->with("error", " EL DNI INTRODUCIDO YA ESTA REGISTRADO PARA UN PACIENTE");
 
       } else {
 
@@ -188,6 +189,7 @@ class PacientesController extends Controller
        $historia->id_paciente =$pacientes->id;
        $historia->historia    =HistoriaPacientes::generarHistoria($usuarioEmp,$usuarioSuc);
        $historia->save();
+
       }
 
     
@@ -215,6 +217,8 @@ class PacientesController extends Controller
                 }
 
       If (PacientesController::pacDNI($request)){ 
+
+         return redirect()->back()->with("error", " EL DNI INTRODUCIDO YA ESTA REGISTRADO PARA UN PACIENTE");
 
 
       } else {

@@ -3,12 +3,12 @@
 @section('content')
     <h3 class="page-title">@lang('global.pacientes.title')</h3>
     {!! Form::open(['method' => 'POST', 'route' => ['pacientes.store']]) !!}
-
+@include("messages.messages")
     <div class="panel panel-default">
         <div class="panel-heading">
             @lang('global.app_create')
         </div>
-        
+
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-6 form-group">
