@@ -103,7 +103,7 @@
                                 <td> 
                                    
                                 @if(Auth::user()->rol!="Recepcionista")
-
+                                   @if($com->origen=="Servicios")
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',
                                         'method' => 'DELETE',
@@ -111,7 +111,16 @@
                                         'route' => ['admin.comisionesporpagar.destroy', $com->id])) !!}
                                     {!! Form::submit(trans('global.app_pay'), array('class' => 'btn btn-xs btn-info')) !!}
                                     {!! Form::close() !!}
-
+                                    @else
+                                     {!! Form::open(array(
+                                        'style' => 'display: inline-block;',
+                                        'method' => 'PUT',
+                                        'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
+                                        'route' => ['admin.comisionesporpagar.destroylab', $com->id])) !!}
+                                    {!! Form::submit(trans('global.app_pay'), array('class' => 'btn btn-xs btn-info')) !!}
+                                    {!! Form::close() !!}
+     
+                                @endif
                                 @endif
                                 </td>
 

@@ -160,14 +160,45 @@ class ComisionesPorPagarController extends Controller
 
     }
 
+    public function searchID($id){
+
+       $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
+
+        $searchid = DB::table('atencion_profesionales_servicios')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id)
+                    ->where('id_empresa','=',$usuarioEmp)
+                    ->where('id_sucursal','=',$usuarioSuc)
+                    ->get();
+
+           if (count($searchid) > 0){
+
+              return true;
+           } else {
+
+              return false;
+           }
+
+    }
+
 
     public function destroy($id)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
 
-         $id_usuario = Auth::id();
+        $id_usuario = Auth::id();
       
         $searchUsuarioID = DB::table('users')
                     ->select('*')
@@ -180,7 +211,11 @@ class ComisionesPorPagarController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-         
+     $fecha = Carbon::now()->format('Y-m-d');
+ 
+
+     If (ComisionesPorPagarController::searchID($id)){ 
+
 
                   $searchAtecProSer = DB::table('atencion_profesionales_servicios')
                    ->select('*')
@@ -209,17 +244,14 @@ class ComisionesPorPagarController extends Controller
 
                 $recibo =rand(1,99999);
 
-                dd($pagar);
-                die();
-
            
 
 
-                $atencionproser=AtencionServicios::where("id_atencion","=",$id_atencion)
-                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
+                $atencionproser=AtencionServicios::where("id","=",$id)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo,'fecha_pago_comision' => $fecha]);
 
-                $atencionprofser=AtencionProfesionalesServicio::where("id_atencion","=",$id_atencion)
-                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
+                $atencionprofser=AtencionProfesionalesServicio::where("id","=",$id)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo,'fecha_pago_comision' => $fecha]);
                 $debitos = new Debitos;
                 $debitos->descripcion =$detalle;
                 $debitos->monto     =$pagar;
@@ -227,6 +259,55 @@ class ComisionesPorPagarController extends Controller
                 $debitos->id_empresa     =$usuarioEmp;
                 $debitos->id_sucursal     =$usuarioSuc;
                 $debitos->save();
+
+            } else {
+
+                 $searchAtecProSer = DB::table('atencion_profesionales_laboratorios')
+                   ->select('*')
+                   // ->where('estatus','=','1')
+                   ->where('id','=', $id)
+                   ->get();
+
+                   foreach ($searchAtecProSer as $atecpro) {
+                    $id_prof_serv = $atecpro->id;
+                    $id_atencion = $atecpro->id_atencion;
+                    $id_laboratorio = $atecpro->id_laboratorio;
+                }
+
+
+                $searchSer = DB::table('analises')
+                ->select('*')
+                   // ->where('estatus','=','1')
+                ->where('id','=', $id_laboratorio)
+                ->get();
+
+                foreach ($searchSer as $servicios) {
+                    $detalle = $servicios->name;
+                    $porcentaje = $servicios->porcentaje;
+                }
+
+                $recibo =rand(1,99999);
+                $fecha = date('YYYY-m-d');
+
+
+                $atencionproser=AtencionLaboratorio::where("id","=",$id)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo,'fecha_pago_comision' => $fecha]);
+
+                $atencionprofser=AtencionProfesionalesLaboratorio::where("id","=",$id)
+                                                      ->update(['pagado' => 1,'recibo' => $recibo,'fecha_pago_comision' => $fecha]);
+
+                $debitos = new Debitos;
+                $debitos->descripcion =$detalle;
+                $debitos->monto     =$porcentaje;
+                $debitos->origen     ='COMISIONES POR PAGAR';
+                $debitos->id_empresa     =$usuarioEmp;
+                $debitos->id_sucursal     =$usuarioSuc;
+                $debitos->save();
+
+
+             
+
+            }
 
              return redirect()->route('admin.comisionesporpagar.index');
     }
@@ -277,13 +358,14 @@ class ComisionesPorPagarController extends Controller
                 }
 
                 $recibo =rand(1,99999);
+                $fecha = date('YYYY-m-d');
 
 
                 $atencionproser=AtencionLaboratorio::where("id_atencion","=",$id_atencion)
-                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
+                                                      ->update(['pagado' => 1,'recibo' => $recibo,'fecha_pago_comision' => $fecha]);
 
                 $atencionprofser=AtencionProfesionalesLaboratorio::where("id_atencion","=",$id_atencion)
-                                                      ->update(['pagado' => 1,'recibo' => $recibo]);
+                                                      ->update(['pagado' => 1,'recibo' => $recibo,'fecha_pago_comision' => $fecha]);
 
                 $debitos = new Debitos;
                 $debitos->descripcion =$detalle;
@@ -303,7 +385,7 @@ class ComisionesPorPagarController extends Controller
      */
     public function massDestroy(Request $request)
     {
-        
+        $fecha = Carbon::now()->format('Y-m-d');
       
         if ($request->input('ids')) {
             $entries = AtencionServicios::whereIn('id', $request->input('ids'))->get();
@@ -332,6 +414,7 @@ class ComisionesPorPagarController extends Controller
           foreach ($entries2 as $entry) {
             $entry->pagado= 1;
             $entry->recibo= $recibo;
+            $entry->fecha_pago_comision= $fecha;
             $entry->save(); 
 
           }
@@ -339,6 +422,7 @@ class ComisionesPorPagarController extends Controller
           foreach ($entries3 as $entry) {
             $entry->pagado= 1;
             $entry->recibo= $recibo;
+            $entry->fecha_pago_comision= $fecha;
             $entry->save(); 
 
           }

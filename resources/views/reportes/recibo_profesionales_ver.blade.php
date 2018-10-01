@@ -33,8 +33,6 @@
     <td>{{ $recibo["fecha"]}}</td>
     <td>{{ $recibo["detalle"]}}</td>
     <td>{{ $recibo["pagar"]}}</td>
-
-
   </tr>
   @endforeach
  </tbody>

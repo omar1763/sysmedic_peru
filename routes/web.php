@@ -172,6 +172,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
 
     Route::get('/prueba','Existencias\AtencionController@prueba');
+    Route::put('destroylab', 'Existencias\ComisionesPorPagarController@destroylab')->name('admin.comisionesporpagar.destroylab');
+
 
 
   
