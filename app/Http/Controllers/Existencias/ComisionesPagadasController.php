@@ -133,7 +133,7 @@ class ComisionesPagadasController extends Controller
         $comisionespagadas = json_encode($comisionespagadas);
         $comisionespagadas = self::unique_multidim_array(json_decode($comisionespagadas, true), "id_atencion");
 
-        return view('existencias.comisionespagadas.index', compact('comisionespagadas','comisiones_lab_pag','comisiones_serv_pag'));
+        return view('existencias.comisionespagadas.index', compact('comisionespagadas','f1','comisiones_lab_pag','comisiones_serv_pag'));
     }
  
   static function unique_multidim_array($array, $key) {
