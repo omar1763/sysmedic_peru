@@ -214,8 +214,19 @@ class PaquetesController extends Controller
      
        $servicioIds = [];
        $analisisIds = [];
-       $servicio = Servicios::all();
-       $analisis = Analisis::all();
+        $servicio = DB::table('servicios')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('detalle','id');
+
+      // $servicio = Servicios::get()->pluck('detalle', 'id');
+     //  dd($servicio);
+         $analisis = DB::table('analises')
+        ->select('*')
+        ->where('id_empresa','=', $usuarioEmp)
+        ->where('id_sucursal','=', $usuarioSuc)
+        ->get()->pluck('name','id');
        $paquetesserv = PaquetesServ::all()->where('id_paquete',$id );
        $paquetesanalisis = PaquetesAnalisis::all()->where('id_paquete',$id );
 
