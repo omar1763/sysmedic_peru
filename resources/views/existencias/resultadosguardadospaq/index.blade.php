@@ -60,12 +60,10 @@
                                 <td>{{ $paq->fecha }}</td>
 
                                 <td>
-                                @if(Auth::user()->rol!="Recepcionista")
                                       @if ($paq->status_redactar_resultados==1)
                                      <a href="{{ route('resultados_lab_paq',['id'=>$paq->id]) }}" target="_blank" class="btn btn-xs btn-success">@lang('global.app_view')</a>
                        
                                      @endif
-                                      @endif
                                 </td>
 
                             </tr>

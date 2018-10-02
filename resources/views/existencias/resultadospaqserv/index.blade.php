@@ -60,9 +60,7 @@
                                 <td>{{ $paq->fecha }}</td>
 
                                 <td>
-                                @if(Auth::user()->rol!="Recepcionista")
                                     <a href="{{ route('admin.resultadospaqserv.create',['id'=>$paq->id]) }}" class="btn btn-xs btn-info">@lang('global.app_create_resultado')</a>
-                                     @endif
                                 </td>
 
                             </tr>

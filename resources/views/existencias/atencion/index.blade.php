@@ -69,9 +69,11 @@
 
                                 <td>
                                   <a  target="_blank" href="{{asset('ticket_atencion_ver')}}/{{$atec->id_atencion}}" class="btn btn-xs btn-success">@lang('global.app_imprimirt')</a>
+                                  
+                                 @if(Auth::user()->rol!="Recepcionista")
+
                                  <a href="{{ route('admin.atencion.edit',[$atec->id]) }}" class="btn btn-xs btn-info">@lang('global.app_edit')</a>
 
-                                  @if(Auth::user()->rol!="Recepcionista")
 
                                     {!! Form::open(array(
                                         'style' => 'display: inline-block;',

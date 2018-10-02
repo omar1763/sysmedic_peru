@@ -54,13 +54,14 @@ class ResultadosPaqController extends Controller
          
 
                  $paquetes = DB::table('atencion_profesionales_paquete_labs as a')
-                ->select('a.id', 'a.id_atencion', 'a.id_paquete as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+                ->select('a.id', 'a.id_atencion', 'a.id_paquete as id_servicio', 'a.pagado','a.id_profesional', 'a.porcentajepaq as porcentaje',
                     'a.recibo', 'a.created_at as fecha','a.status_redactar_resultados','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
-                    'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio')
+                    'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio','g.name','g.apellidos as ape')
                 ->join('profesionales as f','f.id','a.id_profesional')
                 ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
                 ->join('pacientes as p','p.id','b.id_paciente')
                 ->join('paquetes as c','c.id','a.id_paquete')
+                ->join('profesionales as g','g.id','a.id_profesional')
                 ->where('a.status_redactar_resultados','=',0)
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)

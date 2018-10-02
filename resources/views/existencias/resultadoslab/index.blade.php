@@ -36,8 +36,8 @@
                     <tr>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         <th>@lang('global.resultadoslab.fields.detalle')</th>
-                        <th>@lang('global.resultadoslab.fields.nombre')</th>
-                        <th>@lang('global.resultadoslab.fields.apellido')</th>
+                        <th>Paciente</th>
+                        <th>Origen</th>
                         <th>@lang('global.resultadoslab.fields.fecha')</th>
                     
                         <th>&nbsp;</th>
@@ -52,14 +52,12 @@
                                 <td></td>
 
                                 <td>{{ $lab->detalleservicio }}</td>
-                                <td>{{ $lab->nombres }}</td>
-                                <td>{{ $lab->apellidos }}</td>
+                                <td>{{ $lab->nombres }},{{ $lab->apellidos }}</td>
+                                <td>{{ $lab->name }},{{ $lab->ape }}</td>
                                 <td>{{ $lab->created_at }}</td>
 
                                 <td>
-                                @if(Auth::user()->rol!="Recepcionista")
                                     <a href="{{ route('admin.resultadoslab.create',['id'=>$lab->id]) }}" class="btn btn-xs btn-info">@lang('global.app_create_resultado')</a>
-                                     @endif
                                 </td>
 
                             </tr>

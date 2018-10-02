@@ -50,12 +50,13 @@ class ResultadosLabController extends Controller
                 
 
                  $laboratorios = DB::table('atencion_profesionales_laboratorios as a')
-                ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','a.id_empresa','a.id_sucursal','a.created_at','d.name as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados')
+                ->select('a.id','a.id_atencion','a.id_laboratorio','a.pagado','a.id_empresa','a.id_profesional','a.id_sucursal','a.created_at','d.name as detalleservicio','e.id_paciente','f.nombres','f.apellidos','a.status_redactar_resultados','g.name','g.apellidos as ape')
                 ->join('empresas as b','a.id_empresa','b.id')
                 ->join('locales as c','a.id_sucursal','c.id')
                 ->join('analises as d','a.id_laboratorio','d.id')
                 ->join('atencion_detalles as e','a.id_atencion','e.id_atencion')
                 ->join('pacientes as f','f.id','e.id_paciente')
+                ->join('profesionales as g','g.id','a.id_profesional')
                 ->where('a.status_redactar_resultados','=',0)
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)

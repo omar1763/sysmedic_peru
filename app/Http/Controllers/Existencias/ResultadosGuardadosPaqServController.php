@@ -48,14 +48,15 @@ class ResultadosGuardadosPaqServController extends Controller
 
     
           $paquetes = DB::table('atencion_profesionales_paquetes as a')
-                ->select('a.id', 'a.id_atencion', 'a.id_paquete','a.id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
+                ->select('a.id', 'a.id_atencion', 'a.id_paquete','a.id_servicio', 'a.pagado','a.id_profesional', 'a.porcentajepaq as porcentaje',
                     'a.recibo', 'a.created_at as fecha','a.status_redactar_resultados','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
-                    'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio','i.detalle as detalle1')
+                    'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio','i.detalle as detalle1','g.name','g.apellidos as ape')
                 ->join('profesionales as f','f.id','a.id_profesional')
                 ->join('atencion_detalles as b','a.id_atencion','b.id_atencion')
                 ->join('pacientes as p','p.id','b.id_paciente')
                 ->join('paquetes as c','c.id','a.id_paquete')
                 ->join('servicios as i','i.id','a.id_servicio')
+                ->join('profesionales as g','g.id','a.id_profesional')
                 ->where('a.status_redactar_resultados','=',1)
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
