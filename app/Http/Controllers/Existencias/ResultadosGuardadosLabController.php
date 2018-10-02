@@ -60,7 +60,7 @@ class ResultadosGuardadosLabController extends Controller
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
                 ->whereBetween('a.created_at', [$f1, $f2])
-                ->orderby('a.created_at','desc');
+                ->orderby('a.created_at','desc')
                 ->get();
 
         
