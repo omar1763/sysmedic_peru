@@ -17,16 +17,10 @@ use App\Http\Requests\Movimientos\UpdateIngresosRequest;
 
 class IngresosController extends Controller
 {
-    /**
-     * Display a listing of User.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+        
 
          $id_usuario = Auth::id();
 
@@ -77,7 +71,7 @@ class IngresosController extends Controller
         ->select('*')
         ->where('id_empresa','=', $usuarioEmp)
         ->where('id_sucursal','=', $usuarioSuc)
-        ->get()->pluck('name','name');
+        ->get()->pluck('name','id');
 
         return view('movimientos.ingresos.create', compact('producto'));
     }
@@ -90,9 +84,7 @@ class IngresosController extends Controller
      */
     public function store(StoreIngresosRequest $request)
     {
-        if (! Gate::allows('users_manage')) {
-            return abort(401);
-        }
+       
 
         $id_usuario = Auth::id();
 
@@ -107,37 +99,31 @@ class IngresosController extends Controller
                     $usuarioSuc = $usuario->id_sucursal;
                 }
 
-      
-       $ingresos = new Ingresos;
-       $ingresos->producto =$request->producto;
-       $ingresos->cantidad     =$request->cantidad;
-       $ingresos->fechaingreso     =$request->fechaingreso;
-       $ingresos->id_empresa     =$usuarioEmp;
-       $ingresos->id_sucursal     =$usuarioSuc;
-       $ingresos->save();
-
-        $product =Productos::all();
-
-         $searchproduct = DB::table('productos')
+        $searchproduct = DB::table('productos')
                     ->select('*')
                    // ->where('estatus','=','1')
-                    ->where('name','=', $request->producto)
+                    ->where('id','=', $request->producto)
                     ->get();
+       
 
         foreach ($searchproduct as $prod) {
                     $idproduc = $prod->id;
                     $nombreprod = $prod->name;
                     $cantidadprod = $prod->cantidad;
                 }
+             
+       $ingresos = new Ingresos;
+       $ingresos->producto =$nombreprod;
+       $ingresos->cantidad     =$request->cantidad;
+       $ingresos->fechaingreso     =$request->fechaingreso;
+       $ingresos->id_empresa     =$usuarioEmp;
+       $ingresos->id_sucursal     =$usuarioSuc;
+       $ingresos->save();
 
-    
-      
        $productos=Productos::where('id', '=' , $idproduc)->get()->first();
        $productos->cantidad=$cantidadprod + $ingresos->cantidad;
        $productos->update();
 
-
-    
         return redirect()->route('admin.ingresos.index');
     }
 
