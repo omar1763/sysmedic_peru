@@ -73,7 +73,6 @@
                         <th>Porcentaje</th>
                         <th>A Cuenta</th>
                         <th>Monto a Pagar</th>
-                        <th>&nbsp;</th>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         @elseif($filtro =='1')
                         <th>Fecha</th>
@@ -82,14 +81,12 @@
                         <th>Cantidad</th>
                         <th>Tipo de Ingreso</th>
                         <th>Monto</th>
-                        <th>&nbsp;</th>
                         <th style="text-align:center;"><input type="checkbox" id="select-all" /></th>
                         @elseif($filtro =='2')
                         <th>Fecha</th>
                         <th>Nombre</th>
                         <th>Detalle del Gasto</th>
                         <th>Monto</th>
-                        <th>&nbsp;</th>
                         @else
                         @endif
 
@@ -105,8 +102,7 @@
 
                           <td>{{ $rep->fecha }}</td>
                           @if($filtro =='0')
-                          <td></td>
-                          <td>{{ $atenciondetalles->selectProfesional($rep->id_profesional) }}</td>                                
+                          <td>{{ $atenciondetalles->selectProfesional($rep->id_profesional) }}</td>                           
                           <td>{{ $atenciondetalles->selectPaciente($rep->id_paciente) }}</td>
                           <td>{{ $rep->detalle }}</td>
                           <td>{{ $rep->precio }}</td>
@@ -114,14 +110,12 @@
                           <td>{{ $rep->costoa }}</td>
                           <td>{{ $rep->pagar }}</td>
                           @elseif($filtro =='1')
-                           <td></td>
                           <td>{{ $rep->detalle }}</td>
                           <td>{{ $rep->producto }}</td>
                           <td>{{ $rep->cantidad }}</td>
                           <td>{{ $rep->tipo_ingreso }}</td>
                           <td>{{ $rep->precio }}</td>
                           @elseif($filtro =='2')
-                          <td></td>
                           <td>{{ $rep->name }}</td>
                           <td>{{ $rep->concepto }}</td>
                           <td>{{ $rep->monto }}</td>
