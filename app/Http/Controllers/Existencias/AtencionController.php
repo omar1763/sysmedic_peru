@@ -75,7 +75,7 @@ class AtencionController extends Controller
         ->join('analises as c','c.id','a.id_laboratorio')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-        ->orderby('a.id','DESC')
+        ->orderby('a.id_atencion','DESC')
         ->where('a.created_at','=', $f1);
 
          $atec_paq = DB::table('atencion_profesionales_paquetes as a')
@@ -178,11 +178,11 @@ class AtencionController extends Controller
         ->join('servicios as c','c.id','a.id_servicio')
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
-        ->orderby('a.id_atencion','DESC')
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->union($atec_lab)
         ->union($atec_paq)
         ->union($atec_lab_paq)
+        ->orderby('id_atencion','DESC')
         ->get();
 
      
