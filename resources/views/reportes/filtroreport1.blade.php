@@ -87,6 +87,7 @@
                         <th>Nombre</th>
                         <th>Detalle del Gasto</th>
                         <th>Monto</th>
+                        <th></th>
                         @else
                         <th></th>
                         @endif
