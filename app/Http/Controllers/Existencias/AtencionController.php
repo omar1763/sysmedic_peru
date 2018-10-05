@@ -101,8 +101,9 @@ class AtencionController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->where('a.created_at','=', $f1)
-        ->orderby('a.id_atencion','DESC')
-        ->union($atec_lab,$atec_paq)
+        ->union($atec_lab)
+        ->union($atec_paq)
+        ->orderby('id_atencion','DESC')
         ->get();
 
 
