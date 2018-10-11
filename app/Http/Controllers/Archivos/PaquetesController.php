@@ -204,10 +204,21 @@ class PaquetesController extends Controller
      */
     public function edit($id)
     {
-       
+        $id_usuario = Auth::id();
+
+         $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
      
 
-      $paquetes = Paquetes::find($id);
+       $paquetes = Paquetes::find($id);
        $select=json_decode($paquetes->servicio);
 
     
