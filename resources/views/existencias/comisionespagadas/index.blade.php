@@ -74,15 +74,15 @@
                 <tbody>
                     @if (count($comisionespagadas) > 0)
                         @foreach ($comisionespagadas as $com)
-                            <tr data-entry-id="{{ $com->id }}">
+                            <tr data-entry-id="{{ $com["id"]}}">
                                 <td></td>
-                                <td>{{ $com->recibo }}</td>
-                                <td>{{ $com->nombres }},{{ $com->apellidos }}</td>
-                                <td>{{ $com->fecha_pago_comision }}</td>
+                                <td>{{ $com["recibo"]}}</td>
+                                <td>{{ $com["nombres"]}},{{ $com["apellidos"]}}</td>
+                                <td>{{ $com["fecha_pago_comision"] }}</td>
                                 <td> 
                                  @if(Auth::user()->rol!="Recepcionista")
 
-                                  <a target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com->recibo}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
+                                  <a target="_blank" href="{{asset('recibo_profesionales_ver')}}/{{$com["recibo"]}}" class="btn btn-xs btn-success">@lang('global.app_imprimirr')</a>
                                  @endif   
                                 </td>
 
