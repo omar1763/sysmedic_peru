@@ -218,26 +218,17 @@ class PaquetesController extends Controller
                 }
      
 
-       $paquetes = Paquetes::find($id);
+       
+      $paquetes = Paquetes::find($id);
        $select=json_decode($paquetes->servicio);
 
+      // $paquetes = PaquetesServ::findOrFail($id);
     
      
        $servicioIds = [];
        $analisisIds = [];
-        $servicio = DB::table('servicios')
-        ->select('*')
-        ->where('id_empresa','=', $usuarioEmp)
-        ->where('id_sucursal','=', $usuarioSuc)
-        ->get()->pluck('detalle','id');
-
-      // $servicio = Servicios::get()->pluck('detalle', 'id');
-     //  dd($servicio);
-         $analisis = DB::table('analises')
-        ->select('*')
-        ->where('id_empresa','=', $usuarioEmp)
-        ->where('id_sucursal','=', $usuarioSuc)
-        ->get()->pluck('name','id');
+       $servicio = Servicios::all();
+       $analisis = Analisis::all();
        $paquetesserv = PaquetesServ::all()->where('id_paquete',$id );
        $paquetesanalisis = PaquetesAnalisis::all()->where('id_paquete',$id );
 
@@ -290,13 +281,6 @@ class PaquetesController extends Controller
        $paquetes->costo     =$request->costo;
        $paquetes->update();
 
-
-     /*  foreach ($request->servicio as $key => $value) {
-       $paquetesserv=PaquetesServ::findOrFail($id);
-       $paquetesserv->id_servicio    =$value;
-       $paquetesserv->update();
-       }*/
-      
         return redirect()->route('admin.paquetes.index');
     }
 
