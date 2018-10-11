@@ -89,6 +89,7 @@ class AtencionController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->orderby('a.id_atencion','DESC')
+        ->groupBy('a.id_atencion')
         ->where('a.created_at','=', $f1);
 
         $atencion = DB::table('atencion_profesionales_servicios as a')
@@ -104,6 +105,7 @@ class AtencionController extends Controller
         ->union($atec_lab)
         ->union($atec_paq)
         ->orderby('id_atencion','DESC')
+        ->groupBy('a.id_atencion')
         ->get();
 
 
@@ -141,7 +143,7 @@ class AtencionController extends Controller
         ->orderby('a.id_atencion','DESC')
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
 
-         $atec_paq = DB::table('atencion_profesionales_paquetes as a')
+       /*  $atec_paq = DB::table('atencion_profesionales_paquetes as a')
         ->select('a.id', 'a.id_atencion', 'a.id_paquete as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
         'a.recibo', 'a.created_at as fecha','a.id_profesional', 'b.costo','b.id_paciente','b.costoa', 'f.name as nombres',
         'f.apellidos', 'b.origen', 'p.nombres as pnombres', 'p.apellidos as papellidos','c.name as detalle','c.costo as precio')
@@ -152,8 +154,7 @@ class AtencionController extends Controller
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->orderby('a.id_atencion','DESC')
-        ->groupBy('a.id_atencion')
-        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));
+        ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'));*/
 
          $atec_lab_paq = DB::table('atencion_profesionales_paquete_labs as a')
         ->select('a.id', 'a.id_atencion', 'a.id_paquete as id_servicio', 'a.pagado', 'a.porcentajepaq as porcentaje',
@@ -181,7 +182,7 @@ class AtencionController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
         ->union($atec_lab)
-        ->union($atec_paq)
+       // ->union($atec_paq)
         ->union($atec_lab_paq)
         ->orderby('id_atencion','DESC')
         ->get();

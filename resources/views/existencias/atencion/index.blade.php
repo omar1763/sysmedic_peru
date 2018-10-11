@@ -65,8 +65,6 @@
                                 <td>{{ $atec->porcentaje }}</td>
                                 <td>{{ $atec->costoa }}</td>
 
-                             
-
                                 <td>
                                   <a  target="_blank" href="{{asset('ticket_atencion_ver')}}/{{$atec->id_atencion}}" class="btn btn-xs btn-success">@lang('global.app_imprimirt')</a>
                                   
