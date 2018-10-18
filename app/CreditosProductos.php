@@ -29,6 +29,11 @@ class CreditosProductos extends Authenticatable
         ->where('id_credito', $id)
         ->get();
         $descripcion='';
+        $cantidad='';
+
+         foreach ($data as $datacredito) {
+                    $cantidadCredito = $datacredito->cantidad;   
+                }
 
         
         
@@ -40,7 +45,8 @@ class CreditosProductos extends Authenticatable
           ->get();
 
           foreach ($dataproductos as $keydataproductos => $valuedataproductos) {
-            $descripcion.= $valuedataproductos->name.',';
+            $descripcion.= $valuedataproductos->name.'-> Cantidad:'.$cantidadCredito.',';
+           // $cantidad.= $valuedataproductos->cantidad.',';
                           # code...
         }
     }
