@@ -9,7 +9,7 @@
  @foreach($pacientes as $pac)
 
   	<p style="text-align: left;"><center><STRONG>HISTORÌA MÈDICA</STRONG></center></p>
-    <p style="text-align: left;"><center><h1>{{Auth::user()->empresa}}</h1></center></p>
+    <p style="text-align: left;"><center><strong>{{Auth::user()->empresa}}</strong></center></p>
     <p style="text-align: left;"><strong>Nº DE H.C:</strong>{{ $pac->historia}}</p><p style="text-align: right; margin-right: 190px; margin-top: -30px;"><strong>FECHA Y HORA DE ATENCIÒN:</strong></p>
    <p style="text-align: left;"><strong>I. DATOS DE AFILIACIÒN:</strong></p> 
    <p style="text-align: left;"><strong>APELLIDOS Y NOMBRES:</strong>{{ $pac->apellidos}},{{ $pac->nombres}}</p> 
@@ -46,8 +46,6 @@
   <p style="text-align: right; margin-top: -30px; margin-right: 400px;"><strong>SUEÑO:</strong></p> 
   <p style="text-align: right; margin-top: -30px; margin-right: 200px;"><strong>ESTADO DE ANIMO:</strong></p> 
   <p style="text-align: left;"><strong>IV. EXAMEN FÌSICO GENERAL:</strong></p> 
-  _______________________________________________________________________________________________________<br>
-  _______________________________________________________________________________________________________<br>
   _______________________________________________________________________________________________________<br>
   _______________________________________________________________________________________________________<br>
   _______________________________________________________________________________________________________<br>
