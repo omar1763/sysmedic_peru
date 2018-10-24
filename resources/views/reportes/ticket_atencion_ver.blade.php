@@ -48,6 +48,10 @@
 		<p><strong>{{ $atec->costo}},00</strong></p>
 	</div>
 
+	<div class="origen">
+		<p><strong>Origen:{{ $atec->name}},{{ $atec->apellidos}}</strong></p>
+	</div>
+
 	@endforeach
 
 
