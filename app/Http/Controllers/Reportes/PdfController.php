@@ -1272,6 +1272,19 @@ class PdfController extends Controller
     {
        
      $atencion =PdfController::ticketAtencion($id);
+     
+      $id_usuario = Auth::id();
+
+      $searchUsuarioID = DB::table('users')
+                    ->select('*')
+                   // ->where('estatus','=','1')
+                    ->where('id','=', $id_usuario)
+                    ->get();
+
+            foreach ($searchUsuarioID as $usuario) {
+                    $usuarioEmp = $usuario->id_empresa;
+                    $usuarioSuc = $usuario->id_sucursal;
+                }
 
      $servicios = new Servicios();
      $analisis = new Analisis();
@@ -1279,7 +1292,7 @@ class PdfController extends Controller
      $paquetes = new PaquetesServ();
      $atenciondetalle = new AtencionDetalle();
 
-     $view = \View::make('reportes.ticket_atencion_ver')->with('atencion', $atencion)->with('servicios', $servicios)->with('analisis', $analisis)->with('paquete', $paquete)->with('paquetes', $paquetes)->with('atenciondetalle', $atenciondetalle);
+     $view = \View::make('reportes.ticket_atencion_ver')->with('atencion', $atencion)->with('servicios', $servicios)->with('analisis', $analisis)->with('paquete', $paquete)->with('paquetes', $paquetes)->with('atenciondetalle', $atenciondetalle)->with('usuarioEmp', $usuarioEmp);
      $pdf = \App::make('dompdf.wrapper');
      $pdf->loadHTML($view);
      
