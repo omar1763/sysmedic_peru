@@ -99,13 +99,15 @@
 		<p><strong>Deuda: {{ $atec->pendiente}},00</strong></p>
 	</div>
 
+	<div class="" style="margin-left: 50px; margin-top: -25px;">
+		<p><strong>Origen:{{ $atec->name}},{{ $atec->apellidos}}</strong></p>
+	</div>
+
 	<div class="total">
 		<p><strong>{{ $atec->costo}},00</strong></p>
 	</div>
 
-	<div class="origen">
-		<p><strong>Origen:{{ $atec->name}},{{ $atec->apellidos}}</strong></p>
-	</div>
+
 
 @endforeach
 @endif
