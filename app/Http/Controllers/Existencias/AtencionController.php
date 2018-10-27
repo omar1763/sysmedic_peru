@@ -109,24 +109,6 @@ class AtencionController extends Controller
         ->get();
 
 
-       /*   $atencion = DB::table('atencions as a')
-         ->select('a.id','a.created_at','a.id_empresa','a.id_sucursal','d.id_atencion','d.id_paciente','d.costo','d.origen','d.costoa','d.porcentaje','d.acuenta','d.observaciones','e.nombres','e.apellidos','f.id','f.detalle')
-        ->join('empresas as b','a.id_empresa','b.id')
-        ->join('locales as c','a.id_sucursal','c.id')
-        ->join('atencion_detalles as d','a.id','d.id_atencion')
-        ->join('pacientes as e','d.id_paciente','e.id')
-        ->join('servicios as f','d.id_servicio','f.id')
-        //->join('atencion_paquetes as g','g.id_atencion','a.id')
-        //->join('paquetes as h','h.id','g.id_paquete')
-        ->where('a.id_empresa','=', $usuarioEmp)
-        ->where('a.id_sucursal','=', $usuarioSuc)
-        ->where('a.created_at','=', $f1)
-        //->orwhereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
-        ->orderby('a.created_at','desc')
-         ->paginate(1000);*/
- //      ->toSql();
-//dd($atencion);
-       // dd(DB::getQueryLog());
     } else {
 
           $atec_lab = DB::table('atencion_profesionales_laboratorios as a')
@@ -558,6 +540,20 @@ public function cardainput3($id, Request $request){
 
             }
 
+               $atenciondetalle = new AtencionDetalle;
+       $atenciondetalle->id_atencion     =$atencion->id;
+       $atenciondetalle->id_paciente     =$request->pacientes;
+       $atenciondetalle->costo           =$request->preciototal;
+       $atenciondetalle->origen           =$request->origen_paciente;
+       $atenciondetalle->id_profesional =$request->profesional;
+       $atenciondetalle->acuenta         =$request->acuenta;
+       $atenciondetalle->costoa          =$request->costoa;
+       $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
+       $atenciondetalle->tarjeta         =$request->tarjeta;
+       $atenciondetalle->porcentaje      =$request->porcentaje;
+       $atenciondetalle->observaciones   =$request->observaciones;
+       $atenciondetalle->save();
+
 
             $serviciosprofatencion = new AtencionProfesionalesServicio;
             $serviciosprofatencion->id_atencion =$atencion->id;
@@ -703,7 +699,7 @@ public function cardainput3($id, Request $request){
             $serviciosprofatencion = new AtencionProfesionalesServicio;
             $serviciosprofatencion->id_atencion =$atencion->id;
             $serviciosprofatencion->id_servicio    =$value;
-            $serviciosprofatencion->id_profesional =999;
+            $serviciosprofatencion->id_profesional =$request->personal;
             $serviciosprofatencion->porcentaje =$request->porcentajeserv;
             $serviciosprofatencion->montoser = $request->precioserv;
             $serviciosprofatencion->pagar = ($precio*$request->porcentajeserv)/100;
@@ -720,7 +716,7 @@ public function cardainput3($id, Request $request){
      $analisisatencion->id_atencion =$atencion->id;
      $analisisatencion->id_analisis    =0;
      $analisisatencion->origen    ='Laboratorios';
-     $analisisatencion->id_profesional =999;
+     $analisisatencion->id_profesional =$request->personal;
      $analisisatencion->porcentaje =$request->porcentajelab;
      $analisisatencion->montolab = $request->preciopublico;
      $analisisatencion->id_sucursal =$usuarioSuc;
@@ -744,7 +740,7 @@ public function cardainput3($id, Request $request){
         $serviciosproflab = new AtencionProfesionalesLaboratorio;
         $serviciosproflab->id_atencion =$atencion->id;
         $serviciosproflab->id_laboratorio    =$value;
-        $serviciosproflab->id_profesional =999;
+        $serviciosproflab->id_profesional =$request->personal;
         $serviciosproflab->porcentaje =$request->porcentajelab;
         $serviciosproflab->montolab = $request->preciopublico;
         $serviciosproflab->pagar = ($precio*$request->porcentajelab)/100;
@@ -754,6 +750,21 @@ public function cardainput3($id, Request $request){
         $serviciosproflab->save();
     }
 }
+
+
+     $atenciondetalle = new AtencionDetalle;
+       $atenciondetalle->id_atencion     =$atencion->id;
+       $atenciondetalle->id_paciente     =$request->pacientes;
+       $atenciondetalle->costo           =$request->preciototal;
+       $atenciondetalle->origen           =$request->origen_paciente;
+       $atenciondetalle->id_profesional =999;
+       $atenciondetalle->acuenta         =$request->acuenta;
+       $atenciondetalle->costoa          =$request->costoa;
+       $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
+       $atenciondetalle->tarjeta         =$request->tarjeta;
+       $atenciondetalle->porcentaje      =$request->porcentaje;
+       $atenciondetalle->observaciones   =$request->observaciones;
+       $atenciondetalle->save();
 
  if(! is_null($request->paquetes)){
      foreach ($request->paquetes as $key => $value) {
@@ -774,7 +785,7 @@ public function cardainput3($id, Request $request){
              $paquetesatencion->id_atencion =$atencion->id;
              $paquetesatencion->id_paquete    =$value;
              $paquetesatencion->id_servicio    =$id_servicio;
-             $paquetesatencion->id_profesional =999;
+             $paquetesatencion->id_profesional =$request->personal;
              $paquetesatencion->porcentajepaq =$request->porcentajepaq;
              $paquetesatencion->costo = $request->costo;
              $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
@@ -799,7 +810,7 @@ public function cardainput3($id, Request $request){
                $paquetesatencion->id_atencion =$atencion->id;
                $paquetesatencion->id_paquete    =$value;
                $paquetesatencion->id_laboratorio    =$id_laboratorio;
-               $paquetesatencion->id_profesional =999;
+               $paquetesatencion->id_profesional =$request->personal;
                $paquetesatencion->pagadolab = 0;
                $paquetesatencion->porcentajepaq =$request->porcentajepaq;
                $paquetesatencion->costo = $request->costo;
@@ -818,20 +829,6 @@ public function cardainput3($id, Request $request){
 
 }
 
-
-       $atenciondetalle = new AtencionDetalle;
-       $atenciondetalle->id_atencion     =$atencion->id;
-       $atenciondetalle->id_paciente     =$request->pacientes;
-       $atenciondetalle->costo           =$request->preciototal;
-       $atenciondetalle->origen           =$request->origen_paciente;
-       $atenciondetalle->id_profesional =$request->profesional;
-       $atenciondetalle->acuenta         =$request->acuenta;
-       $atenciondetalle->costoa          =$request->costoa;
-       $atenciondetalle->pendiente       =($request->preciototal-$request->costoa);
-       $atenciondetalle->tarjeta         =$request->tarjeta;
-       $atenciondetalle->porcentaje      =$request->porcentaje;
-       $atenciondetalle->observaciones   =$request->observaciones;
-       $atenciondetalle->save();
 
        $creditos = new Creditos;
        $creditos->id_atencion    =$atencion->id;
