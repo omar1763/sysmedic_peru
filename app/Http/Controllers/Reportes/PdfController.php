@@ -1246,18 +1246,17 @@ class PdfController extends Controller
 
         
                 $atencion = DB::table('atencions as a')
-                ->select('a.id','a.created_at','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.pendiente','d.observaciones','d.id_paciente','d.origen','f.id_atencion','f.id_profesional','g.name','g.apellidos')
-
+                ->select('a.id','a.created_at','d.id_atencion','d.id_paciente','d.costo','d.costoa','d.porcentaje','d.acuenta','d.pendiente','d.observaciones','d.id_paciente','d.origen','d.id_profesional','g.name','g.apellidos')
                 ->join('atencion_detalles as d','a.id','d.id_atencion')
-                ->join('atencion_profesionales_servicios as f','a.id','f.id_atencion')
-                ->join('profesionales as g','g.id','f.id_profesional')
+               // ->join('atencion_profesionales_servicios as f','a.id','f.id_atencion')
+                //->join('atencion_profesionales_laboratorios as h','a.id','h.id_atencion')
+                ->join('profesionales as g','g.id','d.id_profesional')
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
                 ->where('a.id','=', $id)
                 ->orderby('a.created_at','desc')
                 ->get();
-
-
+                
         if(!is_null($atencion)){
             return $atencion;
          }else{
@@ -1291,6 +1290,7 @@ class PdfController extends Controller
      $paquete = new Paquetes();
      $paquetes = new PaquetesServ();
      $atenciondetalle = new AtencionDetalle();
+
 
      $view = \View::make('reportes.ticket_atencion_ver')->with('atencion', $atencion)->with('servicios', $servicios)->with('analisis', $analisis)->with('paquete', $paquete)->with('paquetes', $paquetes)->with('atenciondetalle', $atenciondetalle)->with('usuarioEmp', $usuarioEmp);
      $pdf = \App::make('dompdf.wrapper');
