@@ -699,7 +699,7 @@ public function cardainput3($id, Request $request){
             $serviciosprofatencion = new AtencionProfesionalesServicio;
             $serviciosprofatencion->id_atencion =$atencion->id;
             $serviciosprofatencion->id_servicio    =$value;
-            $serviciosprofatencion->id_profesional =$request->personal;
+            $serviciosprofatencion->id_profesional =999;
             $serviciosprofatencion->porcentaje =$request->porcentajeserv;
             $serviciosprofatencion->montoser = $request->precioserv;
             $serviciosprofatencion->pagar = ($precio*$request->porcentajeserv)/100;
@@ -716,7 +716,7 @@ public function cardainput3($id, Request $request){
      $analisisatencion->id_atencion =$atencion->id;
      $analisisatencion->id_analisis    =0;
      $analisisatencion->origen    ='Laboratorios';
-     $analisisatencion->id_profesional =$request->personal;
+     $analisisatencion->id_profesional =999;
      $analisisatencion->porcentaje =$request->porcentajelab;
      $analisisatencion->montolab = $request->preciopublico;
      $analisisatencion->id_sucursal =$usuarioSuc;
@@ -740,7 +740,7 @@ public function cardainput3($id, Request $request){
         $serviciosproflab = new AtencionProfesionalesLaboratorio;
         $serviciosproflab->id_atencion =$atencion->id;
         $serviciosproflab->id_laboratorio    =$value;
-        $serviciosproflab->id_profesional =$request->personal;
+        $serviciosproflab->id_profesional =999;
         $serviciosproflab->porcentaje =$request->porcentajelab;
         $serviciosproflab->montolab = $request->preciopublico;
         $serviciosproflab->pagar = ($precio*$request->porcentajelab)/100;
@@ -785,7 +785,7 @@ public function cardainput3($id, Request $request){
              $paquetesatencion->id_atencion =$atencion->id;
              $paquetesatencion->id_paquete    =$value;
              $paquetesatencion->id_servicio    =$id_servicio;
-             $paquetesatencion->id_profesional =$request->personal;
+             $paquetesatencion->id_profesional =999;
              $paquetesatencion->porcentajepaq =$request->porcentajepaq;
              $paquetesatencion->costo = $request->costo;
              $paquetesatencion->pagar = ($request->costo*$request->porcentajepaq)/100;
@@ -810,7 +810,7 @@ public function cardainput3($id, Request $request){
                $paquetesatencion->id_atencion =$atencion->id;
                $paquetesatencion->id_paquete    =$value;
                $paquetesatencion->id_laboratorio    =$id_laboratorio;
-               $paquetesatencion->id_profesional =$request->personal;
+               $paquetesatencion->id_profesional =999;
                $paquetesatencion->pagadolab = 0;
                $paquetesatencion->porcentajepaq =$request->porcentajepaq;
                $paquetesatencion->costo = $request->costo;
