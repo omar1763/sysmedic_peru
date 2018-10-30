@@ -1254,6 +1254,7 @@ class PdfController extends Controller
                 ->where('a.id_empresa','=', $usuarioEmp)
                 ->where('a.id_sucursal','=', $usuarioSuc)
                 ->where('a.id','=', $id)
+                ->groupBy('a.id')
                 ->orderby('a.created_at','desc')
                 ->get();
                 

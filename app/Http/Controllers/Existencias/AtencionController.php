@@ -169,7 +169,6 @@ class AtencionController extends Controller
         ->orderby('id_atencion','DESC')
         ->get();
 
-     
     }
 
 
