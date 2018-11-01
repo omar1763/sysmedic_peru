@@ -9,10 +9,11 @@
 
 	<p style="text-align: left;"><center><h1>{{Auth::user()->empresa}}</h1></center></p>
 	<br>
-  
-  <p style="margin-left: 15px;"><strong>DOCTOR:  </strong>{{ $profnombre.' '.$profapellido }}</p>
-  <p style="margin-left: 15px;"><strong>CONSULTORIO:  </strong>{{ $centro}}</p>
-  <p style="margin-left: 15px;"><strong>RECIBO:  </strong>{{ $recibo}}</p>
+  @foreach($profesional as $prof)
+  <p style="margin-left: 15px;"><strong>DOCTOR:  </strong>{{ $prof["name"]}},{{ $prof["apellidos"]}}</p>
+  <p style="margin-left: 15px;"><strong>CONSULTORIO:  </strong>{{ $prof["centro"]}}</p>
+  @endforeach
+  <p style="margin-left: 15px;"><strong>RECIBO:  </strong>{{$recibo}}</p>
 
   
 <table>
@@ -26,19 +27,18 @@
  
   </thead>
   <tbody>
-  <?php $sum = 0; ?>
-  @foreach($reciboprofesional as $recibo)
+   @foreach($reciboprofesional as $recibo)
   <tr>
-    <td>{{ $recibo["nombres"].' '.$recibo["apellidos"] }}</td>
-    <td>{{ $recibo["fecha"]}}</td>
-    <td>{{ $recibo["detalle"]}}</td>
-    <td>{{ $recibo["pagar"]}}</td>
+    <td>{{ $recibo->nombres.' '.$recibo->apellidos}} </td>
+    <td>{{ $recibo->fecha}} </td>
+    <td>{{ $recibo->detalle}} </td>
+    <td>{{ $recibo->pagar}} </td>
   </tr>
   @endforeach
  </tbody>
 
- @foreach($total_lab as $lab)
- @foreach($total_serv as $serv)
+ @foreach($comisiones_lab_pag as $lab)
+ @foreach($comisiones_serv_pag as $serv)
 
 <?php 
 
