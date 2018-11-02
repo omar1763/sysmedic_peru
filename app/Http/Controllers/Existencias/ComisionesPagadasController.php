@@ -86,6 +86,7 @@ class ComisionesPagadasController extends Controller
         ->where('a.pagado','=',1)
         ->where('a.id_empresa','=', $usuarioEmp)
         ->where('a.id_sucursal','=', $usuarioSuc)
+        ->groupBy('a.recibo')
         ->whereBetween('a.fecha_pago_comision', [$f1, $f2]);
         //->groupBy('recibo');
 
@@ -100,14 +101,14 @@ class ComisionesPagadasController extends Controller
         ->where('a.pagado', '=', 1)
         ->whereBetween('a.fecha_pago_comision', [$f1, $f2])
         ->union($comisiones_lab)
-        ->groupBy('recibo')
+        ->groupBy('a.recibo')
         ->get();
 
 
         
       
          $comisionespagadas = json_encode($comisionespagadas);
-         $comisionespagadas = self::unique_multidim_array(json_decode($comisionespagadas, true), "id_atencion");
+         $comisionespagadas = self::unique_multidim_array(json_decode($comisionespagadas, true), "recibo");
 
         return view('existencias.comisionespagadas.index', compact('comisionespagadas','f1','comisiones_lab_pag','comisiones_serv_pag'));
     }
