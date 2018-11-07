@@ -56,6 +56,7 @@ class CuentasporCobrarController extends Controller
                     ->where('a.pendiente','>', 0)
                    // ->where('a.created_at','=', $f1)
                     //->whereDate('a.created_at', '=', Carbon::now()->format('Y-m-d'))
+                    ->groupBy('b.id')
                     ->orderby('a.created_at','desc')
                     ->paginate(500);
 
