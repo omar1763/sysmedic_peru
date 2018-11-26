@@ -24,6 +24,8 @@ use App\Debitos;
 use App\Empresas;
 use App\Locales;
 use App\Recibos;
+use App\Gastos;
+use App\Creditos;
 use Carbon\Carbon;
 use Elibyy\TCPDF\Facades\TCPDF;
 use PDF;
@@ -192,6 +194,13 @@ class ReportesController extends Controller
         ->whereBetween('a.created_at', [$f1, $f2])
         ->paginate(1000);
 
+         $totalcreditos = Creditos::where('causa','=','V')
+                             ->where('id_empresa','=', $usuarioEmp)
+                             ->where('id_sucursal','=', $usuarioSuc)
+                             ->whereBetween('created_at', [$f1, $f2])
+                            ->select(DB::raw('SUM(monto) as monto'))
+                            ->first();
+   
 
         } else if (! is_null($request->fecha) & ($request->filtro==2)){
 
@@ -201,6 +210,12 @@ class ReportesController extends Controller
         ->where('a.id_sucursal','=', $usuarioSuc)
         ->whereBetween('a.created_at', [$f1, $f2])
         ->paginate(1000);
+
+         $totalgastos = Gastos::where('id_empresa','=', $usuarioEmp)
+                             ->where('id_sucursal','=', $usuarioSuc)
+                             ->whereBetween('created_at', [$f1, $f2])
+                            ->select(DB::raw('SUM(monto) as monto'))
+                            ->first();
 
       } else {
           $reporte = DB::table('atencion_profesionales_servicios as a')
@@ -249,7 +264,7 @@ class ReportesController extends Controller
 
      $filtro = $request->filtro;
 
-        return view('reportes.filtroreport1', compact('reporte','servicios','analisis','pacientes','servicioss','analisiss','paquetes','paquetess','atenciondetalles','filtro'));
+        return view('reportes.filtroreport1', compact('reporte','servicios','analisis','pacientes','servicioss','analisiss','paquetes','paquetess','atenciondetalles','filtro','totalcreditos','totalgastos'));
     }
 
     public function pacientes(){
@@ -324,7 +339,7 @@ class ReportesController extends Controller
         }
 
       $analisis = DB::table('analises')
-      ->select('*')
+      ->select('name','id')
       ->where('id_empresa','=', $usuarioEmp)
       ->where('id_sucursal','=', $usuarioSuc)
       ->get()->pluck('name','id');

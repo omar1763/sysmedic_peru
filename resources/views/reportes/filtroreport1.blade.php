@@ -54,8 +54,16 @@
      
     <div class="panel panel-default">
  
-        <div class="panel-heading">
-      
+          <div class="panel-heading">
+       
+            @if($filtro =='1')
+            <p><strong>Total:{{$totalcreditos}}</strong></p>
+            @elseif($filtro =='2')
+            <p><strong>Total:{{$totalgastos}}</strong></p>
+            @else
+            <p><strong>Total:</strong></p>
+            @endif
+
      </div>
 
 
