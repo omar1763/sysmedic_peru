@@ -57,11 +57,13 @@
           <div class="panel-heading">
        
             @if($filtro =='1')
-            <p><strong>Total:{{$totalcreditos}}</strong></p>
+            <p><strong>Total:{{$totalcreditos->monto}}.00</strong></p>
             @elseif($filtro =='2')
-            <p><strong>Total:{{$totalgastos}}</strong></p>
+            <p><strong>Total:{{$totalgastos->monto}}.00</strong></p>
+            @elseif($filtro =='0')
+            <p><strong>Total:{{$totalservicios->monto + $totallab->monto}}.00</strong></p>
             @else
-            <p><strong>Total:</strong></p>
+            <p><strong>Total:0</strong></p>
             @endif
 
      </div>

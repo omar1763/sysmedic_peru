@@ -177,6 +177,28 @@ class ReportesController extends Controller
         ->union($paquetes_serv)
         ->union($paquetes_lab)
         ->get();
+
+           $totalservicios = AtencionProfesionalesServicio::where('id_empresa','=', $usuarioEmp)
+                             ->where('id_sucursal','=', $usuarioSuc)
+                             ->whereBetween('created_at', [$f1, $f2])
+                            ->select(DB::raw('SUM(montoser) as monto'))
+                            ->first();
+
+            if (is_null($totalservicios->monto)) {
+            $totalservicios->monto = 0;
+              }
+
+           $totallab = AtencionProfesionalesLaboratorio::where('id_empresa','=', $usuarioEmp)
+                             ->where('id_sucursal','=', $usuarioSuc)
+                             ->whereBetween('created_at', [$f1, $f2])
+                             ->select(DB::raw('SUM(montolab) as monto'))
+                             ->first();
+
+            if (is_null($totallab->monto)) {
+            $totallab->monto = 0;
+              }
+
+              $totalatencion = $totalservicios->monto + $totallab->monto;
         
 
      
@@ -200,6 +222,10 @@ class ReportesController extends Controller
                              ->whereBetween('created_at', [$f1, $f2])
                             ->select(DB::raw('SUM(monto) as monto'))
                             ->first();
+
+            if (is_null($totalcreditos->monto)) {
+            $totalcreditos->monto = 0;
+              }
    
 
         } else if (! is_null($request->fecha) & ($request->filtro==2)){
@@ -216,6 +242,10 @@ class ReportesController extends Controller
                              ->whereBetween('created_at', [$f1, $f2])
                             ->select(DB::raw('SUM(monto) as monto'))
                             ->first();
+
+           if (is_null($totalgastos->monto)) {
+            $totalgastos->monto = 0;
+              }
 
       } else {
           $reporte = DB::table('atencion_profesionales_servicios as a')
@@ -264,7 +294,7 @@ class ReportesController extends Controller
 
      $filtro = $request->filtro;
 
-        return view('reportes.filtroreport1', compact('reporte','servicios','analisis','pacientes','servicioss','analisiss','paquetes','paquetess','atenciondetalles','filtro','totalcreditos','totalgastos'));
+        return view('reportes.filtroreport1', compact('reporte','servicios','analisis','pacientes','servicioss','analisiss','paquetes','paquetess','atenciondetalles','filtro','totalcreditos','totalgastos','totalservicios','totallab','totalatencion'));
     }
 
     public function pacientes(){
