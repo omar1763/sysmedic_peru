@@ -1336,7 +1336,7 @@ class PdfController extends Controller
      $atenciondetalle = new AtencionDetalle();
 
 
-     $view = \View::make('reportes.ticket_atencion_ver')->with('atencion', $atencion)->with('servicios', $servicios)->with('analisis', $analisis)->with('paquete', $paquete)->with('paquetes', $paquetes)->with('atenciondetalle', $atenciondetalle)->with('usuarioEmp', $usuarioEmp);
+     $view = \View::make('reportes.ticket_atencion_ver')->with('atencion', $atencion)->with('servicios', $servicios)->with('analisis', $analisis)->with('paquete', $paquete)->with('paquetes', $paquetes)->with('atenciondetalle', $atenciondetalle)->with('usuarioEmp', $usuarioEmp)->with('usuarioSuc', $usuarioSuc);
      $pdf = \App::make('dompdf.wrapper');
      $pdf->loadHTML($view);
      

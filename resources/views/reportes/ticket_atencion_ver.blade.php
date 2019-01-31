@@ -58,6 +58,61 @@
 
 @endif
 
+@if($usuarioSuc =='16')
+ @foreach($atencion as $atec)
+
+    <div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>MADRE TERESA- INDEPENDENCIA</strong></p>
+	</div>
+
+    <div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>FECHA:{{ $atec->created_at}}</strong></p>
+	</div>
+
+	<div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>PACIENTE:{{ $atenciondetalle->selectPaciente($atec->id_paciente) }}</strong></p>
+	</div>
+
+	<div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>SERVICIOS:
+			@if($servicios->selectAllServicios($atec->id_atencion))
+			{{$servicios->selectAllServicios($atec->id_atencion)}}
+			@else
+			Sin Servicios
+			@endif
+		</strong></p>
+	</div>
+
+	<div class=""  style="font-size: 30px; text-align: center;">
+		<p><strong> LABORATORIOS:
+			@if($analisis->selectAllAnalisis($atec->id_atencion))
+			{{$analisis->selectAllAnalisis($atec->id_atencion)}}
+			@else
+			Sin Laboratorios
+			@endif
+		</strong></p>
+	</div>
+
+	<div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>A CUENTA:{{ $atec->costoa}}</strong></p>
+	</div>
+
+	<div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>DEUDA: {{ $atec->pendiente}},00</strong></p>
+	</div>
+
+	<div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>TOTAL: {{ $atec->costo}},00</strong></p>
+	</div>
+
+	<div class="" style="font-size: 30px; text-align: center;">
+		<p><strong>Origen:{{ $atec->name}},{{ $atec->apellidos}}</strong></p>
+	</div>
+
+@endforeach
+
+@endif
+
 
 @if($usuarioEmp <>'13')
 
