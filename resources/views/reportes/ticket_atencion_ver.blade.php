@@ -171,6 +171,7 @@
 
 
 
+@if($usuarioSuc =='8')
 @foreach($atencion as $atec)
 
 
@@ -220,6 +221,8 @@
 
 
 @endforeach
+@endif
+
 
 
 </body>
